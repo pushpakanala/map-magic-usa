@@ -4,6 +4,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { statesData } from '@/lib/states-data';
 
 interface StateData {
   state: string;
@@ -37,6 +38,11 @@ const USAMap: React.FC = () => {
     return stateData ? stateData.population.toLocaleString() : 'N/A';
   };
 
+  const getStateName = (stateId: string) => {
+    const state = statesData.find(state => state.id === stateId);
+    return state ? state.name : stateId;
+  };
+
   if (isLoading) return <Skeleton className="w-full h-[600px] rounded-lg" />;
 
   if (error) {
@@ -54,23 +60,30 @@ const USAMap: React.FC = () => {
         viewBox="0 0 959 593"
         className="w-full h-auto"
       >
-        {/* This is where we'll add state paths - I'll include just a few examples for brevity */}
-        <path
-          d="M161.1 453.7l-14.9 63.9-12.6 53.9 3.4 6.1 1.5 4.6-0.6 7.6 2.7 4.9 0.9 4.9-2.7 8.5 2.4 5.5 3.4 3.4 0.6 4.9 4.3 6.1 1.5 4-1.8 3.4 0.9 3.4 7.6 3.4 0.9 11.6 4.3 2.7 2.1 6.4 3.4 2.1 3.1 2.6 4.9 0.9 3.8 5.5 3.9 4 0.9 3.1-2.1 5.2-0.3 3.7 3.7 4 1.8 4.6 0.9 4.3 2.4 4.9 1.5 4.3 1.5 5.5 4 5.8 2.7 5.2-0.9 3.4-3.4 3.1-1.8 4.9 2.1 4.6 3.4 5.8-0.6 4.6-1.8 4.9-3.1 4.3-4.6 2.4 0.9 1.2-0.9 1.5-3.1 1.8-2.7 4-0.3 4.9 0.9 3.7 1.5 4.3 0.9 4.3 2.4 4.6 1.5 4.9 0.9 4.3 1.5 4.3-0.3 4.9-1.8 4.6-3.1 4.3-4.6 2.4 1.5 1.5-1.5 1.5-3.1 1.8-2.7 4-0.3 4.9 0.9 3.7 1.5 4.3 0.9 4.3 2.4 4.6 1.5 4.9 0.9 4.3 1.5 4.3-0.3 4.9-1.8 4.6-3.1 4.3-4.6 2.4 1.5 1.5-1.5 1.5-3.1 1.8-2.7 4-0.3 4.9 0.9 3.7 1.5 4.3 0.9 4.3 2.4 4.6 1.5 4.9 0.9 4.3 1.5 4.3-0.3 4.9-1.8 4.6-3.1 4.3-4.6 2.4z"
-          className={`fill-mapBase hover:fill-mapHover cursor-pointer transition-colors duration-300 ${
-            hoveredState === 'CA' ? 'animate-map-hover' : ''
-          }`}
-          onMouseEnter={() => setHoveredState('CA')}
-          onMouseLeave={() => setHoveredState(null)}
-          onClick={() => handleStateClick('california')}
-        />
-        {/* Add more state paths here */}
+        {statesData.map((state) => (
+          <path
+            key={state.id}
+            d={state.path}
+            className={`fill-mapBase hover:fill-mapHover cursor-pointer transition-colors duration-300 ${
+              hoveredState === state.id ? 'animate-map-hover' : ''
+            }`}
+            onMouseEnter={() => setHoveredState(state.id)}
+            onMouseLeave={() => setHoveredState(null)}
+            onClick={() => handleStateClick(state.name)}
+          />
+        ))}
       </svg>
       
       {hoveredState && (
-        <div className="absolute bg-white p-4 rounded-lg shadow-lg border border-gray-200 transform -translate-x-1/2 pointer-events-none">
-          <p className="font-semibold">{hoveredState}</p>
-          <p>Population: {getPopulation(hoveredState)}</p>
+        <div 
+          className="absolute bg-white p-4 rounded-lg shadow-lg border border-gray-200 transform -translate-x-1/2 pointer-events-none z-10"
+          style={{
+            left: '50%',
+            top: '50%'
+          }}
+        >
+          <p className="font-semibold text-lg">{getStateName(hoveredState)}</p>
+          <p className="text-gray-600">Population: {getPopulation(hoveredState)}</p>
         </div>
       )}
     </div>
