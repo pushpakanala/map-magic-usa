@@ -19,9 +19,15 @@ export default {
     },
     extend: {
       colors: {
-        mapBase: "#2b4c7e",  // Updated to a richer blue
-        mapHover: "#1e40af", // Darker blue on hover
-        mapActive: "#1e3a8a", // Even darker blue when active
+        mapBase: {
+          100: "#4299e1", // Light blue
+          200: "#3182ce", // Medium blue
+          300: "#2b6cb0", // Dark blue
+          400: "#2c5282", // Darker blue
+          500: "#2a4365", // Darkest blue
+        },
+        mapHover: "#1e40af",
+        mapActive: "#1e3a8a",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

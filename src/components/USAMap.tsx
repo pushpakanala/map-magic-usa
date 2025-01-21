@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -11,8 +11,15 @@ interface StateData {
   population: number;
 }
 
+interface HoverPosition {
+  x: number;
+  y: number;
+}
+
 const USAMap: React.FC = () => {
   const [hoveredState, setHoveredState] = useState<string | null>(null);
+  const [hoverPosition, setHoverPosition] = useState<HoverPosition>({ x: 0, y: 0 });
+  const mapRef = useRef<SVGSVGElement>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -43,6 +50,20 @@ const USAMap: React.FC = () => {
     return state ? state.name : stateId;
   };
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (mapRef.current) {
+      const rect = mapRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      setHoverPosition({ x, y });
+    }
+  };
+
+  const getStateColor = (index: number) => {
+    const colors = ['100', '200', '300', '400', '500'];
+    return `fill-mapBase-${colors[index % colors.length]}`;
+  };
+
   if (isLoading) return <Skeleton className="w-full h-[600px] rounded-lg" />;
 
   if (error) {
@@ -57,14 +78,16 @@ const USAMap: React.FC = () => {
   return (
     <div className="relative w-full max-w-4xl mx-auto">
       <svg
+        ref={mapRef}
         viewBox="0 0 959 593"
         className="w-full h-auto"
+        onMouseMove={handleMouseMove}
       >
-        {statesData.map((state) => (
+        {statesData.map((state, index) => (
           <path
             key={state.id}
             d={state.path}
-            className={`fill-mapBase hover:fill-mapHover cursor-pointer transition-colors duration-300 ${
+            className={`${getStateColor(index)} hover:fill-mapHover cursor-pointer transition-colors duration-300 ${
               hoveredState === state.id ? 'animate-map-hover' : ''
             }`}
             onMouseEnter={() => setHoveredState(state.id)}
@@ -76,10 +99,11 @@ const USAMap: React.FC = () => {
       
       {hoveredState && (
         <div 
-          className="absolute bg-white p-4 rounded-lg shadow-lg border border-gray-200 transform -translate-x-1/2 pointer-events-none z-10"
+          className="absolute bg-white p-4 rounded-lg shadow-lg border border-gray-200 pointer-events-none z-10"
           style={{
-            left: '50%',
-            top: '50%'
+            left: `${hoverPosition.x}px`,
+            top: `${hoverPosition.y}px`,
+            transform: 'translate(20px, -50%)'
           }}
         >
           <p className="font-semibold text-lg">{getStateName(hoveredState)}</p>
