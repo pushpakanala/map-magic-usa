@@ -12,13 +12,19 @@ const StatePage = () => {
   const { data: stateData, isLoading } = useQuery({
     queryKey: ['stateDetails', stateName],
     queryFn: async () => {
-      const response = await axios.get(`https://api.census.gov/data/2020/dec/pl?get=P1_001N&for=state:*`);
+      const response = await axios.get('https://api.census.gov/data/2023/acs/acs1', {
+        params: {
+            get: "NAME,B01001_001E,B01001_002E,B01001_026E", // Total population, male, female
+            for: "state:*", // Get data for all states
+            key: "e921b3e18e6fd0b1d0845420b5baf19b33229c36" // Replace with your Census API key
+        }
+    });
+    
       const formattedData = response.data.slice(1).find((item: any[]) => 
-        item[2].toLowerCase() === stateName?.toLowerCase()
+        item[0].toLowerCase() === stateName?.toLowerCase()
       );
       return formattedData ? {
-        population: parseInt(formattedData[0]).toLocaleString(),
-        stateId: formattedData[2]
+        population: parseInt(formattedData[1]).toLocaleString()
       } : null;
     }
   });

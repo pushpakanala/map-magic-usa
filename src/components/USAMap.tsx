@@ -26,10 +26,16 @@ const USAMap: React.FC = () => {
   const { data: populationData, isLoading, error } = useQuery({
     queryKey: ['statePopulation'],
     queryFn: async () => {
-      const response = await axios.get('https://api.census.gov/data/2020/dec/pl?get=P1_001N&for=state:*');
+      const response = await axios.get('https://api.census.gov/data/2023/acs/acs1', {
+        params: {
+            get: "NAME,B01001_001E,B01001_002E,B01001_026E", // Total population, male, female
+            for: "state:*", // Get data for all states
+            key: "e921b3e18e6fd0b1d0845420b5baf19b33229c36" // Replace with your Census API key
+        }
+    });    
       const formattedData = response.data.slice(1).map((item: any[]) => ({
-        state: item[2],
-        population: parseInt(item[0])
+        state: item[0],
+        population: parseInt(item[1])
       }));
       return formattedData;
     }
@@ -79,7 +85,7 @@ const USAMap: React.FC = () => {
     <div className="relative w-full max-w-4xl mx-auto">
       <svg
         ref={mapRef}
-        viewBox="0 0 959 593"
+        viewBox="100 0 959 800"
         className="w-full h-auto"
         onMouseMove={handleMouseMove}
       >
@@ -90,7 +96,7 @@ const USAMap: React.FC = () => {
             className={`${getStateColor(index)} hover:fill-mapHover cursor-pointer transition-colors duration-300 ${
               hoveredState === state.id ? 'animate-map-hover' : ''
             }`}
-            onMouseEnter={() => setHoveredState(state.id)}
+            onMouseEnter={() => setHoveredState(state.name)}
             onMouseLeave={() => setHoveredState(null)}
             onClick={() => handleStateClick(state.name)}
           />
