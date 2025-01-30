@@ -14,6 +14,19 @@ interface College {
   website: string;
 }
 
+const dummyColleges: College[] = [
+  { id: "1", name: "State University", city: "Capital City", website: "https://www.stateuniversity.edu" },
+  { id: "2", name: "Tech Institute", city: "Tech Valley", website: "https://www.techinstitute.edu" },
+  { id: "3", name: "Liberal Arts College", city: "Arts Town", website: "https://www.liberalarts.edu" },
+  { id: "4", name: "Community College", city: "Community Center", website: "https://www.communitycollege.edu" },
+  { id: "5", name: "Medical University", city: "Health City", website: "https://www.medicaluniversity.edu" },
+  { id: "6", name: "Business School", city: "Commerce City", website: "https://www.businessschool.edu" },
+  { id: "7", name: "Engineering College", city: "Innovation Hub", website: "https://www.engineeringcollege.edu" },
+  { id: "8", name: "Arts Academy", city: "Creative District", website: "https://www.artsacademy.edu" },
+  { id: "9", name: "Law School", city: "Justice City", website: "https://www.lawschool.edu" },
+  { id: "10", name: "Science Institute", city: "Research Park", website: "https://www.scienceinstitute.edu" }
+];
+
 const StatePage = () => {
   const { stateName } = useParams();
   const navigate = useNavigate();
@@ -40,28 +53,7 @@ const StatePage = () => {
     }
   });
 
-  const { data: colleges, isLoading: collegesLoading } = useQuery({
-    queryKey: ['colleges', stateName],
-    queryFn: async () => {
-      const response = await axios.get('https://api.data.gov/ed/collegescorecard/v1/schools', {
-        params: {
-          state: stateName,
-          fields: 'id,school.name,school.city,school.school_url',
-          api_key: 'YOUR_API_KEY',
-          per_page: 9
-        }
-      });
-      
-      return response.data.results.map((college: any) => ({
-        id: college.id,
-        name: college.school.name,
-        city: college.school.city,
-        website: college.school.school_url
-      }));
-    }
-  });
-
-  if (stateLoading || collegesLoading) {
+  if (stateLoading) {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto">
@@ -126,7 +118,7 @@ const StatePage = () => {
 
           <h2 className="text-3xl font-bold mb-6">Top Colleges</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {colleges?.map((college: College) => (
+            {dummyColleges.map((college: College) => (
               <motion.div
                 key={college.id}
                 whileHover={{ scale: 1.02 }}
