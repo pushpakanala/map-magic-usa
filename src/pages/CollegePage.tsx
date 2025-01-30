@@ -11,13 +11,15 @@ const CollegePage = () => {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
-        <Button
-          variant="outline"
-          onClick={() => navigate(-1)}
-          className="mb-8"
-        >
-          ← Back
-        </Button>
+        <div className="w-full max-w-7xl">
+          <Button
+            variant="outline"
+            onClick={() => navigate(-1)}
+            className="mb-8"
+          >
+            ← Back
+          </Button>
+        </div>
         
         <motion.div
           initial={{ opacity: 0, y: 20 }}
