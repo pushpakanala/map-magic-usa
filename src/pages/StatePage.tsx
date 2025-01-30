@@ -64,6 +64,10 @@ const StatePage = () => {
     );
   }
 
+  const handleCollegeClick = (college: College) => {
+    navigate(`/college/${encodeURIComponent(college.name)}`);
+  };
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
@@ -126,7 +130,7 @@ const StatePage = () => {
               >
                 <Card 
                   className="cursor-pointer hover:shadow-lg transition-shadow"
-                  onClick={() => window.open(college.website, '_blank')}
+                  onClick={() => handleCollegeClick(college)}
                 >
                   <CardHeader>
                     <CardTitle className="text-xl">{college.name}</CardTitle>
