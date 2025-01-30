@@ -24,7 +24,9 @@ const StatePage = () => {
         item[0].toLowerCase() === stateName?.toLowerCase()
       );
       return formattedData ? {
-        population: parseInt(formattedData[1]).toLocaleString()
+        population: parseInt(formattedData[1]).toLocaleString(),
+        male: parseInt(formattedData[2]).toLocaleString(),
+        female: parseInt(formattedData[3]).toLocaleString()
       } : null;
     }
   });
@@ -59,6 +61,12 @@ const StatePage = () => {
           <h2 className="text-2xl font-semibold mb-4">State Information</h2>
           <p className="text-lg">
             Population: {stateData?.population || 'N/A'}
+          </p>
+          <p className="text-lg">
+          Male: {stateData?.male || 'N/A'}
+          </p>
+          <p className="text-lg">
+          Female: {stateData?.female || 'N/A'}
           </p>
         </div>
       </div>
