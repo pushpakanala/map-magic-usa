@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,14 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 
-interface College {
-  id: string;
-  name: string;
-  city: string;
-  website: string;
-}
-
-const dummyColleges: College[] = [
+const dummyColleges = [
   { id: "1", name: "State University", city: "Capital City", website: "https://www.stateuniversity.edu" },
   { id: "2", name: "Tech Institute", city: "Tech Valley", website: "https://www.techinstitute.edu" },
   { id: "3", name: "Liberal Arts College", city: "Arts Town", website: "https://www.liberalarts.edu" },
@@ -42,7 +36,7 @@ const StatePage = () => {
         }
       });
       
-      const formattedData = response.data.slice(1).find((item: any[]) => 
+      const formattedData = response.data.slice(1).find((item) => 
         item[0].toLowerCase() === stateName?.toLowerCase()
       );
       return formattedData ? {
@@ -64,7 +58,7 @@ const StatePage = () => {
     );
   }
 
-  const handleCollegeClick = (college: College) => {
+  const handleCollegeClick = (college) => {
     navigate(`/college/${encodeURIComponent(college.name)}`);
   };
 
@@ -125,7 +119,7 @@ const StatePage = () => {
 
           <h2 className="text-3xl font-bold mb-6">Top Colleges</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {dummyColleges.map((college: College) => (
+            {dummyColleges.map((college) => (
               <motion.div
                 key={college.id}
                 whileHover={{ scale: 1.02 }}
