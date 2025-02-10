@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { Mail, Lock } from 'lucide-react';
+import axios from 'axios';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -19,11 +20,18 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      // For demo purposes, we'll use a simple check
-      // In a real app, you'd validate against a backend
-      if (email && password) {
+      // Using JSONPlaceholder API for demonstration
+      const response = await axios.get(`https://jsonplaceholder.typicode.com/users?email=${email}`);
+      
+      if (response.data.length > 0) {
         // Store user data
-        sessionStorage.setItem('user', JSON.stringify({ email, role: 'user' }));
+        const userData = {
+          email,
+          name: response.data[0].name,
+          role: 'user'
+        };
+        
+        sessionStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('isLoggedIn', 'true');
         
         toast({

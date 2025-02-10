@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock } from 'lucide-react';
+import axios from 'axios';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -20,9 +21,14 @@ const SignupPage = () => {
     setIsLoading(true);
 
     try {
-      // For demo purposes, we'll use a simple check
-      // In a real app, you'd validate against a backend
-      if (name && email && password) {
+      // Using JSONPlaceholder API for demonstration
+      const response = await axios.post('https://jsonplaceholder.typicode.com/users', {
+        name,
+        email,
+        password
+      });
+      
+      if (response.status === 201) {
         // Store user data
         const userData = {
           name,
@@ -40,7 +46,7 @@ const SignupPage = () => {
         
         navigate('/', { replace: true });
       } else {
-        throw new Error('Invalid input');
+        throw new Error('Failed to create account');
       }
     } catch (error) {
       toast({
