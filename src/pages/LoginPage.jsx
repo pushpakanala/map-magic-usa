@@ -29,17 +29,11 @@ const LoginPage = () => {
     setLoading(true);
     
     try {
-      const response = await fetch(
-        `${LOGIN}?email=${encodeURIComponent(formData.email)}&password=${encodeURIComponent(formData.password)}`,
-        {
-          method: "GET",
-        }
-      );
-      const data = await response.json();
+      const response = await axios.post(LOGIN, formData);
       
-      if (data.data && data.data.user) {
+      if (response.data && response.data.data && response.data.data.user) {
         // Store user data in sessionStorage
-        sessionStorage.setItem('user', JSON.stringify(data.data.user));
+        sessionStorage.setItem('user', JSON.stringify(response.data.data.user));
         // Set a login flag in localStorage
         localStorage.setItem('token', 'true');
         
@@ -49,15 +43,15 @@ const LoginPage = () => {
         });
         
         // Navigate to the map page
-        navigate('/');
+        navigate('/', { replace: true });
       } else {
-        throw new Error('Invalid response format');
+        throw new Error('Invalid credentials');
       }
     } catch (error) {
       console.error('Login error:', error);
       toast({
         title: "Error",
-        description: "Invalid credentials",
+        description: error.message || "Invalid credentials",
         variant: "destructive",
       });
     } finally {
