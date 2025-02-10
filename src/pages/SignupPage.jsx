@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
+import { USER_RESOURCE } from '../constants';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -31,9 +32,8 @@ const SignupPage = () => {
     
     try {
       // Sample API endpoint - replace with your actual endpoint
-      const response = await axios.post('http://your-api/signup', formData);
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      const response = await axios.post(USER_RESOURCE, formData);
+      // sessionStorage.setItem('user', JSON.stringify(response.data.user));
       toast({
         title: "Success",
         description: "Account created successfully",

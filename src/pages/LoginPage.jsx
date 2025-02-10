@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
+import { LOGIN } from '../constants';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -29,9 +30,15 @@ const LoginPage = () => {
     
     try {
       // Sample API endpoint - replace with your actual endpoint
-      const response = await axios.post('http://your-api/login', formData);
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      const response = await fetch(
+        `${LOGIN}?email=${encodeURIComponent(formData.email)}&password=${encodeURIComponent(formData.password)}`,
+        {
+          method: "GET",
+        }
+      );
+      const data = await response.json();
+      const role = data.data.role;
+      sessionStorage.setItem('user', JSON.stringify(data.data.user));
       toast({
         title: "Success",
         description: "Logged in successfully",
