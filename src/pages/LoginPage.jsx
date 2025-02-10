@@ -29,7 +29,6 @@ const LoginPage = () => {
     setLoading(true);
     
     try {
-      // Sample API endpoint - replace with your actual endpoint
       const response = await fetch(
         `${LOGIN}?email=${encodeURIComponent(formData.email)}&password=${encodeURIComponent(formData.password)}`,
         {
@@ -37,14 +36,25 @@ const LoginPage = () => {
         }
       );
       const data = await response.json();
-      const role = data.data.role;
-      sessionStorage.setItem('user', JSON.stringify(data.data.user));
-      toast({
-        title: "Success",
-        description: "Logged in successfully",
-      });
-      navigate('/');
+      
+      if (data.data && data.data.user) {
+        // Store user data in sessionStorage
+        sessionStorage.setItem('user', JSON.stringify(data.data.user));
+        // Set a login flag in localStorage
+        localStorage.setItem('token', 'true');
+        
+        toast({
+          title: "Success",
+          description: "Logged in successfully",
+        });
+        
+        // Navigate to the map page
+        navigate('/');
+      } else {
+        throw new Error('Invalid response format');
+      }
     } catch (error) {
+      console.error('Login error:', error);
       toast({
         title: "Error",
         description: "Invalid credentials",
