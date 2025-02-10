@@ -3,52 +3,42 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { Mail, Lock } from 'lucide-react';
 import axios from 'axios';
+import { LOGIN } from '../constants';
+import { toast } from 'sonner';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // Using JSONPlaceholder API for demonstration
-      const response = await axios.get(`https://jsonplaceholder.typicode.com/users?email=${email}`);
+      const response = await axios.get(`${LOGIN}?email=${email}&password=${password}`);
       
-      if (response.data.length > 0) {
-        // Store user data
+      if (response.data) {
         const userData = {
           email,
-          name: response.data[0].name,
+          name: response.data.data.name,
           role: 'user'
         };
         
         sessionStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('isLoggedIn', 'true');
         
-        toast({
-          title: "Success!",
-          description: "You have successfully logged in.",
-        });
-        
         navigate('/', { replace: true });
+        toast.success('Successfully logged in!');
       } else {
         throw new Error('Invalid credentials');
       }
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Invalid email or password",
-      });
+      toast.error('Login failed. Please check your credentials.');
     } finally {
       setIsLoading(false);
     }

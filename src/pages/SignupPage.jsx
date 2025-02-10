@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock } from 'lucide-react';
 import axios from 'axios';
+import { USER_RESOURCE } from '../constants';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -16,16 +17,17 @@ const SignupPage = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
       // Using JSONPlaceholder API for demonstration
-      const response = await axios.post('https://jsonplaceholder.typicode.com/users', {
+      const response = await axios.post(USER_RESOURCE, {
         name,
         email,
-        password
+        password,
+        role:'user'
       });
       
       if (response.status === 201) {

@@ -32,7 +32,7 @@ const Index = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">
-            United States Interactive Map
+            UNIQUEST
           </h1>
           <Button 
             variant="outline"
@@ -44,7 +44,7 @@ const Index = () => {
           </Button>
         </div>
         <p className="text-center text-muted-foreground mb-12">
-          Click on a state to learn more about it, or hover to see its population
+          Click on a state to learn more about its Universities, or hover to see its population
         </p>
         <USAMap />
       </div>
