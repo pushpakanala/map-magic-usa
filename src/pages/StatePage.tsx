@@ -16,7 +16,7 @@ interface College {
 
 const dummyColleges: College[] = [
   { id: "1", name: "State University", city: "Capital City", website: "https://www.stateuniversity.edu" },
-  { id: "2", name: "Tech Institute", city: "Tech Valley", website: "https://www.techinstitute.edu" },
+  { id: "2", name: "Unniversity of Louisville", city: "Tech Valley", website: "https://www.techinstitute.edu" },
   { id: "3", name: "Liberal Arts College", city: "Arts Town", website: "https://www.liberalarts.edu" },
   { id: "4", name: "Community College", city: "Community Center", website: "https://www.communitycollege.edu" },
   { id: "5", name: "Medical University", city: "Health City", website: "https://www.medicaluniversity.edu" },
