@@ -38,7 +38,9 @@ const LoginPage = () => {
       );
       const data = await response.json();
       const role = data.data.role;
-      sessionStorage.setItem('user', JSON.stringify(data.data.user));
+      // localStorage.setItem('user', JSON.stringify(data.data.name));
+      // localStorage.setItem('token', 'true');
+      sessionStorage.setItem('user', JSON.stringify(data.data));
       toast({
         title: "Success",
         description: "Logged in successfully",

@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 
 function App() {
   // Check if user is logged in
-  const isLoggedIn = !!localStorage.getItem('token');
+  const isLoggedIn = sessionStorage.getItem('user');
 
   return (
     <QueryClientProvider client={queryClient}>
