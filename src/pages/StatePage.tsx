@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,9 +7,16 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 
-const dummyColleges = [
+interface College {
+  id: string;
+  name: string;
+  city: string;
+  website: string;
+}
+
+const dummyColleges: College[] = [
   { id: "1", name: "State University", city: "Capital City", website: "https://www.stateuniversity.edu" },
-  { id: "2", name: "Unniversity of Louisville", city: "Tech Valley", website: "https://www.techinstitute.edu" },
+  { id: "2", name: "Tech Institute", city: "Tech Valley", website: "https://www.techinstitute.edu" },
   { id: "3", name: "Liberal Arts College", city: "Arts Town", website: "https://www.liberalarts.edu" },
   { id: "4", name: "Community College", city: "Community Center", website: "https://www.communitycollege.edu" },
   { id: "5", name: "Medical University", city: "Health City", website: "https://www.medicaluniversity.edu" },
@@ -36,7 +42,7 @@ const StatePage = () => {
         }
       });
       
-      const formattedData = response.data.slice(1).find((item) => 
+      const formattedData = response.data.slice(1).find((item: any[]) => 
         item[0].toLowerCase() === stateName?.toLowerCase()
       );
       return formattedData ? {
@@ -58,7 +64,7 @@ const StatePage = () => {
     );
   }
 
-  const handleCollegeClick = (college) => {
+  const handleCollegeClick = (college: College) => {
     navigate(`/college/${encodeURIComponent(college.name)}`);
   };
 
@@ -119,7 +125,7 @@ const StatePage = () => {
 
           <h2 className="text-3xl font-bold mb-6">Top Colleges</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {dummyColleges.map((college) => (
+            {dummyColleges.map((college: College) => (
               <motion.div
                 key={college.id}
                 whileHover={{ scale: 1.02 }}
