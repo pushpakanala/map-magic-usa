@@ -7,40 +7,42 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 
-const LoginPage = () => {
+const SignupPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
+    role: 'user',
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     
     try {
       // Sample API endpoint - replace with your actual endpoint
-      const response = await axios.post('http://your-api/login', formData);
+      const response = await axios.post('http://your-api/signup', formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       toast({
         title: "Success",
-        description: "Logged in successfully",
+        description: "Account created successfully",
       });
       navigate('/');
     } catch (error) {
       toast({
         title: "Error",
-        description: "Invalid credentials",
+        description: "Failed to create account",
         variant: "destructive",
       });
     } finally {
@@ -52,10 +54,20 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Login</CardTitle>
+          <CardTitle className="text-2xl text-center">Sign Up</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
             <div>
               <Input
                 type="email"
@@ -77,12 +89,12 @@ const LoginPage = () => {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Loading...' : 'Login'}
+              {loading ? 'Loading...' : 'Sign Up'}
             </Button>
             <p className="text-center text-sm text-muted-foreground">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-primary hover:underline">
-                Sign up
+              Already have an account?{' '}
+              <Link to="/login" className="text-primary hover:underline">
+                Login
               </Link>
             </p>
           </form>
@@ -92,4 +104,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;
