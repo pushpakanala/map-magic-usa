@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,23 +15,11 @@ interface College {
   website: string;
 }
 
-const dummyColleges: College[] = [
-  { id: "1", name: "State University", city: "Capital City", website: "https://www.stateuniversity.edu" },
-  { id: "2", name: "Tech Institute", city: "Tech Valley", website: "https://www.techinstitute.edu" },
-  { id: "3", name: "Liberal Arts College", city: "Arts Town", website: "https://www.liberalarts.edu" },
-  { id: "4", name: "Community College", city: "Community Center", website: "https://www.communitycollege.edu" },
-  { id: "5", name: "Medical University", city: "Health City", website: "https://www.medicaluniversity.edu" },
-  { id: "6", name: "Business School", city: "Commerce City", website: "https://www.businessschool.edu" },
-  { id: "7", name: "Engineering College", city: "Innovation Hub", website: "https://www.engineeringcollege.edu" },
-  { id: "8", name: "Arts Academy", city: "Creative District", website: "https://www.artsacademy.edu" },
-  { id: "9", name: "Law School", city: "Justice City", website: "https://www.lawschool.edu" },
-  { id: "10", name: "Science Institute", city: "Research Park", website: "https://www.scienceinstitute.edu" }
-];
-
 const StatePage = () => {
   const { stateName } = useParams();
   const navigate = useNavigate();
 
+  // Query for state population data
   const { data: stateData, isLoading: stateLoading } = useQuery({
     queryKey: ['stateDetails', stateName],
     queryFn: async () => {
@@ -53,7 +42,24 @@ const StatePage = () => {
     }
   });
 
-  if (stateLoading) {
+  // Query for universities data
+  const { data: universities, isLoading: universitiesLoading } = useQuery({
+    queryKey: ['universities', stateName],
+    queryFn: async () => {
+      // Using JSONPlaceholder as a sample API - replace this with your actual API
+      const response = await axios.get(`https://jsonplaceholder.typicode.com/users?state=${stateName}`);
+      
+      // Transform the sample data into our College interface format
+      return response.data.map((item: any) => ({
+        id: item.id.toString(),
+        name: item.company.name, // Using company name as university name for sample data
+        city: item.address.city,
+        website: item.website
+      }));
+    }
+  });
+
+  if (stateLoading || universitiesLoading) {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto">
@@ -123,26 +129,32 @@ const StatePage = () => {
             </Card>
           </div>
 
-          <h2 className="text-3xl font-bold mb-6">Top Colleges</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {dummyColleges.map((college: College) => (
-              <motion.div
-                key={college.id}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Card 
-                  className="cursor-pointer hover:shadow-lg transition-shadow"
-                  onClick={() => handleCollegeClick(college)}
-                >
-                  <CardHeader>
-                    <CardTitle className="text-xl">{college.name}</CardTitle>
-                    <CardDescription>{college.city}</CardDescription>
-                  </CardHeader>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+          {universities && universities.length > 0 && (
+            <>
+              <h2 className="text-3xl font-bold mb-6">
+                Universities ({universities.length})
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {universities.map((college: College) => (
+                  <motion.div
+                    key={college.id}
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Card 
+                      className="cursor-pointer hover:shadow-lg transition-shadow"
+                      onClick={() => handleCollegeClick(college)}
+                    >
+                      <CardHeader>
+                        <CardTitle className="text-xl">{college.name}</CardTitle>
+                        <CardDescription>{college.city}</CardDescription>
+                      </CardHeader>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </>
+          )}
         </motion.div>
       </div>
     </div>
