@@ -11,14 +11,14 @@ const Index = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn');
     if (!isLoggedIn) {
       navigate('/login', { replace: true });
     }
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('user');
     toast({
       title: "Logged out",

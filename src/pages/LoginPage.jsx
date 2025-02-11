@@ -30,7 +30,7 @@ const LoginPage = () => {
         };
         
         sessionStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('isLoggedIn', 'true');
         
         navigate('/', { replace: true });
         toast.success('Successfully logged in!');
