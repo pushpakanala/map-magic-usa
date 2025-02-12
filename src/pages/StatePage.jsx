@@ -1,16 +1,21 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
+import { Heart } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { UNIVERSITY_RESOURCE } from '../constants';
 
 const StatePage = () => {
   const { stateName } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [favorites, setFavorites] = useState([]);
 
   const { data: stateData, isLoading: stateLoading } = useQuery({
     queryKey: ['stateDetails', stateName],
@@ -44,6 +49,49 @@ const StatePage = () => {
     }
   });
 
+  // Mutation for updating favorites
+  const updateFavoritesMutation = useMutation({
+    mutationFn: async (favoriteUniversities) => {
+      const userId = JSON.parse(sessionStorage.getItem('user') || '{}').id || '1';
+      // Sample API endpoint - replace with your actual endpoint
+      const response = await axios.put(`https://jsonplaceholder.typicode.com/users/${userId}`, {
+        favorites: favoriteUniversities
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Favorites updated successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update favorites",
+      });
+    }
+  });
+
+  const handleFavoriteClick = async (collegeName, e) => {
+    e.stopPropagation(); // Prevent card click event
+    
+    let newFavorites;
+    if (favorites.includes(collegeName)) {
+      newFavorites = favorites.filter(name => name !== collegeName);
+    } else {
+      newFavorites = [...favorites, collegeName];
+    }
+    
+    setFavorites(newFavorites);
+    updateFavoritesMutation.mutate(newFavorites);
+  };
+
+  const handleCollegeClick = (college) => {
+    navigate(`/college/${encodeURIComponent(college.name)}`);
+  };
+
   if (stateLoading || universitiesLoading) {
     return (
       <div className="min-h-screen bg-background p-8">
@@ -54,10 +102,6 @@ const StatePage = () => {
       </div>
     );
   }
-
-  const handleCollegeClick = (college) => {
-    navigate(`/college/${encodeURIComponent(college.name)}`);
-  };
 
   return (
     <div className="min-h-screen bg-background p-8">
@@ -109,7 +153,24 @@ const StatePage = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {universities.map((college) => (
                   <motion.div key={college.id} whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-                    <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleCollegeClick(college)}>
+                    <Card 
+                      className="cursor-pointer hover:shadow-lg transition-shadow relative"
+                      onClick={() => handleCollegeClick(college)}
+                    >
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-2 right-2 z-10"
+                        onClick={(e) => handleFavoriteClick(college.name, e)}
+                      >
+                        <Heart 
+                          className={`h-5 w-5 transition-colors ${
+                            favorites.includes(college.name) 
+                              ? 'fill-current text-primary' 
+                              : 'text-muted-foreground'
+                          }`}
+                        />
+                      </Button>
                       <CardHeader>
                         <CardTitle className="text-xl">{college.name}</CardTitle>
                         <CardDescription>{college.city}</CardDescription>
