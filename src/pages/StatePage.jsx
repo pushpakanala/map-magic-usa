@@ -9,7 +9,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { UNIVERSITY_RESOURCE } from '../constants';
+import { UNIVERSITY_RESOURCE, USER_RESOURCE } from '../constants';
 
 const StatePage = () => {
   const { stateName } = useParams();
@@ -52,10 +52,13 @@ const StatePage = () => {
   // Mutation for updating favorites
   const updateFavoritesMutation = useMutation({
     mutationFn: async (favoriteUniversities) => {
-      const userId = JSON.parse(sessionStorage.getItem('user') || '{}').id || '1';
+      const userId = JSON.parse(sessionStorage.getItem('user'));
       // Sample API endpoint - replace with your actual endpoint
-      const response = await axios.put(`https://jsonplaceholder.typicode.com/users/${userId}`, {
-        favorites: favoriteUniversities
+      const response = await axios.put(`${USER_RESOURCE}`, {
+        name: userId.name,
+        email: userId.email,
+        role: userId.role,
+        favourites: favoriteUniversities
       });
       return response.data;
     },
