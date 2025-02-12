@@ -18,7 +18,7 @@ const StatePage = () => {
   const [favorites, setFavorites] = useState([]);
 
   // Query for user's favorites
-  const { data: userData } = useQuery({
+  const { data: userData, refetch: refetchUserData } = useQuery({
     queryKey: ['userFavorites'],
     queryFn: async () => {
       const user = JSON.parse(sessionStorage.getItem('user'));
@@ -28,6 +28,7 @@ const StatePage = () => {
     },
     onSuccess: (data) => {
       if (data && data.data && data.data[0].favourites) {
+        // Ensure we're not overwriting existing favorites, but adding to them
         setFavorites(data.data[0].favourites);
       }
     }
@@ -78,6 +79,8 @@ const StatePage = () => {
       return response.data;
     },
     onSuccess: () => {
+      // Refetch user data to ensure we have the latest favorites
+      refetchUserData();
       toast({
         title: "Success",
         description: "Favorites updated successfully",
@@ -94,11 +97,21 @@ const StatePage = () => {
 
   const handleFavoriteClick = async (collegeName, e) => {
     e.stopPropagation(); // Prevent card click event
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please login to add favorites",
+      });
+      return;
+    }
     
     let newFavorites;
     if (favorites.includes(collegeName)) {
       newFavorites = favorites.filter(name => name !== collegeName);
     } else {
+      // Ensure we're adding to existing favorites
       newFavorites = [...favorites, collegeName];
     }
     
