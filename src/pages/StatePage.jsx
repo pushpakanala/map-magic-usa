@@ -68,12 +68,11 @@ const StatePage = () => {
   // Mutation for updating favorites
   const updateFavoritesMutation = useMutation({
     mutationFn: async (favoriteUniversities) => {
-      const userId = JSON.parse(sessionStorage.getItem('user'));
-      // Sample API endpoint - replace with your actual endpoint
+      const userData = JSON.parse(sessionStorage.getItem('user'));
       const response = await axios.put(`${USER_RESOURCE}`, {
-        name: userId.name,
-        email: userId.email,
-        role: userId.role,
+        name: userData.name,
+        email: userData.email,
+        role: userData.role,
         favourites: favoriteUniversities
       });
       return response.data;
@@ -171,7 +170,7 @@ const StatePage = () => {
               <h2 className="text-3xl font-bold mb-6">Universities ({universities.length})</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {universities.map((college) => (
-                  <motion.div key={college.id} whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
+                  <motion.div key={college.name} whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
                     <Card 
                       className="cursor-pointer hover:shadow-lg transition-shadow relative"
                       onClick={() => handleCollegeClick(college)}
