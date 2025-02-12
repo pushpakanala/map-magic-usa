@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -16,6 +16,22 @@ const StatePage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [favorites, setFavorites] = useState([]);
+
+  // Query for user's favorites
+  const { data: userData } = useQuery({
+    queryKey: ['userFavorites'],
+    queryFn: async () => {
+      const user = JSON.parse(sessionStorage.getItem('user'));
+      if (!user) return null;
+      const response = await axios.get(`${USER_RESOURCE}${user.email}`);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      if (data && data.data && data.data.favourites) {
+        setFavorites(data.data.favourites);
+      }
+    }
+  });
 
   const { data: stateData, isLoading: stateLoading } = useQuery({
     queryKey: ['stateDetails', stateName],
