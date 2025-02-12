@@ -23,12 +23,12 @@ const StatePage = () => {
     queryFn: async () => {
       const user = JSON.parse(sessionStorage.getItem('user'));
       if (!user) return null;
-      const response = await axios.get(`${USER_RESOURCE}${user.email}`);
+      const response = await axios.get(`${USER_RESOURCE}{id}?email=${user.email}`);
       return response.data;
     },
     onSuccess: (data) => {
-      if (data && data.data && data.data.favourites) {
-        setFavorites(data.data.favourites);
+      if (data && data.data && data.data[0].favourites) {
+        setFavorites(data.data[0].favourites);
       }
     }
   });
