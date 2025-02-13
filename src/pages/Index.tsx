@@ -38,19 +38,21 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">
-            UNIQUEST
-          </h1>
-          <Button 
-            variant="outline"
-            onClick={handleLogout}
-            className="gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
-        </div>
+      <div className="flex justify-between items-center mb-8 relative">
+  <div className="flex-1"></div> {/* Empty div to balance spacing */}
+  <h1 className="text-4xl font-bold absolute left-1/2 transform -translate-x-1/2">
+    UNIQUEST
+  </h1>
+  <Button 
+    variant="outline"
+    onClick={handleLogout}
+    className="gap-2"
+  >
+    <LogOut className="h-4 w-4" />
+    Logout
+  </Button>
+</div>
+
 
         <Tabs defaultValue="map" className="mb-8">
           <TabsList className="grid w-full grid-cols-2 max-w-[400px] mx-auto">
