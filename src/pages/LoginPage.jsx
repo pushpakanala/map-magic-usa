@@ -7,13 +7,14 @@ import { motion } from 'framer-motion';
 import { Mail, Lock } from 'lucide-react';
 import axios from 'axios';
 import { LOGIN } from '../constants';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,12 +34,19 @@ const LoginPage = () => {
         sessionStorage.setItem('isLoggedIn', 'true');
         
         navigate('/', { replace: true });
-        toast.success('Successfully logged in!');
+        toast({
+          title: "Success",
+          description: "Successfully logged in!",
+        });
       } else {
         throw new Error('Invalid credentials');
       }
     } catch (error) {
-      toast.error('Login failed. Please check your credentials.');
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Login failed. Please check your credentials.",
+      });
     } finally {
       setIsLoading(false);
     }

@@ -22,7 +22,6 @@ const SignupPage = () => {
     setIsLoading(true);
 
     try {
-      // Using JSONPlaceholder API for demonstration
       const response = await axios.post(USER_RESOURCE, {
         name,
         email,
@@ -31,7 +30,6 @@ const SignupPage = () => {
       });
       
       if (response.status === 201) {
-        // Store user data
         const userData = {
           name,
           email,
@@ -39,11 +37,11 @@ const SignupPage = () => {
         };
         
         sessionStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('isLoggedIn', 'true');
         
         toast({
-          title: "Account created!",
-          description: "You have successfully signed up.",
+          title: "Success",
+          description: "Account created successfully!",
         });
         
         navigate('/', { replace: true });
