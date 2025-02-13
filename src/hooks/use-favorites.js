@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useToast } from '@/hooks/use-toast';
@@ -9,52 +8,66 @@ export const useFavorites = () => {
   const [favorites, setFavorites] = useState([]);
   const { toast } = useToast();
 
-  const { refetch: refetchUserData } = useQuery({
+  const { data: userData, refetch: refetchUserData } = useQuery({
     queryKey: ['userFavorites'],
     queryFn: async () => {
       const user = JSON.parse(sessionStorage.getItem('user'));
       if (!user) return null;
       const response = await axios.get(`${USER_RESOURCE}{id}?email=${user.email}`);
+      console.log('Fetched favorites:', response.data?.data[0]?.favourites);
       return response.data;
     },
     onSuccess: (data) => {
       if (data && data.data && data.data[0].favourites) {
         setFavorites(data.data[0].favourites);
+        console.log('Updated favorites state:', data.data[0].favourites);
       }
     },
+    refetchOnWindowFocus: true,
     keepPreviousData: true
   });
 
+  useEffect(() => {
+    if (userData?.data?.[0]?.favourites) {
+      setFavorites(userData.data[0].favourites);
+    }
+  }, [userData]);
+
   const updateFavoritesMutation = useMutation({
     mutationFn: async (newFavorites) => {
-      const userData = JSON.parse(sessionStorage.getItem('user'));
-      const currentResponse = await axios.get(`${USER_RESOURCE}{id}?email=${userData.email}`);
+      const user = JSON.parse(sessionStorage.getItem('user'));
+      if (!user) throw new Error('User not logged in');
+
+      const currentResponse = await axios.get(`${USER_RESOURCE}{id}?email=${user.email}`);
       const currentFavorites = currentResponse.data.data[0].favourites || [];
       
-      const updatedFavorites = newFavorites;
-      
+      console.log('Current favorites before update:', currentFavorites);
+      console.log('New favorites to save:', newFavorites);
+
       const response = await axios.put(`${USER_RESOURCE}`, {
-        name: userData.name,
-        email: userData.email,
-        role: userData.role,
-        favourites: updatedFavorites
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        favourites: newFavorites
       });
+      
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       refetchUserData();
       toast({
         title: "Success",
         description: "Favorites updated successfully",
       });
     },
-    onError: () => {
+    onError: (error) => {
       refetchUserData();
       toast({
         variant: "destructive",
         title: "Error",
         description: "Failed to update favorites",
       });
+      console.error('Error updating favorites:', error);
     }
   });
 
@@ -79,6 +92,8 @@ export const useFavorites = () => {
       updatedFavorites = [...currentFavorites, collegeName];
     }
 
+    console.log('Updating favorites:', updatedFavorites);
+    
     setFavorites(updatedFavorites);
     updateFavoritesMutation.mutate(updatedFavorites);
   };
