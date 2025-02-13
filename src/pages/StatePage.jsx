@@ -1,37 +1,20 @@
-import React, { useState, useEffect } from 'react';
+
+import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import { Heart } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { UNIVERSITY_RESOURCE, USER_RESOURCE } from '../constants';
+import { UNIVERSITY_RESOURCE } from '../constants';
+import PopulationStats from '../components/state/PopulationStats';
+import UniversitiesList from '../components/state/UniversitiesList';
+import { useFavorites } from '../hooks/use-favorites';
 
 const StatePage = () => {
   const { stateName } = useParams();
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [favorites, setFavorites] = useState([]);
-
-  // Query for user's favorites
-  const { data: userData, refetch: refetchUserData } = useQuery({
-    queryKey: ['userFavorites'],
-    queryFn: async () => {
-      const user = JSON.parse(sessionStorage.getItem('user'));
-      if (!user) return null;
-      const response = await axios.get(`${USER_RESOURCE}{id}?email=${user.email}`);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      if (data && data.data && data.data[0].favourites) {
-        setFavorites(data.data[0].favourites);
-      }
-    },
-    keepPreviousData: true
-  });
+  const { favorites, handleFavoriteClick } = useFavorites();
 
   const { data: stateData, isLoading: stateLoading } = useQuery({
     queryKey: ['stateDetails', stateName],
@@ -65,65 +48,6 @@ const StatePage = () => {
     }
   });
 
-  // Mutation for updating favorites
-  const updateFavoritesMutation = useMutation({
-    mutationFn: async (newFavorites) => {
-      const userData = JSON.parse(sessionStorage.getItem('user'));
-      const currentResponse = await axios.get(`${USER_RESOURCE}{id}?email=${userData.email}`);
-      const currentFavorites = currentResponse.data.data[0].favourites || [];
-      
-      const updatedFavorites = newFavorites;
-      
-      const response = await axios.put(`${USER_RESOURCE}`, {
-        name: userData.name,
-        email: userData.email,
-        role: userData.role,
-        favourites: updatedFavorites
-      });
-      return response.data;
-    },
-    onSuccess: () => {
-      refetchUserData();
-      toast({
-        title: "Success",
-        description: "Favorites updated successfully",
-      });
-    },
-    onError: () => {
-      refetchUserData();
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to update favorites",
-      });
-    }
-  });
-
-  const handleFavoriteClick = async (collegeName, e) => {
-    e.stopPropagation();
-    const user = JSON.parse(sessionStorage.getItem('user'));
-    if (!user) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Please login to add favorites",
-      });
-      return;
-    }
-
-    const currentFavorites = [...favorites];
-    let updatedFavorites;
-
-    if (currentFavorites.includes(collegeName)) {
-      updatedFavorites = currentFavorites.filter(name => name !== collegeName);
-    } else {
-      updatedFavorites = [...currentFavorites, collegeName];
-    }
-
-    setFavorites(updatedFavorites);
-    updateFavoritesMutation.mutate(updatedFavorites);
-  };
-
   const handleCollegeClick = (college) => {
     navigate(`/college/${encodeURIComponent(college.name)}`);
   };
@@ -151,71 +75,15 @@ const StatePage = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-center">
           <h1 className="text-4xl font-bold mb-6 capitalize">{stateName}</h1>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <Card className="bg-primary/10">
-              <CardHeader>
-                <CardTitle>Total Population</CardTitle>
-                <CardDescription>Current census data</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold">{stateData?.population}</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-blue-500/10">
-              <CardHeader>
-                <CardTitle>Male Population</CardTitle>
-                <CardDescription>Current census data</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold">{stateData?.male}</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-pink-500/10">
-              <CardHeader>
-                <CardTitle>Female Population</CardTitle>
-                <CardDescription>Current census data</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-3xl font-bold">{stateData?.female}</p>
-              </CardContent>
-            </Card>
-          </div>
+          <PopulationStats stateData={stateData} />
 
           {universities && universities.length > 0 && (
-            <>
-              <h2 className="text-3xl font-bold mb-6">Universities ({universities.length})</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {universities.map((college) => (
-                  <motion.div key={college.name} whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-                    <Card 
-                      className="cursor-pointer hover:shadow-lg transition-shadow relative"
-                      onClick={() => handleCollegeClick(college)}
-                    >
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute top-2 right-2 z-10"
-                        onClick={(e) => handleFavoriteClick(college.name, e)}
-                      >
-                        <Heart 
-                          className={`h-5 w-5 transition-colors ${
-                            favorites.includes(college.name) 
-                              ? 'fill-current text-primary' 
-                              : 'text-muted-foreground'
-                          }`}
-                        />
-                      </Button>
-                      <CardHeader>
-                        <CardTitle className="text-xl">{college.name}</CardTitle>
-                        <CardDescription>{college.city}</CardDescription>
-                      </CardHeader>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            </>
+            <UniversitiesList
+              universities={universities}
+              favorites={favorites}
+              onFavoriteClick={handleFavoriteClick}
+              onUniversityClick={handleCollegeClick}
+            />
           )}
         </motion.div>
       </div>
