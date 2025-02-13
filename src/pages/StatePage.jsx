@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -28,10 +27,10 @@ const StatePage = () => {
     },
     onSuccess: (data) => {
       if (data && data.data && data.data[0].favourites) {
-        // Ensure we're not overwriting existing favorites, but adding to them
         setFavorites(data.data[0].favourites);
       }
-    }
+    },
+    keepPreviousData: true
   });
 
   const { data: stateData, isLoading: stateLoading } = useQuery({
@@ -68,18 +67,22 @@ const StatePage = () => {
 
   // Mutation for updating favorites
   const updateFavoritesMutation = useMutation({
-    mutationFn: async (favoriteUniversities) => {
+    mutationFn: async (newFavorites) => {
       const userData = JSON.parse(sessionStorage.getItem('user'));
+      const currentResponse = await axios.get(`${USER_RESOURCE}{id}?email=${userData.email}`);
+      const currentFavorites = currentResponse.data.data[0].favourites || [];
+      
+      const updatedFavorites = newFavorites;
+      
       const response = await axios.put(`${USER_RESOURCE}`, {
         name: userData.name,
         email: userData.email,
         role: userData.role,
-        favourites: favoriteUniversities
+        favourites: updatedFavorites
       });
       return response.data;
     },
     onSuccess: () => {
-      // Refetch user data to ensure we have the latest favorites
       refetchUserData();
       toast({
         title: "Success",
@@ -87,6 +90,7 @@ const StatePage = () => {
       });
     },
     onError: () => {
+      refetchUserData();
       toast({
         variant: "destructive",
         title: "Error",
@@ -96,7 +100,7 @@ const StatePage = () => {
   });
 
   const handleFavoriteClick = async (collegeName, e) => {
-    e.stopPropagation(); // Prevent card click event
+    e.stopPropagation();
     const user = JSON.parse(sessionStorage.getItem('user'));
     if (!user) {
       toast({
@@ -106,17 +110,18 @@ const StatePage = () => {
       });
       return;
     }
-    
-    let newFavorites;
-    if (favorites.includes(collegeName)) {
-      newFavorites = favorites.filter(name => name !== collegeName);
+
+    const currentFavorites = [...favorites];
+    let updatedFavorites;
+
+    if (currentFavorites.includes(collegeName)) {
+      updatedFavorites = currentFavorites.filter(name => name !== collegeName);
     } else {
-      // Ensure we're adding to existing favorites
-      newFavorites = [...favorites, collegeName];
+      updatedFavorites = [...currentFavorites, collegeName];
     }
-    
-    setFavorites(newFavorites);
-    updateFavoritesMutation.mutate(newFavorites);
+
+    setFavorites(updatedFavorites);
+    updateFavoritesMutation.mutate(updatedFavorites);
   };
 
   const handleCollegeClick = (college) => {
