@@ -58,27 +58,37 @@ const SignupPage = () => {
       });
       
       if (response.status === 201) {
-        const userData = {
-          name,
-          email,
-          role: 'user'
-        };
-        
-        sessionStorage.setItem('user', JSON.stringify(userData));
-        sessionStorage.setItem('isLoggedIn', 'true');
-        
         toast({
-          title: "Success",
-          description: "Account created successfully!",
+          title: "Success!",
+          description: "Account created successfully! Please login.",
+          duration: 3000,
         });
         
-        navigate('/', { replace: true });
+        // Clear form data
+        setName('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        
+        // Wait for toast to be visible before navigating
+        setTimeout(() => {
+          navigate('/login', { replace: true });
+        }, 1000);
       }
     } catch (error) {
+      let errorMessage = "Failed to create account. Please try again.";
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.status === 409) {
+        errorMessage = "Email already exists. Please use a different email.";
+      }
+      
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.response?.data?.message || "Failed to create account. Please try again.",
+        description: errorMessage,
+        duration: 3000,
       });
     } finally {
       setIsLoading(false);
