@@ -20,6 +20,11 @@ const SignupPage = () => {
   const [passwordError, setPasswordError] = useState('');
 
   const validatePasswords = () => {
+    if (password === '' || confirmPassword === '') {
+      setPasswordError('');
+      return false;
+    }
+    
     if (password !== confirmPassword) {
       setPasswordError('Passwords do not match');
       return false;
@@ -32,12 +37,14 @@ const SignupPage = () => {
     e.preventDefault();
     
     if (!validatePasswords()) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Passwords do not match. Please try again.",
-      });
-      return;
+      if (password !== confirmPassword) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Passwords do not match. Please try again.",
+        });
+        return;
+      }
     }
 
     setIsLoading(true);
@@ -66,17 +73,39 @@ const SignupPage = () => {
         });
         
         navigate('/', { replace: true });
-      } else {
-        throw new Error('Failed to create account');
       }
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to create account. Please try again.",
+        description: error.response?.data?.message || "Failed to create account. Please try again.",
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    if (confirmPassword) {
+      if (newPassword === confirmPassword) {
+        setPasswordError('');
+      } else {
+        setPasswordError('Passwords do not match');
+      }
+    }
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    const newConfirmPassword = e.target.value;
+    setConfirmPassword(newConfirmPassword);
+    if (password) {
+      if (password === newConfirmPassword) {
+        setPasswordError('');
+      } else {
+        setPasswordError('Passwords do not match');
+      }
     }
   };
 
@@ -127,10 +156,7 @@ const SignupPage = () => {
                   type="password"
                   placeholder="Password"
                   value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    if (confirmPassword) validatePasswords();
-                  }}
+                  onChange={handlePasswordChange}
                   className="pl-10"
                   required
                 />
@@ -144,10 +170,7 @@ const SignupPage = () => {
                   type="password"
                   placeholder="Confirm Password"
                   value={confirmPassword}
-                  onChange={(e) => {
-                    setConfirmPassword(e.target.value);
-                    if (password) validatePasswords();
-                  }}
+                  onChange={handleConfirmPasswordChange}
                   className={`pl-10 ${passwordError ? 'border-red-500' : ''}`}
                   required
                 />
