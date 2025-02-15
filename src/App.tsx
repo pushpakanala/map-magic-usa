@@ -6,6 +6,7 @@ import StatePage from './pages/StatePage';
 import CollegePage from './pages/CollegePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import { Toaster } from "@/components/ui/toaster";
 import './App.css';
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ function App() {
           <Route path="/state/:stateName" element={<StatePage />} />
           <Route path="/college/:collegeName" element={<CollegePage />} />
         </Routes>
+        <Toaster />
       </Router>
     </QueryClientProvider>
   );
