@@ -15,10 +15,31 @@ const SignupPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+
+  const validatePasswords = () => {
+    if (password !== confirmPassword) {
+      setPasswordError('Passwords do not match');
+      return false;
+    }
+    setPasswordError('');
+    return true;
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    
+    if (!validatePasswords()) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Passwords do not match. Please try again.",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -26,10 +47,10 @@ const SignupPage = () => {
         name,
         email,
         password,
-        role:'user'
+        role: 'user'
       });
       
-      if (response.status === 200) {
+      if (response.status === 201) {
         const userData = {
           name,
           email,
@@ -106,17 +127,40 @@ const SignupPage = () => {
                   type="password"
                   placeholder="Password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (confirmPassword) validatePasswords();
+                  }}
                   className="pl-10"
                   required
                 />
               </div>
             </div>
 
+            <div className="space-y-2">
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                <Input
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    if (password) validatePasswords();
+                  }}
+                  className={`pl-10 ${passwordError ? 'border-red-500' : ''}`}
+                  required
+                />
+              </div>
+              {passwordError && (
+                <p className="text-sm text-red-500 mt-1">{passwordError}</p>
+              )}
+            </div>
+
             <Button 
               type="submit" 
               className="w-full"
-              disabled={isLoading}
+              disabled={isLoading || passwordError}
             >
               {isLoading ? "Creating account..." : "Sign Up"}
             </Button>
