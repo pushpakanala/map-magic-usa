@@ -57,7 +57,7 @@ const SignupPage = () => {
         role: 'user'
       });
       
-      if (response.status === 201) {
+      if (response.status === 200) {
         toast({
           title: "Success!",
           description: "Account created successfully! Please login.",
