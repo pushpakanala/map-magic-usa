@@ -67,31 +67,33 @@ const CollegePage = () => {
             className="space-y-8"
           >
             <Card className="w-full overflow-hidden border-none shadow-xl bg-gradient-to-br from-card to-card/50 backdrop-blur-sm">
-              <CardHeader className="pb-0">
-                <div className="relative">
-                  <div className="absolute top-0 right-0 flex space-x-2">
+              <CardHeader>
+                <div className="space-y-6">
+                  <div className="flex flex-wrap gap-2 justify-end">
                     {school.school_programs.map((program) => (
                       <span
                         key={program}
-                        className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium backdrop-blur-sm"
+                        className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium backdrop-blur-sm border border-primary/20"
                       >
                         {program}
                       </span>
                     ))}
                   </div>
-                  <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                    {school.name}
-                  </CardTitle>
+                  <div>
+                    <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                      {school.name}
+                    </CardTitle>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="flex items-center gap-2 text-muted-foreground mt-4"
+                    >
+                      <MapPin className="h-4 w-4 text-primary" />
+                      <span>{school.address}</span>
+                    </motion.div>
+                  </div>
                 </div>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="flex items-center gap-2 text-muted-foreground mt-4"
-                >
-                  <MapPin className="h-4 w-4 text-primary" />
-                  <span>{school.address}</span>
-                </motion.div>
               </CardHeader>
 
               <CardContent className="mt-6">
@@ -102,7 +104,7 @@ const CollegePage = () => {
                     transition={{ delay: 0.3 }}
                     className="space-y-4"
                   >
-                    <div className="flex items-center gap-3 group">
+                    <div className="flex items-center gap-3 group hover:bg-accent/50 p-3 rounded-lg transition-colors">
                       <div className="p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
                         <Globe className="h-5 w-5 text-primary" />
                       </div>
@@ -119,13 +121,13 @@ const CollegePage = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 group">
+                    <div className="flex items-center gap-3 group hover:bg-accent/50 p-3 rounded-lg transition-colors">
                       <div className="p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
                         <Award className="h-5 w-5 text-primary" />
                       </div>
                       <div>
                         <p className="text-sm font-medium">US Ranking</p>
-                        <p className="text-2xl font-bold text-primary">#{school.us_ranking}</p>
+                        <p className="text-3xl font-bold text-primary">#{school.us_ranking}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -136,14 +138,14 @@ const CollegePage = () => {
                     transition={{ delay: 0.4 }}
                     className="md:col-span-2"
                   >
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       <div>
                         <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
                           <Building2 className="h-5 w-5 text-primary" />
                           Accreditation
                         </h3>
-                        <div className="bg-muted/50 p-4 rounded-lg backdrop-blur-sm">
-                          <p className="text-sm">{school.accreditor}</p>
+                        <div className="bg-accent/50 p-4 rounded-lg backdrop-blur-sm border border-accent">
+                          <p className="text-sm text-foreground">{school.accreditor}</p>
                           <p className="text-xs text-muted-foreground mt-1">Code: {school.accreditor_code}</p>
                         </div>
                       </div>
@@ -157,7 +159,7 @@ const CollegePage = () => {
                           {school.eligibility_addmission_exams.map((exam) => (
                             <span
                               key={exam}
-                              className="bg-secondary/10 text-secondary px-3 py-1.5 rounded-full text-sm font-medium hover:bg-secondary/20 transition-colors cursor-default"
+                              className="bg-secondary text-secondary-foreground px-3 py-1.5 rounded-full text-sm font-medium hover:bg-secondary/80 transition-colors cursor-default border border-secondary/20"
                             >
                               {exam}
                             </span>
