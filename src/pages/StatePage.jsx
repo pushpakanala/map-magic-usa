@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Skeleton } from '@/components/ui/skeleton';
 import { motion } from 'framer-motion';
-import { UNIVERSITY_RESOURCE } from '../constants';
+import { TOP_GPT_UNIVERSITIES_LLM } from '../constants';
 import PopulationStats from '../components/state/PopulationStats';
 import UniversitiesList from '../components/state/UniversitiesList';
 import { useFavorites } from '../hooks/use-favorites';
@@ -41,7 +41,7 @@ const StatePage = () => {
   const { data: universities, isLoading: universitiesLoading } = useQuery({
     queryKey: ['universities', stateName],
     queryFn: async () => {
-      const response = await axios.get(`${UNIVERSITY_RESOURCE}{id}?state_name=${stateName}`);
+      const response = await axios.get(`${TOP_GPT_UNIVERSITIES_LLM}?state_name=${stateName}`);
       return response.data.data.map((item) => ({
         name: item.university_name,
       }));

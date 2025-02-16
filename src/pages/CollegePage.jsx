@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from 'axios';
-import { UniversityResponse } from '@/types/university';
 import { MapPin, Globe, Award, School, BookOpen } from 'lucide-react';
 import {
   Table,
@@ -16,18 +14,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { UNIVERSITIS_DATA_GPT } from '../constants';
 
 const CollegePage = () => {
   const { collegeName } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [universityData, setUniversityData] = useState<UniversityResponse | null>(null);
+  const [universityData, setUniversityData] = useState(null);
 
   useEffect(() => {
     const fetchUniversityData = async () => {
       try {
-        // Replace with your actual API endpoint
-        const response = await axios.get(`https://api.example.com/universities/${encodeURIComponent(collegeName)}`);
+        const response = await axios.get(`${UNIVERSITIS_DATA_GPT}?university_name=${collegeName}`);
         setUniversityData(response.data);
       } catch (error) {
         console.error('Error fetching university data:', error);
@@ -53,27 +51,15 @@ const CollegePage = () => {
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
-        <Button
-          variant="outline"
-          onClick={() => navigate(-1)}
-          className="mb-8"
-        >
+        <Button variant="outline" onClick={() => navigate(-1)} className="mb-8">
           ← Back
         </Button>
 
         {school && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-8"
-          >
-            {/* School Information */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="space-y-8">
             <Card className="w-full">
               <CardHeader>
-                <CardTitle className="text-4xl font-bold">
-                  {school.name}
-                </CardTitle>
+                <CardTitle className="text-4xl font-bold">{school.name}</CardTitle>
                 <div className="flex items-center gap-2 text-muted-foreground mt-2">
                   <MapPin className="h-4 w-4" />
                   <span>{school.address}</span>
@@ -83,8 +69,7 @@ const CollegePage = () => {
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <Globe className="h-4 w-4 text-primary" />
-                    <a href={school.school_url} target="_blank" rel="noopener noreferrer" 
-                       className="text-primary hover:underline">
+                    <a href={school.school_url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                       Visit Website
                     </a>
                   </div>
@@ -101,8 +86,8 @@ const CollegePage = () => {
                 <div>
                   <h3 className="font-semibold mb-2">Programs Offered</h3>
                   <div className="flex flex-wrap gap-2">
-                    {school.school_programs.map((program) => (
-                      <span key={program} className="bg-primary/10 text-primary px-2 py-1 rounded-full text-sm">
+                    {school.school_programs.map((program, index) => (
+                      <span key={index} className="bg-primary/10 text-primary px-2 py-1 rounded-full text-sm">
                         {program}
                       </span>
                     ))}
@@ -112,8 +97,8 @@ const CollegePage = () => {
                 <div>
                   <h3 className="font-semibold mb-2">Admission Exams</h3>
                   <div className="flex flex-wrap gap-2">
-                    {school.eligibility_addmission_exams.map((exam) => (
-                      <span key={exam} className="bg-secondary/10 text-secondary px-2 py-1 rounded-full text-sm">
+                    {school.eligibility_addmission_exams.map((exam, index) => (
+                      <span key={index} className="bg-secondary/10 text-secondary px-2 py-1 rounded-full text-sm">
                         {exam}
                       </span>
                     ))}
@@ -122,7 +107,6 @@ const CollegePage = () => {
               </CardContent>
             </Card>
 
-            {/* Programs Section */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl font-bold flex items-center gap-2">
@@ -147,8 +131,8 @@ const CollegePage = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {programs?.undergrad_programs.map((program) => (
-                          <TableRow key={program.program_name}>
+                        {programs?.undergrad_programs.map((program, index) => (
+                          <TableRow key={index}>
                             <TableCell>{program.program_name}</TableCell>
                             <TableCell>{program.program_duration}</TableCell>
                             <TableCell>{program.fees}</TableCell>
@@ -168,8 +152,8 @@ const CollegePage = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {programs?.grad_programs.map((program) => (
-                          <TableRow key={program.program_name}>
+                        {programs?.grad_programs.map((program, index) => (
+                          <TableRow key={index}>
                             <TableCell>{program.program_name}</TableCell>
                             <TableCell>{program.program_duration}</TableCell>
                             <TableCell>{program.fees}</TableCell>
@@ -181,8 +165,6 @@ const CollegePage = () => {
                 </Tabs>
               </CardContent>
             </Card>
-
-            {/* Student & Faculty Demographics will be added in the next iteration */}
           </motion.div>
         )}
       </div>
