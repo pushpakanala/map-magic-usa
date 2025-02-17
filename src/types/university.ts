@@ -1,4 +1,3 @@
-
 export interface UniversityResponse {
   status: {
     code: number;
@@ -26,6 +25,20 @@ export interface School {
   us_ranking: number;
   school_programs: string[];
   eligibility_addmission_exams: string[];
+  founded_in: number;
+  cost_of_living_near_university: string;
+  type: string;
+  contact_details: {
+    phone: string;
+    email: string;
+    website: string;
+  };
+  graduation_rate: string;
+  acceptance_rate: string;
+  course_rank: {
+    undergrad: number;
+    grad: number;
+  };
 }
 
 export interface Program {

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -115,6 +114,49 @@ const CollegePage = () => {
                       ))}
                     </div>
                   </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Key Information</h3>
+                      <div className="space-y-2">
+                        <p className="text-sm"><span className="font-medium">Founded:</span> {school.founded_in}</p>
+                        <p className="text-sm"><span className="font-medium">Type:</span> {school.type}</p>
+                        <p className="text-sm"><span className="font-medium">Cost of Living:</span> {school.cost_of_living_near_university}</p>
+                        <p className="text-sm"><span className="font-medium">US Ranking:</span> #{school.us_ranking}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Contact Details</h3>
+                      <div className="space-y-2">
+                        <p className="text-sm"><span className="font-medium">Phone:</span> {school.contact_details.phone}</p>
+                        <p className="text-sm"><span className="font-medium">Email:</span> {school.contact_details.email}</p>
+                        <p className="text-sm"><span className="font-medium">Website:</span> 
+                          <a 
+                            href={school.contact_details.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline ml-1"
+                          >
+                            Visit Website
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Academic Performance</h3>
+                      <div className="space-y-2">
+                        <p className="text-sm"><span className="font-medium">Graduation Rate:</span> {school.graduation_rate}</p>
+                        <p className="text-sm"><span className="font-medium">Acceptance Rate:</span> {school.acceptance_rate}</p>
+                        <p className="text-sm"><span className="font-medium">Course Ranking:</span></p>
+                        <ul className="list-disc list-inside ml-2">
+                          <li className="text-sm">Undergraduate: #{school.course_rank.undergrad}</li>
+                          <li className="text-sm">Graduate: #{school.course_rank.grad}</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </CardHeader>
 
@@ -194,7 +236,6 @@ const CollegePage = () => {
               </CardContent>
             </Card>
 
-            {/* Students & Faculty Demographics */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Card className="w-full">
                 <CardHeader>
@@ -215,11 +256,11 @@ const CollegePage = () => {
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm text-muted-foreground">Male Students</p>
-                      <p className="text-2xl font-semibold">{students.men.toLocaleString()}</p>
+                      <p className="text-2xl font-semibold">{students.men.toLocaleString()} ({((students.men / students.total_students) * 100).toFixed(1)}%)</p>
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm text-muted-foreground">Female Students</p>
-                      <p className="text-2xl font-semibold">{students.women.toLocaleString()}</p>
+                      <p className="text-2xl font-semibold">{students.women.toLocaleString()} ({((students.women / students.total_students) * 100).toFixed(1)}%)</p>
                     </div>
                   </div>
                   <div className="h-[300px]">
@@ -257,11 +298,11 @@ const CollegePage = () => {
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="space-y-2">
                       <p className="text-sm text-muted-foreground">Male Faculty</p>
-                      <p className="text-2xl font-semibold">{faculty.men.toLocaleString()}</p>
+                      <p className="text-2xl font-semibold">{faculty.men.toLocaleString()} ({((faculty.men / (faculty.men + faculty.women)) * 100).toFixed(1)}%)</p>
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm text-muted-foreground">Female Faculty</p>
-                      <p className="text-2xl font-semibold">{faculty.women.toLocaleString()}</p>
+                      <p className="text-2xl font-semibold">{faculty.women.toLocaleString()} ({((faculty.women / (faculty.men + faculty.women)) * 100).toFixed(1)}%)</p>
                     </div>
                   </div>
                   <div className="h-[300px]">
@@ -289,7 +330,6 @@ const CollegePage = () => {
               </Card>
             </div>
 
-            {/* Academic Programs */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl font-bold flex items-center gap-2">
