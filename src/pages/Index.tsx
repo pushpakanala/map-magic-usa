@@ -1,10 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LogOut, User, Search, Bot, X } from 'lucide-react';
+import { LogOut, User, Search, Bot, X, Settings, Bell, HelpCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
@@ -25,11 +24,10 @@ const Index = () => {
   const { favorites, handleFavoriteClick } = useFavorites();
   const [userData, setUserData] = useState<{ name: string; role: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState<{ text: string; sender: 'user' | 'bot' }[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const token = sessionStorage.getItem('token')
+  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
@@ -47,18 +45,11 @@ const Index = () => {
     if (!searchQuery.trim()) return;
     
     try {
-      const response = await axios.get(`${UNIVERSITIS_DATA_GPT}?university_name=${searchQuery}`,{
-        headers: { Authorization: `Bearer ${token}` }
-    });
-      setSearchResults(response.data);
-      toast({
-        title: "Search Results",
-        description: "University information found!",
-      });
+      navigate(`/college/${encodeURIComponent(searchQuery)}`);
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to fetch university data",
+        description: "Failed to search university",
         variant: "destructive",
       });
     }
@@ -74,120 +65,123 @@ const Index = () => {
     navigate('/login', { replace: true });
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
-    setMessages([...messages, { text: newMessage, sender: 'user' }]);
-    // Simulate bot response
-    setTimeout(() => {
+    setMessages(prev => [...prev, { text: newMessage, sender: 'user' }]);
+    
+    try {
+      // Sample API endpoint - replace with your actual chatbot API
+      const response = await axios.post('https://api.example.com/chatbot', {
+        message: newMessage
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
       setMessages(prev => [...prev, { 
-        text: "Thanks for your message! Our support team will get back to you soon.", 
+        text: response.data.reply || "Thanks for your message!", 
         sender: 'bot' 
       }]);
-    }, 1000);
+    } catch (error) {
+      setMessages(prev => [...prev, { 
+        text: "I'm having trouble connecting right now. Please try again later.", 
+        sender: 'bot' 
+      }]);
+    }
+    
     setNewMessage('');
   };
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto p-8">
+      <div className="max-w-[1920px] mx-auto p-4">
         <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center space-x-4">
-            <img 
-              src="/lovable-uploads/17d6db8d-3627-4ac9-90a6-5c27912246ed.png" 
-              alt="Uniquest Logo" 
-              className="w-16 h-16"
-            />
-            <h1 className="text-2xl font-bold">UNIQUEST</h1>
-          </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative h-10 w-10 rounded-full"
-              >
-                <User className="h-5 w-5" />
+          <img 
+            src="/lovable-uploads/17d6db8d-3627-4ac9-90a6-5c27912246ed.png" 
+            alt="Uniquest Logo" 
+            className="w-32 h-32"
+          />
+          
+          <div className="flex items-center gap-4">
+            <div className="flex gap-2">
+              <Input
+                placeholder="Search for a university..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-80"
+              />
+              <Button onClick={handleSearch}>
+                <Search className="h-4 w-4 mr-2" />
+                Search
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80" align="end">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium">Name</p>
-                      <p className="text-sm text-muted-foreground">{userData?.name}</p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium">Role</p>
-                      <p className="text-sm text-muted-foreground capitalize">{userData?.role}</p>
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      onClick={handleLogout}
-                      className="w-full gap-2"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Logout
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </PopoverContent>
-          </Popover>
-        </div>
+            </div>
 
-        <div className="mb-8">
-          <div className="flex gap-4 max-w-xl mx-auto">
-            <Input
-              placeholder="Search for a university..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1"
-            />
-            <Button onClick={handleSearch}>
-              <Search className="h-4 w-4 mr-2" />
-              Search
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="relative h-10 w-10 rounded-full hover:bg-accent"
+                >
+                  <User className="h-5 w-5" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80" align="end">
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-4">
+                        <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+                          <User className="h-8 w-8 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-lg">{userData?.name}</p>
+                          <p className="text-sm text-muted-foreground capitalize">{userData?.role}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button variant="outline" className="w-full gap-2" onClick={() => toast({ title: "Settings", description: "Coming soon!" })}>
+                          <Settings className="h-4 w-4" />
+                          Settings
+                        </Button>
+                        <Button variant="outline" className="w-full gap-2" onClick={() => toast({ title: "Notifications", description: "Coming soon!" })}>
+                          <Bell className="h-4 w-4" />
+                          Notifications
+                        </Button>
+                        <Button variant="outline" className="w-full gap-2" onClick={() => toast({ title: "Help", description: "Coming soon!" })}>
+                          <HelpCircle className="h-4 w-4" />
+                          Help
+                        </Button>
+                        <Button variant="outline" className="w-full gap-2" onClick={handleLogout}>
+                          <LogOut className="h-4 w-4" />
+                          Logout
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
 
         <Tabs defaultValue="map" className="mb-8">
-          <TabsList className="grid w-full grid-cols-4 max-w-[600px] mx-auto">
+          <TabsList className="grid w-full grid-cols-3 max-w-[600px] mx-auto">
             <TabsTrigger value="map">Map View</TabsTrigger>
             <TabsTrigger value="favorites">Favorites ({favorites.length})</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
-            <TabsTrigger value="admin">Admin</TabsTrigger>
+            {userData?.role === 'admin' && (
+              <TabsTrigger value="admin">Admin</TabsTrigger>
+            )}
           </TabsList>
           
-          <TabsContent value="map">
-            {searchResults ? (
-              <div className="mb-8">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setSearchResults(null)}
-                  className="mb-4"
-                >
-                  ← Back to Map
-                </Button>
-                <Card>
-                  <CardContent className="pt-6">
-                    {/* Display university data similar to CollegePage */}
-                    <h2 className="text-2xl font-bold mb-4">{searchResults.data.school.name}</h2>
-                    <p>{searchResults.data.school.address}</p>
-                    {/* Add more details as needed */}
-                  </CardContent>
-                </Card>
-              </div>
-            ) : (
-              <>
-                <p className="text-center text-muted-foreground mb-12">
-                  Click on a state to learn more about its Universities, or hover to see its population
-                </p>
-                <USAMap />
-              </>
-            )}
+          <TabsContent value="map" className="min-h-[800px]">
+            <p className="text-center text-muted-foreground mb-8">
+              Click on a state to learn more about its Universities, or hover to see its population
+            </p>
+            <USAMap />
           </TabsContent>
           
           <TabsContent value="favorites">
@@ -232,7 +226,6 @@ const Index = () => {
           </TabsContent>
         </Tabs>
 
-        {/* Chatbot */}
         <AnimatePresence>
           {isChatOpen && (
             <motion.div
@@ -241,12 +234,16 @@ const Index = () => {
               exit={{ opacity: 0, y: 20 }}
               className="fixed bottom-20 right-4 w-80 bg-card rounded-lg shadow-xl border"
             >
-              <div className="p-4 border-b flex justify-between items-center">
-                <h3 className="font-semibold">Chat Support</h3>
+              <div className="p-4 border-b flex justify-between items-center bg-primary text-primary-foreground rounded-t-lg">
+                <h3 className="font-semibold flex items-center gap-2">
+                  <Bot className="h-4 w-4" />
+                  Chat Support
+                </h3>
                 <Button 
                   variant="ghost" 
                   size="icon"
                   onClick={() => setIsChatOpen(false)}
+                  className="hover:bg-primary/20"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -277,7 +274,7 @@ const Index = () => {
                     placeholder="Type your message..."
                     className="flex-1"
                   />
-                  <Button type="submit">Send</Button>
+                  <Button type="submit" className="bg-primary hover:bg-primary/90">Send</Button>
                 </div>
               </form>
             </motion.div>
@@ -285,7 +282,7 @@ const Index = () => {
         </AnimatePresence>
 
         <Button
-          className="fixed bottom-4 right-4 rounded-full h-12 w-12 shadow-lg"
+          className="fixed bottom-4 right-4 rounded-full h-12 w-12 shadow-lg bg-primary hover:bg-primary/90"
           onClick={() => setIsChatOpen(!isChatOpen)}
         >
           <Bot className="h-6 w-6" />
