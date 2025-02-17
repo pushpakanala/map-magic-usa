@@ -29,6 +29,7 @@ const Index = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState<{ text: string; sender: 'user' | 'bot' }[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const token = sessionStorage.getItem('token')
 
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
@@ -46,7 +47,9 @@ const Index = () => {
     if (!searchQuery.trim()) return;
     
     try {
-      const response = await axios.get(`${UNIVERSITIS_DATA_GPT}?university_name=${searchQuery}`);
+      const response = await axios.get(`${UNIVERSITIS_DATA_GPT}?university_name=${searchQuery}`,{
+        headers: { Authorization: `Bearer ${token}` }
+    });
       setSearchResults(response.data);
       toast({
         title: "Search Results",

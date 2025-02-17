@@ -15,6 +15,7 @@ const StatePage = () => {
   const { stateName } = useParams();
   const navigate = useNavigate();
   const { favorites, handleFavoriteClick } = useFavorites();
+  const token = sessionStorage.getItem("token");
 
   const { data: stateData, isLoading: stateLoading } = useQuery({
     queryKey: ['stateDetails', stateName],
@@ -41,7 +42,9 @@ const StatePage = () => {
   const { data: universities, isLoading: universitiesLoading } = useQuery({
     queryKey: ['universities', stateName],
     queryFn: async () => {
-      const response = await axios.get(`${TOP_GPT_UNIVERSITIES_LLM}?state_name=${stateName}`);
+      const response = await axios.get(`${TOP_GPT_UNIVERSITIES_LLM}?state_name=${stateName}`,{
+        headers: { Authorization: `Bearer ${token}` }
+    });
       return response.data.data.map((item) => ({
         name: item.university_name,
       }));

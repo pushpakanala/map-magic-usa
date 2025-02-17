@@ -25,11 +25,14 @@ const CollegePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [universityData, setUniversityData] = useState(null);
+  const token = sessionStorage.getItem('token');
 
   useEffect(() => {
     const fetchUniversityData = async () => {
       try {
-        const response = await axios.get(`${UNIVERSITIS_DATA_GPT}?university_name=${collegeName}`);
+        const response = await axios.get(`${UNIVERSITIS_DATA_GPT}?university_name=${collegeName}`,{
+          headers: { Authorization: `Bearer ${token}` }
+      });
         setUniversityData(response.data);
       } catch (error) {
         console.error('Error fetching university data:', error);

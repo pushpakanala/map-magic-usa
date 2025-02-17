@@ -21,7 +21,7 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.get(`${LOGIN}?email=${email}&password=${password}`);
+      const response = await axios.post(`${LOGIN}?email=${email}&password=${password}`);
       
       if (response.data) {
         const userData = {
@@ -30,8 +30,11 @@ const LoginPage = () => {
           role: 'user'
         };
         
+        const token = response.data.data.access_token;
+        
         sessionStorage.setItem('user', JSON.stringify(userData));
         sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('token', token);
         
         navigate('/', { replace: true });
         toast({

@@ -7,13 +7,16 @@ import { USER_RESOURCE } from '../constants';
 export const useFavorites = () => {
   const [favorites, setFavorites] = useState([]);
   const { toast } = useToast();
+  const token = sessionStorage.getItem("token");
 
   const { data: userData, refetch: refetchUserData } = useQuery({
     queryKey: ['userFavorites'],
     queryFn: async () => {
       const user = JSON.parse(sessionStorage.getItem('user'));
       if (!user) return null;
-      const response = await axios.get(`${USER_RESOURCE}{id}?email=${user.email}`);
+      const response = await axios.get(`${USER_RESOURCE}{id}?email=${user.email}`,{
+        headers: { Authorization: `Bearer ${token}` }
+    });
       console.log('Fetched favorites:', response.data?.data[0]?.favourites);
       return response.data;
     },
@@ -38,7 +41,9 @@ export const useFavorites = () => {
       const user = JSON.parse(sessionStorage.getItem('user'));
       if (!user) throw new Error('User not logged in');
 
-      const currentResponse = await axios.get(`${USER_RESOURCE}{id}?email=${user.email}`);
+      const currentResponse = await axios.get(`${USER_RESOURCE}{id}?email=${user.email}`,{
+        headers: { Authorization: `Bearer ${token}` }
+    });
       const currentFavorites = currentResponse.data.data[0].favourites || [];
       
       console.log('Current favorites before update:', currentFavorites);
@@ -48,8 +53,12 @@ export const useFavorites = () => {
         name: user.name,
         email: user.email,
         role: user.role,
-        favourites: newFavorites
-      });
+        favourites: newFavorites,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` }
+    }
+    );
       
       return response.data;
     },
