@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -68,7 +67,6 @@ const USAMap: React.FC = () => {
   };
 
   const getStateColor = (index: number) => {
-    // Enhanced color palette with satellite-inspired colors
     const colors = [
       'fill-slate-400',
       'fill-slate-500',
@@ -81,7 +79,7 @@ const USAMap: React.FC = () => {
 
   if (isLoading) return (
     <div className="w-full aspect-[2.2/1] relative">
-      <Skeleton className="absolute inset-0 rounded-xl" />
+      <Skeleton className="absolute inset-0" />
     </div>
   );
 
@@ -96,85 +94,70 @@ const USAMap: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 md:px-6 lg:px-8 py-12">
-      <motion.div 
-        className="relative bg-gradient-to-br from-slate-200/90 to-zinc-200/80 rounded-xl shadow-2xl border border-slate-300/50 backdrop-blur-sm overflow-hidden"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="aspect-[2.2/1] relative w-full p-6">
-          <svg
-            ref={mapRef}
-            viewBox="-50 -20 1100 650"
-            preserveAspectRatio="xMidYMid meet"
-            className="w-full h-full"
-            onMouseMove={handleMouseMove}
-            style={{ 
-              filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
+      <div className="aspect-[2.2/1] relative w-full">
+        <svg
+          ref={mapRef}
+          viewBox="-50 -20 1100 650"
+          preserveAspectRatio="xMidYMid meet"
+          className="w-full h-full"
+          onMouseMove={handleMouseMove}
+          style={{ 
+            filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
+          }}
+        >
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          {statesData.map((state, index) => (
+            <motion.path
+              key={state.id}
+              d={state.path}
+              className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
+                hover:brightness-110 hover:saturate-150`}
+              style={{
+                filter: hoveredState === state.id ? 'url(#glow)' : 'none',
+                opacity: 0.85,
+              }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 0.85, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.01 }}
+              whileHover={{ scale: 1.02, opacity: 1 }}
+              onMouseEnter={() => setHoveredState(state.name)}
+              onMouseLeave={() => setHoveredState(null)}
+              onClick={() => handleStateClick(state.name)}
+            />
+          ))}
+        </svg>
+      </div>
+      
+      <AnimatePresence>
+        {hoveredState && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="absolute bg-white/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-slate-200/50 pointer-events-none z-10"
+            style={{
+              left: `${hoverPosition.x}px`,
+              top: `${hoverPosition.y}px`,
+              transform: 'translate(20px, -50%)'
             }}
           >
-            <defs>
-              <linearGradient id="satelliteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style={{ stopColor: '#e2e8f0', stopOpacity: 0.8 }} />
-                <stop offset="100%" style={{ stopColor: '#f8fafc', stopOpacity: 0.9 }} />
-              </linearGradient>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-              <pattern id="gridPattern" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#94a3b8" strokeWidth="0.5" opacity="0.2"/>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#gridPattern)" />
-            {statesData.map((state, index) => (
-              <motion.path
-                key={state.id}
-                d={state.path}
-                className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
-                  hover:brightness-110 hover:saturate-150`}
-                style={{
-                  filter: hoveredState === state.id ? 'url(#glow)' : 'none',
-                  opacity: 0.85,
-                }}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 0.85, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.01 }}
-                whileHover={{ scale: 1.02, opacity: 1 }}
-                onMouseEnter={() => setHoveredState(state.name)}
-                onMouseLeave={() => setHoveredState(null)}
-                onClick={() => handleStateClick(state.name)}
-              />
-            ))}
-          </svg>
-        </div>
-        
-        <AnimatePresence>
-          {hoveredState && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="absolute bg-white/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-slate-200/50 pointer-events-none z-10"
-              style={{
-                left: `${hoverPosition.x}px`,
-                top: `${hoverPosition.y}px`,
-                transform: 'translate(20px, -50%)'
-              }}
-            >
-              <p className="font-semibold text-lg text-slate-700">
-                {getStateName(hoveredState)}
-              </p>
-              <p className="text-sm text-slate-500">
-                Population: {getPopulation(hoveredState)}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+            <p className="font-semibold text-lg text-slate-700">
+              {getStateName(hoveredState)}
+            </p>
+            <p className="text-sm text-slate-500">
+              Population: {getPopulation(hoveredState)}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
