@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
 import UniversitiesList from '@/components/state/UniversitiesList';
 import axios from 'axios';
-import { UNIVERSITIS_DATA_GPT } from '@/constants';
+import { BOT_GEMINI } from '../constants';
 import {
   Popover,
   PopoverContent,
@@ -80,14 +80,13 @@ const Index = () => {
     
     try {
       // Sample API endpoint - replace with your actual chatbot API
-      const response = await axios.post('https://api.example.com/chatbot', {
-        message: newMessage
-      }, {
+      const response = await axios.get(`${BOT_GEMINI}?request=${newMessage}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
+      
       setMessages(prev => [...prev, { 
-        text: response.data.reply || "Thanks for your message!", 
+        text: response.data.data.response || "Thanks for your message!", 
         sender: 'bot' 
       }]);
     } catch (error) {

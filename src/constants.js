@@ -8,3 +8,4 @@ export const UNIVERSITY_RESOURCE = `${API_SERVER_URL}/university-management/stat
 export const TOP_UNIVERSITIES_LLM = `${API_SERVER_URL}/llm/llm/top-universities`
 export const TOP_GPT_UNIVERSITIES_LLM = `${API_SERVER_URL}/llm/llm/top-universities-gpt`
 export const UNIVERSITIS_DATA_GPT = `${API_SERVER_URL}/llm/llm/gpt-universities-data`
+export const BOT_GEMINI = `${API_SERVER_URL}/llm/llm/`
