@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -5,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { statesData } from '@/lib/states-data';
+import { motion } from 'framer-motion';
 
 interface StateData {
   state: string;
@@ -28,11 +30,11 @@ const USAMap: React.FC = () => {
     queryFn: async () => {
       const response = await axios.get('https://api.census.gov/data/2023/acs/acs1', {
         params: {
-            get: "NAME,B01001_001E,B01001_002E,B01001_026E", // Total population, male, female
-            for: "state:*", // Get data for all states
-            key: "e921b3e18e6fd0b1d0845420b5baf19b33229c36" // Replace with your Census API key
+          get: "NAME,B01001_001E,B01001_002E,B01001_026E",
+          for: "state:*",
+          key: "e921b3e18e6fd0b1d0845420b5baf19b33229c36"
         }
-    });    
+      });    
       const formattedData = response.data.slice(1).map((item: any[]) => ({
         state: item[0],
         population: parseInt(item[1])
@@ -66,11 +68,22 @@ const USAMap: React.FC = () => {
   };
 
   const getStateColor = (index: number) => {
-    const colors = ['100', '200', '300', '400', '500'];
-    return `fill-mapBase-${colors[index % colors.length]}`;
+    // Enhanced color palette for better visual hierarchy
+    const colors = [
+      'fill-blue-400',
+      'fill-blue-500',
+      'fill-blue-600',
+      'fill-indigo-500',
+      'fill-indigo-600'
+    ];
+    return colors[index % colors.length];
   };
 
-  if (isLoading) return <Skeleton className="w-full h-[600px] rounded-lg" />;
+  if (isLoading) return (
+    <div className="w-full aspect-[16/9] relative">
+      <Skeleton className="absolute inset-0 rounded-xl" />
+    </div>
+  );
 
   if (error) {
     toast({
@@ -82,40 +95,75 @@ const USAMap: React.FC = () => {
   }
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto">
-      <svg
-        ref={mapRef}
-        viewBox="100 0 959 800"
-        className="w-full h-auto"
-        onMouseMove={handleMouseMove}
+    <div className="relative w-full max-w-[1600px] mx-auto px-4 py-8">
+      <motion.div 
+        className="relative bg-gradient-to-br from-background/80 to-background/40 rounded-xl shadow-xl border border-primary/10 backdrop-blur-sm p-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        {statesData.map((state, index) => (
-          <path
-            key={state.id}
-            d={state.path}
-            className={`${getStateColor(index)} hover:fill-mapHover cursor-pointer transition-colors duration-300 ${
-              hoveredState === state.id ? 'animate-map-hover' : ''
-            }`}
-            onMouseEnter={() => setHoveredState(state.name)}
-            onMouseLeave={() => setHoveredState(null)}
-            onClick={() => handleStateClick(state.name)}
-          />
-        ))}
-      </svg>
-      
-      {hoveredState && (
-        <div 
-          className="absolute bg-white p-4 rounded-lg shadow-lg border border-gray-200 pointer-events-none z-10"
-          style={{
-            left: `${hoverPosition.x}px`,
-            top: `${hoverPosition.y}px`,
-            transform: 'translate(20px, -50%)'
+        <svg
+          ref={mapRef}
+          viewBox="50 0 959 593"
+          className="w-full h-auto transform scale-[0.95]"
+          onMouseMove={handleMouseMove}
+          style={{ 
+            filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
+            maxHeight: '80vh'
           }}
         >
-          <p className="font-semibold text-lg">{getStateName(hoveredState)}</p>
-          <p className="text-gray-600">Population: {getPopulation(hoveredState)}</p>
-        </div>
-      )}
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          {statesData.map((state, index) => (
+            <motion.path
+              key={state.id}
+              d={state.path}
+              className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
+                hover:brightness-110 hover:saturate-150`}
+              style={{
+                filter: hoveredState === state.id ? 'url(#glow)' : 'none',
+              }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.01 }}
+              whileHover={{ scale: 1.02 }}
+              onMouseEnter={() => setHoveredState(state.name)}
+              onMouseLeave={() => setHoveredState(null)}
+              onClick={() => handleStateClick(state.name)}
+            />
+          ))}
+        </svg>
+        
+        <AnimatePresence>
+          {hoveredState && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="absolute bg-card/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-primary/20 pointer-events-none z-10"
+              style={{
+                left: `${hoverPosition.x}px`,
+                top: `${hoverPosition.y}px`,
+                transform: 'translate(20px, -50%)'
+              }}
+            >
+              <p className="font-semibold text-lg bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+                {getStateName(hoveredState)}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Population: {getPopulation(hoveredState)}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 };
