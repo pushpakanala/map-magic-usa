@@ -78,7 +78,7 @@ const USAMap: React.FC = () => {
   };
 
   if (isLoading) return (
-    <div className="w-full aspect-[2.2/1] relative">
+    <div className="w-full h-[600px] relative">
       <Skeleton className="absolute inset-0" />
     </div>
   );
@@ -93,48 +93,46 @@ const USAMap: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 md:px-6 lg:px-8 py-12">
-      <div className="aspect-[2.2/1] relative w-full">
-        <svg
-          ref={mapRef}
-          viewBox="-50 -20 1100 650"
-          preserveAspectRatio="xMidYMid meet"
-          className="w-full h-full"
-          onMouseMove={handleMouseMove}
-          style={{ 
-            filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
-          }}
-        >
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-          {statesData.map((state, index) => (
-            <motion.path
-              key={state.id}
-              d={state.path}
-              className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
-                hover:brightness-110 hover:saturate-150`}
-              style={{
-                filter: hoveredState === state.id ? 'url(#glow)' : 'none',
-                opacity: 0.85,
-              }}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 0.85, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.01 }}
-              whileHover={{ scale: 1.02, opacity: 1 }}
-              onMouseEnter={() => setHoveredState(state.name)}
-              onMouseLeave={() => setHoveredState(null)}
-              onClick={() => handleStateClick(state.name)}
-            />
-          ))}
-        </svg>
-      </div>
+    <div className="w-full h-[600px] relative">
+      <svg
+        ref={mapRef}
+        viewBox="-50 -50 1100 800"
+        preserveAspectRatio="xMidYMid meet"
+        className="w-full h-full"
+        onMouseMove={handleMouseMove}
+        style={{ 
+          filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
+        }}
+      >
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        {statesData.map((state, index) => (
+          <motion.path
+            key={state.id}
+            d={state.path}
+            className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
+              hover:brightness-110 hover:saturate-150`}
+            style={{
+              filter: hoveredState === state.id ? 'url(#glow)' : 'none',
+              opacity: 0.85,
+            }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 0.85, scale: 1 }}
+            transition={{ duration: 0.5, delay: index * 0.01 }}
+            whileHover={{ scale: 1.02, opacity: 1 }}
+            onMouseEnter={() => setHoveredState(state.name)}
+            onMouseLeave={() => setHoveredState(null)}
+            onClick={() => handleStateClick(state.name)}
+          />
+        ))}
+      </svg>
       
       <AnimatePresence>
         {hoveredState && (

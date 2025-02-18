@@ -101,13 +101,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-background to-background">
-      <div className="max-w-[1920px] mx-auto p-4">
+      <div className="max-w-[1920px] mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="space-y-8 p-6"
         >
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex justify-between items-center">
             <motion.img 
               src="/lovable-uploads/17d6db8d-3627-4ac9-90a6-5c27912246ed.png" 
               alt="Uniquest Logo" 
@@ -189,8 +190,8 @@ const Index = () => {
             </div>
           </div>
 
-          <Tabs defaultValue="map" className="mb-8">
-            <TabsList className="grid w-full grid-cols-3 max-w-[600px] mx-auto bg-background/50 backdrop-blur-sm border border-primary/20">
+          <Tabs defaultValue="map" className="w-full">
+            <TabsList className="grid w-full max-w-[600px] mx-auto bg-background/50 backdrop-blur-sm border border-primary/20 grid-cols-3">
               <TabsTrigger value="map">Map View</TabsTrigger>
               <TabsTrigger value="favorites">Favorites ({favorites.length})</TabsTrigger>
               <TabsTrigger value="about">About</TabsTrigger>
@@ -205,7 +206,9 @@ const Index = () => {
               >
                 Click on a state to learn more about its Universities, or hover to see its population
               </motion.p>
-              <USAMap />
+              <div className="max-w-[1600px] mx-auto px-4">
+                <USAMap />
+              </div>
             </TabsContent>
             
             <TabsContent value="favorites">
