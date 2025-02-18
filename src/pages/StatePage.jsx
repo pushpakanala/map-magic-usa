@@ -10,6 +10,35 @@ import { TOP_GPT_UNIVERSITIES_LLM } from '../constants';
 import PopulationStats from '../components/state/PopulationStats';
 import UniversitiesList from '../components/state/UniversitiesList';
 import { useFavorites } from '../hooks/use-favorites';
+import { GraduationCap } from 'lucide-react';
+
+const LoadingState = () => (
+  <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
+    <div className="relative w-24 h-24 mb-8">
+      <motion.div
+        className="absolute inset-0"
+        animate={{
+          scale: [1, 1.2, 1],
+          rotate: [0, 180, 360],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <GraduationCap className="w-24 h-24 text-primary" />
+      </motion.div>
+    </div>
+    <motion.p
+      className="text-xl font-medium text-primary/80"
+      animate={{ opacity: [0.5, 1, 0.5] }}
+      transition={{ duration: 1.5, repeat: Infinity }}
+    >
+      Loading universities in {useParams().stateName}...
+    </motion.p>
+  </div>
+);
 
 const StatePage = () => {
   const { stateName } = useParams();
@@ -56,27 +85,31 @@ const StatePage = () => {
   };
 
   if (stateLoading || universitiesLoading) {
-    return (
-      <div className="min-h-screen bg-background p-8">
-        <div className="max-w-7xl mx-auto">
-          <Skeleton className="h-12 w-48 mb-4" />
-          <Skeleton className="h-64 w-full" />
-        </div>
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-7xl mx-auto text-left">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-background to-background">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-7xl text-left">
-          <Button variant="outline" onClick={() => navigate('/')} className="mb-8">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate('/')} 
+            className="mb-8 hover:bg-background/80 backdrop-blur-sm"
+          >
             ← Back to Map
           </Button>
         </div>
         
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-center">
-          <h1 className="text-4xl font-bold mb-6 capitalize">{stateName}</h1>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.5 }} 
+          className="space-y-8"
+        >
+          <h1 className="text-4xl font-bold mb-6 capitalize bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+            {stateName}
+          </h1>
           
           <PopulationStats stateData={stateData} />
 
