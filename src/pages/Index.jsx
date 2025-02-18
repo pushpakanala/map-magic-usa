@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
@@ -67,6 +66,11 @@ const Index = () => {
       description: "You have been successfully logged out.",
     });
     navigate('/login', { replace: true });
+  };
+
+  const handleBotClick = () => {
+    setIsChatOpen(!isChatOpen);
+    console.log('Bot clicked, chat open:', !isChatOpen);
   };
 
   return (
@@ -185,14 +189,30 @@ const Index = () => {
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.3 }}
+        className="fixed bottom-4 right-4 z-50"
       >
         <Button
-          className="fixed bottom-4 right-4 rounded-full h-12 w-12 shadow-lg bg-primary hover:bg-primary/90"
-          onClick={() => setIsChatOpen(!isChatOpen)}
+          className="rounded-full h-12 w-12 shadow-lg bg-primary hover:bg-primary/90"
+          onClick={handleBotClick}
+          type="button"
         >
           {isChatOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
         </Button>
       </motion.div>
+
+      {isChatOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          className="fixed bottom-20 right-4 w-96 h-[600px] bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-primary/20 z-40"
+        >
+          <div className="p-4">
+            <h3 className="text-lg font-semibold">Chat with Bot</h3>
+            {/* Add your bot chat interface here */}
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 };

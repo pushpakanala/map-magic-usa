@@ -6,8 +6,11 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
 const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
   const handleFavoriteClick = (e) => {
+    e.preventDefault();
     e.stopPropagation();
-    onFavoriteClick(college.name, e);
+    if (onFavoriteClick) {
+      onFavoriteClick(college.name);
+    }
   };
 
   return (
@@ -17,21 +20,25 @@ const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
         onClick={onClick}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50" />
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2 z-10 hover:bg-primary/10"
+        <div 
+          className="absolute top-2 right-2 z-20"
           onClick={handleFavoriteClick}
-          type="button"
         >
-          <Heart 
-            className={`h-5 w-5 transition-colors ${
-              isFavorite 
-                ? 'fill-current text-primary' 
-                : 'text-muted-foreground'
-            }`}
-          />
-        </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-primary/10"
+            type="button"
+          >
+            <Heart 
+              className={`h-5 w-5 transition-colors ${
+                isFavorite 
+                  ? 'fill-current text-primary' 
+                  : 'text-muted-foreground'
+              }`}
+            />
+          </Button>
+        </div>
         <CardHeader className="relative z-10">
           <div className="flex items-start gap-3">
             <div className="mt-1 p-2 rounded-full bg-primary/10">
