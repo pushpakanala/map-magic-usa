@@ -69,10 +69,6 @@ const Index = () => {
     navigate('/login', { replace: true });
   };
 
-  const getGridCols = () => {
-    return userData?.role === 'admin' ? 'grid-cols-4' : 'grid-cols-3';
-  };
-
   return (
     <div className="min-h-[1024px] max-w-[1440px] mx-auto bg-gradient-to-br from-slate-50 via-slate-100 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <motion.div 
@@ -161,7 +157,7 @@ const Index = () => {
         {/* Main Content */}
         <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-slate-200/50 dark:border-slate-700/50">
           <Tabs defaultValue="map" className="w-full">
-            <TabsList className={`grid w-full max-w-[800px] mx-auto bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg ${getGridCols()} p-1 mb-8`}>
+            <TabsList className="grid w-full max-w-[800px] mx-auto bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg grid-cols-4 p-1 mb-8">
               <TabsTrigger value="map" className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md">Map View</TabsTrigger>
               <TabsTrigger value="favorites" className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md">Favorites ({favorites.length})</TabsTrigger>
               <TabsTrigger value="about" className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md">About</TabsTrigger>
