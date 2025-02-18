@@ -71,7 +71,7 @@ const CollegePage = () => {
   const prepareChartData = (data) => {
     return Object.entries(data).map(([name, value]) => ({
       name,
-      value: parseFloat(value.replace('%', ''))
+      value: parseFloat(value.toString().replace('%', ''))
     }));
   };
 
