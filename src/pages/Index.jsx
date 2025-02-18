@@ -9,7 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
 import UniversitiesList from '@/components/state/UniversitiesList';
 import axios from 'axios';
-import { BOT_GEMINI } from '../constants';
 import {
   Popover,
   PopoverContent,
@@ -27,6 +26,7 @@ const Index = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
@@ -61,8 +61,8 @@ const Index = () => {
     }
   };
 
-  const handleSendMessage = () => {
-    if (!currentMessage.trim()) return;
+  const handleSendMessage = async () => {
+    if (!currentMessage.trim() || isLoading) return;
     
     setMessages(prev => [...prev, {
       id: Date.now(),
@@ -70,16 +70,32 @@ const Index = () => {
       sender: 'user'
     }]);
     
-    // Add bot response (you can replace this with actual bot logic)
-    setTimeout(() => {
+    setIsLoading(true);
+    
+    try {
+      const response = await axios.get(`https://jsonplaceholder.typicode.com/comments/1`);
+      
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
-        text: "Thanks for your message! This is a demo response.",
+        text: response.data.body,
         sender: 'bot'
       }]);
-    }, 1000);
-    
-    setCurrentMessage('');
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to get response from the bot",
+        variant: "destructive",
+      });
+      
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        text: "Sorry, I'm having trouble responding right now. Please try again later.",
+        sender: 'bot'
+      }]);
+    } finally {
+      setIsLoading(false);
+      setCurrentMessage('');
+    }
   };
 
   const handleLogout = () => {
@@ -200,6 +216,36 @@ const Index = () => {
           />
         </TabsContent>
 
+        <TabsContent value="about">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-4xl mx-auto p-6 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg space-y-6"
+          >
+            <h2 className="text-3xl font-bold text-primary">About UniQuest</h2>
+            
+            <div className="space-y-4">
+              <p className="text-lg text-muted-foreground">
+                Welcome to UniQuest, your comprehensive platform for exploring universities across the United States. Our interactive map allows you to discover educational institutions state by state, while our powerful search features help you find specific universities that match your interests.
+              </p>
+              
+              <h3 className="text-xl font-semibold text-primary">Key Features</h3>
+              <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+                <li>Interactive state-by-state university exploration</li>
+                <li>Comprehensive university information and details</li>
+                <li>Personalized favorites list</li>
+                <li>Intelligent chat assistance</li>
+                <li>Advanced search capabilities</li>
+              </ul>
+              
+              <h3 className="text-xl font-semibold text-primary">Our Mission</h3>
+              <p className="text-muted-foreground">
+                Our mission is to simplify the university search process and help students make informed decisions about their educational future. We believe in providing accurate, up-to-date information in an accessible and user-friendly format.
+              </p>
+            </div>
+          </motion.div>
+        </TabsContent>
+
         {userData?.role === 'admin' && (
           <TabsContent value="admin">
             <div className="p-6 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg">
@@ -255,6 +301,13 @@ const Index = () => {
                 </div>
               </motion.div>
             ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-muted p-3 rounded-lg">
+                  <span className="animate-pulse">Thinking...</span>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="p-4 border-t border-primary/10">
@@ -262,7 +315,12 @@ const Index = () => {
               <Textarea
                 value={currentMessage}
                 onChange={(e) => setCurrentMessage(e.target.value)}
-                onKeyDown={handleKeyPress}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
                 placeholder="Type your message..."
                 className="resize-none"
                 rows={2}
@@ -271,7 +329,7 @@ const Index = () => {
                 onClick={handleSendMessage}
                 size="icon"
                 className="h-auto"
-                disabled={!currentMessage.trim()}
+                disabled={!currentMessage.trim() || isLoading}
               >
                 <Send className="h-4 w-4" />
               </Button>
