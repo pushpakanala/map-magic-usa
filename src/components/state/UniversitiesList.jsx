@@ -36,7 +36,7 @@ const UniversitiesList = ({ universities, favorites, onFavoriteClick, onUniversi
             <UniversityCard
               college={college}
               isFavorite={favorites.includes(college.name)}
-              onFavoriteClick={(e) => onFavoriteClick(college.name, e)}
+              onFavoriteClick={onFavoriteClick}
               onClick={() => onUniversityClick(college)}
             />
           </motion.div>

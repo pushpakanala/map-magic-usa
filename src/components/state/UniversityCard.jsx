@@ -6,8 +6,9 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
 const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
   const handleFavoriteClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
     if (onFavoriteClick) {
       onFavoriteClick(college.name);
     }
@@ -20,15 +21,13 @@ const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
         onClick={onClick}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50" />
-        <div 
-          className="absolute top-2 right-2 z-20"
-          onClick={handleFavoriteClick}
-        >
+        <div className="absolute top-2 right-2 z-20">
           <Button
             variant="ghost"
             size="icon"
             className="hover:bg-primary/10"
             type="button"
+            onClick={handleFavoriteClick}
           >
             <Heart 
               className={`h-5 w-5 transition-colors ${

@@ -69,9 +69,7 @@ export const useFavorites = () => {
     }
   });
 
-  const handleFavoriteClick = async (collegeName, e) => {
-    if (e) e.stopPropagation();
-    
+  const handleFavoriteClick = async (collegeName) => {
     const user = JSON.parse(sessionStorage.getItem('user'));
     if (!user) {
       toast({
