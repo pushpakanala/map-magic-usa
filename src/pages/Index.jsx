@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
+import { BOT_GEMINI } from '../constants';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -73,11 +74,13 @@ const Index = () => {
     setIsLoading(true);
     
     try {
-      const response = await axios.get(`https://jsonplaceholder.typicode.com/comments/1`);
+      const response = await axios.get(`${BOT_GEMINI}?request=${currentMessage}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
-        text: response.data.body,
+        text: response.data.data.response,
         sender: 'bot'
       }]);
     } catch (error) {
