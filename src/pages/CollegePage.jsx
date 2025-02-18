@@ -153,106 +153,129 @@ const CollegePage = () => {
           transition={{ duration: 0.5 }}
           className="space-y-8 pt-16"
         >
-          <Card className="w-full overflow-hidden border-none shadow-xl bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
-            <CardHeader className="relative overflow-hidden">
+          <Card className="w-full overflow-hidden border-none shadow-xl bg-gradient-to-br from-background/80 to-background/40 backdrop-blur-sm">
+            <CardHeader className="relative overflow-hidden pb-0">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-primary/5 z-0" />
               <div className="relative z-10 space-y-6">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
+                  className="space-y-4"
                 >
-                  <CardTitle className="text-4xl font-bold text-foreground">
-                    {school.name}
-                  </CardTitle>
-                  <div className="flex items-center gap-2 text-muted-foreground mt-4">
-                    <MapPin className="h-4 w-4 text-primary" />
-                    <span>{school.address}</span>
+                  <div className="flex items-start justify-between gap-4 flex-wrap">
+                    <div className="space-y-2">
+                      <CardTitle className="text-4xl font-bold text-foreground bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+                        {school.name}
+                      </CardTitle>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        <span>{school.address}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full">
+                      <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                      <span className="font-semibold">#{school.us_ranking} in US Rankings</span>
+                    </div>
                   </div>
-                </motion.div>
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="flex flex-wrap gap-2 mt-4"
-                >
-                  {school.eligibility_addmission_exams.map((exam) => (
-                    <span
-                      key={exam}
-                      className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium backdrop-blur-sm border border-primary/20 hover:bg-primary/20 transition-colors"
-                    >
-                      {exam}
-                    </span>
-                  ))}
-                </motion.div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
                   <motion.div
-                    className="space-y-4 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-primary/10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="flex flex-wrap gap-2 mt-4"
+                  >
+                    {school.school_programs.map((program) => (
+                      <span
+                        key={program}
+                        className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium backdrop-blur-sm border border-primary/20 hover:bg-primary/20 transition-colors"
+                      >
+                        {program}
+                      </span>
+                    ))}
+                  </motion.div>
+                </motion.div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                  <motion.div
+                    className="p-6 rounded-xl bg-gradient-to-br from-background/60 to-background/30 backdrop-blur-sm border border-primary/10 hover:shadow-lg hover:shadow-primary/5 transition-all"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
                       <Building2 className="h-5 w-5 text-primary" />
                       Key Information
                     </h3>
-                    <div className="space-y-3">
-                      <p className="text-sm"><span className="font-medium text-primary">Founded:</span> {school.founded_in}</p>
-                      <p className="text-sm"><span className="font-medium text-primary">Type:</span> {school.type}</p>
-                      <p className="text-sm"><span className="font-medium text-primary">Cost of Living:</span> {school.cost_of_living_near_university}</p>
-                      <p className="text-sm"><span className="font-medium text-primary">Programs:</span> {renderSchoolPrograms(school.school_programs)}</p>
-                      <p className="text-sm flex items-center gap-2">
-                        <span className="font-medium text-primary">US Ranking:</span>
-                        <span className="flex items-center gap-1">
-                          #{school.us_ranking}
-                          <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                        </span>
-                      </p>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between items-center pb-2 border-b border-primary/10">
+                        <span className="text-muted-foreground">Founded</span>
+                        <span className="font-medium">{school.founded_in}</span>
+                      </div>
+                      <div className="flex justify-between items-center pb-2 border-b border-primary/10">
+                        <span className="text-muted-foreground">Type</span>
+                        <span className="font-medium">{school.type}</span>
+                      </div>
+                      <div className="flex justify-between items-center pb-2 border-b border-primary/10">
+                        <span className="text-muted-foreground">Cost of Living</span>
+                        <span className="font-medium">{school.cost_of_living_near_university}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Required Exams</span>
+                        <div className="flex flex-wrap justify-end gap-1">
+                          {school.eligibility_addmission_exams.map((exam) => (
+                            <span key={exam} className="text-xs bg-primary/10 px-2 py-1 rounded-full">
+                              {exam}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </motion.div>
 
                   <motion.div
-                    className="space-y-4 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-primary/10"
+                    className="p-6 rounded-xl bg-gradient-to-br from-background/60 to-background/30 backdrop-blur-sm border border-primary/10 hover:shadow-lg hover:shadow-primary/5 transition-all"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
                       <Globe className="h-5 w-5 text-primary" />
                       Contact Information
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {renderContactDetails(school.contact_details)}
-                      <p className="text-sm">
-                        <span className="font-medium text-primary">Website:</span> 
-                        <a 
-                          href={school.school_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline ml-1 inline-flex items-center gap-1"
-                        >
-                          Visit Website
-                          <Globe className="h-4 w-4" />
-                        </a>
-                      </p>
+                      <a 
+                        href={school.school_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mt-2"
+                      >
+                        <Globe className="h-4 w-4" />
+                        Visit Website
+                      </a>
                     </div>
                   </motion.div>
 
                   <motion.div
-                    className="space-y-4 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-primary/10"
+                    className="p-6 rounded-xl bg-gradient-to-br from-background/60 to-background/30 backdrop-blur-sm border border-primary/10 hover:shadow-lg hover:shadow-primary/5 transition-all"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
                       <Award className="h-5 w-5 text-primary" />
                       Academic Performance
                     </h3>
-                    <div className="space-y-3">
-                      <p className="text-sm"><span className="font-medium text-primary">Graduation Rate:</span> {school.graduation_rate}</p>
-                      <p className="text-sm"><span className="font-medium text-primary">Acceptance Rate:</span> {school.acceptance_rate}</p>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between items-center pb-2 border-b border-primary/10">
+                        <span className="text-muted-foreground">Graduation Rate</span>
+                        <span className="font-medium">{school.graduation_rate}</span>
+                      </div>
+                      <div className="flex justify-between items-center pb-2 border-b border-primary/10">
+                        <span className="text-muted-foreground">Acceptance Rate</span>
+                        <span className="font-medium">{school.acceptance_rate}</span>
+                      </div>
                       <div className="space-y-2">
-                        <p className="text-sm font-medium text-primary">Accreditation:</p>
-                        <p className="text-sm">{school.accreditor}</p>
+                        <span className="text-muted-foreground block">Accreditation</span>
+                        <p className="font-medium">{school.accreditor}</p>
                         <p className="text-xs text-muted-foreground">Code: {school.accreditor_code}</p>
                       </div>
                     </div>
