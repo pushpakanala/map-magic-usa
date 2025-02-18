@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LogOut, User, Search, Bot, X } from 'lucide-react';
+import { LogOut, User, Search, Bot, X, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { motion, AnimatePresence } from 'framer-motion';
+import { Textarea } from "@/components/ui/textarea";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -24,6 +25,8 @@ const Index = () => {
   const [userData, setUserData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState('');
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
@@ -52,9 +55,31 @@ const Index = () => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSearch();
     }
+  };
+
+  const handleSendMessage = () => {
+    if (!currentMessage.trim()) return;
+    
+    setMessages(prev => [...prev, {
+      id: Date.now(),
+      text: currentMessage,
+      sender: 'user'
+    }]);
+    
+    // Add bot response (you can replace this with actual bot logic)
+    setTimeout(() => {
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        text: "Thanks for your message! This is a demo response.",
+        sender: 'bot'
+      }]);
+    }, 1000);
+    
+    setCurrentMessage('');
   };
 
   const handleLogout = () => {
@@ -205,11 +230,55 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="fixed bottom-20 right-4 w-96 h-[600px] bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-primary/20 z-40"
+          className="fixed bottom-20 right-4 w-96 h-[600px] bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-primary/20 z-40 flex flex-col"
         >
-          <div className="p-4">
-            <h3 className="text-lg font-semibold">Chat with Bot</h3>
-            {/* Add your bot chat interface here */}
+          <div className="p-4 border-b border-primary/10">
+            <h3 className="text-lg font-semibold text-primary">Chat with Bot</h3>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {messages.map((message) => (
+              <motion.div
+                key={message.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[80%] p-3 rounded-lg ${
+                    message.sender === 'user'
+                      ? 'bg-primary text-primary-foreground ml-auto'
+                      : 'bg-muted'
+                  }`}
+                >
+                  {message.text}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="p-4 border-t border-primary/10">
+            <div className="flex gap-2">
+              <Textarea
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value)}
+                onKeyDown={handleKeyPress}
+                placeholder="Type your message..."
+                className="resize-none"
+                rows={2}
+              />
+              <Button
+                onClick={handleSendMessage}
+                size="icon"
+                className="h-auto"
+                disabled={!currentMessage.trim()}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Press Enter to send, Shift + Enter for new line
+            </p>
           </div>
         </motion.div>
       )}
