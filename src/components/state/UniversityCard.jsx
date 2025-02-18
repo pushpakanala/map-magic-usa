@@ -5,11 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
 const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
-  const handleFavoriteClick = (e) => {
-    e.stopPropagation();
-    onFavoriteClick(college.name, e);
-  };
-
   return (
     <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
       <Card 
@@ -21,7 +16,7 @@ const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
           variant="ghost"
           size="icon"
           className="absolute top-2 right-2 z-10 hover:bg-primary/10"
-          onClick={handleFavoriteClick}
+          onClick={(e) => onFavoriteClick(e)}
         >
           <Heart 
             className={`h-5 w-5 transition-colors ${
