@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -78,7 +79,7 @@ const USAMap: React.FC = () => {
   };
 
   if (isLoading) return (
-    <div className="w-full aspect-[16/9] relative">
+    <div className="w-full aspect-[1.9/1] relative">
       <Skeleton className="absolute inset-0 rounded-xl" />
     </div>
   );
@@ -93,51 +94,53 @@ const USAMap: React.FC = () => {
   }
 
   return (
-    <div className="relative w-full max-w-[1600px] mx-auto px-4 py-8">
+    <div className="relative w-full max-w-[1800px] mx-auto">
       <motion.div 
         className="relative bg-gradient-to-br from-background/80 to-background/40 rounded-xl shadow-xl border border-primary/10 backdrop-blur-sm p-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <svg
-          ref={mapRef}
-          viewBox="50 0 959 593"
-          className="w-full h-auto transform scale-[0.95]"
-          onMouseMove={handleMouseMove}
-          style={{ 
-            filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
-            maxHeight: '80vh'
-          }}
-        >
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-          {statesData.map((state, index) => (
-            <motion.path
-              key={state.id}
-              d={state.path}
-              className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
-                hover:brightness-110 hover:saturate-150`}
-              style={{
-                filter: hoveredState === state.id ? 'url(#glow)' : 'none',
-              }}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.01 }}
-              whileHover={{ scale: 1.02 }}
-              onMouseEnter={() => setHoveredState(state.name)}
-              onMouseLeave={() => setHoveredState(null)}
-              onClick={() => handleStateClick(state.name)}
-            />
-          ))}
-        </svg>
+        <div className="aspect-[1.9/1] relative">
+          <svg
+            ref={mapRef}
+            viewBox="0 0 1000 600"
+            preserveAspectRatio="xMidYMid meet"
+            className="w-full h-full"
+            onMouseMove={handleMouseMove}
+            style={{ 
+              filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
+            }}
+          >
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            {statesData.map((state, index) => (
+              <motion.path
+                key={state.id}
+                d={state.path}
+                className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
+                  hover:brightness-110 hover:saturate-150`}
+                style={{
+                  filter: hoveredState === state.id ? 'url(#glow)' : 'none',
+                }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.01 }}
+                whileHover={{ scale: 1.02 }}
+                onMouseEnter={() => setHoveredState(state.name)}
+                onMouseLeave={() => setHoveredState(null)}
+                onClick={() => handleStateClick(state.name)}
+              />
+            ))}
+          </svg>
+        </div>
         
         <AnimatePresence>
           {hoveredState && (
