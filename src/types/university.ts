@@ -1,3 +1,4 @@
+
 export interface UniversityResponse {
   status: {
     code: number;
@@ -23,28 +24,14 @@ export interface School {
   school_url: string;
   accreditor_code: string;
   us_ranking: number;
-  school_programs: string[];
+  school_programs: string;
   eligibility_addmission_exams: string[];
   founded_in: number;
   cost_of_living_near_university: string;
   type: string;
-  contact_details: {
-    phone: string;
-    email: string;
-    website: string;
-  };
+  contact_details: string;
   graduation_rate: string;
   acceptance_rate: string;
-  course_rank: {
-    undergrad: number;
-    grad: number;
-  };
-}
-
-export interface Program {
-  program_name: string;
-  fees: string;
-  program_duration: string;
 }
 
 export interface Programs {
@@ -52,28 +39,27 @@ export interface Programs {
   grad_programs: Program[];
 }
 
+export interface Program {
+  program_name: string;
+  fees: number;
+  program_duration: string;
+  course_rank: string;
+}
+
 export interface Students {
   total_students: number;
   grad_students: number;
-  men: number;
-  women: number;
+  men: string;
+  women: string;
   race_ethnicity: {
-    White: number;
-    Hispanic: number;
-    "Black or African American": number;
-    Asian: number;
-    Other: number;
+    [key: string]: string;
   };
 }
 
 export interface Faculty {
-  men: number;
-  women: number;
+  men: string;
+  women: string;
   race_ethnicity: {
-    White: number;
-    Hispanic: number;
-    "Black or African American": number;
-    Asian: number;
-    Other: number;
+    [key: string]: string;
   };
 }
