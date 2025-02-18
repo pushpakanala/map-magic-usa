@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -6,7 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { statesData } from '@/lib/states-data';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface StateData {
   state: string;
@@ -68,7 +67,6 @@ const USAMap: React.FC = () => {
   };
 
   const getStateColor = (index: number) => {
-    // Enhanced color palette for better visual hierarchy
     const colors = [
       'fill-blue-400',
       'fill-blue-500',
