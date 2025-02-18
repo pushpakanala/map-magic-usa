@@ -1,9 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LogOut, User, Search, Bot, X, Settings, Bell, HelpCircle } from 'lucide-react';
+import { LogOut, User, Search, Bot, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
@@ -15,7 +16,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Card, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Index = () => {
@@ -25,8 +25,6 @@ const Index = () => {
   const [userData, setUserData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
@@ -43,7 +41,6 @@ const Index = () => {
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
-    
     try {
       navigate(`/college/${encodeURIComponent(searchQuery)}`);
     } catch (error) {
@@ -64,36 +61,12 @@ const Index = () => {
   const handleLogout = () => {
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
     toast({
       title: "Logged out",
       description: "You have been successfully logged out.",
     });
     navigate('/login', { replace: true });
-  };
-
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!newMessage.trim()) return;
-
-    setMessages(prev => [...prev, { text: newMessage, sender: 'user' }]);
-    
-    try {
-      const response = await axios.get(`${BOT_GEMINI}?request=${newMessage}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      setMessages(prev => [...prev, { 
-        text: response.data.data.response || "Thanks for your message!", 
-        sender: 'bot' 
-      }]);
-    } catch (error) {
-      setMessages(prev => [...prev, { 
-        text: "I'm having trouble connecting right now. Please try again later.", 
-        sender: 'bot' 
-      }]);
-    }
-    
-    setNewMessage('');
   };
 
   return (
@@ -134,14 +107,45 @@ const Index = () => {
               Search
             </Button>
           </motion.div>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="icon" className="rounded-full">
+                <User className="h-5 w-5" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-4">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="rounded-full bg-primary/10 p-2">
+                  <User className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1 space-y-1 overflow-hidden">
+                  <p className="font-medium truncate">{userData?.name}</p>
+                  <p className="text-sm text-muted-foreground truncate">{userData?.email}</p>
+                  <p className="text-xs text-muted-foreground capitalize">Role: {userData?.role}</p>
+                </div>
+              </div>
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
+                onClick={handleLogout}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </Button>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
 
       <Tabs defaultValue="map" className="w-full">
-        <TabsList className="grid w-full max-w-[600px] mx-auto bg-background/50 backdrop-blur-sm border border-primary/20 grid-cols-3">
+        <TabsList className={`grid w-full max-w-[600px] mx-auto bg-background/50 backdrop-blur-sm border border-primary/20 ${userData?.role === 'admin' ? 'grid-cols-4' : 'grid-cols-3'}`}>
           <TabsTrigger value="map">Map View</TabsTrigger>
           <TabsTrigger value="favorites">Favorites ({favorites.length})</TabsTrigger>
           <TabsTrigger value="about">About</TabsTrigger>
+          {userData?.role === 'admin' && (
+            <TabsTrigger value="admin">Admin</TabsTrigger>
+          )}
         </TabsList>
         
         <TabsContent value="map" className="min-h-[800px]">
@@ -157,6 +161,24 @@ const Index = () => {
             <USAMap />
           </div>
         </TabsContent>
+
+        <TabsContent value="favorites">
+          <UniversitiesList
+            universities={favorites.map(name => ({ name }))}
+            favorites={favorites}
+            onFavoriteClick={handleFavoriteClick}
+            onUniversityClick={(college) => navigate(`/college/${encodeURIComponent(college.name)}`)}
+          />
+        </TabsContent>
+
+        {userData?.role === 'admin' && (
+          <TabsContent value="admin">
+            <div className="p-6 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg">
+              <h2 className="text-2xl font-bold text-primary mb-4">Admin Dashboard</h2>
+              <p className="text-muted-foreground">Welcome to the admin dashboard. Here you can manage universities and user data.</p>
+            </div>
+          </TabsContent>
+        )}
       </Tabs>
 
       <motion.div
@@ -168,7 +190,7 @@ const Index = () => {
           className="fixed bottom-4 right-4 rounded-full h-12 w-12 shadow-lg bg-primary hover:bg-primary/90"
           onClick={() => setIsChatOpen(!isChatOpen)}
         >
-          <Bot className="h-6 w-6" />
+          {isChatOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
         </Button>
       </motion.div>
     </motion.div>
