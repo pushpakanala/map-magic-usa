@@ -68,18 +68,19 @@ const USAMap: React.FC = () => {
   };
 
   const getStateColor = (index: number) => {
+    // Enhanced color palette with satellite-inspired colors
     const colors = [
-      'fill-blue-400',
-      'fill-blue-500',
-      'fill-blue-600',
-      'fill-indigo-500',
-      'fill-indigo-600'
+      'fill-slate-600',
+      'fill-slate-700',
+      'fill-slate-800',
+      'fill-zinc-700',
+      'fill-zinc-800'
     ];
     return colors[index % colors.length];
   };
 
   if (isLoading) return (
-    <div className="w-full aspect-[1.9/1] relative">
+    <div className="w-full aspect-[2/1] relative">
       <Skeleton className="absolute inset-0 rounded-xl" />
     </div>
   );
@@ -94,25 +95,29 @@ const USAMap: React.FC = () => {
   }
 
   return (
-    <div className="relative w-full max-w-[1800px] mx-auto">
+    <div className="container mx-auto px-4 md:px-6 lg:px-8 py-6">
       <motion.div 
-        className="relative bg-gradient-to-br from-background/80 to-background/40 rounded-xl shadow-xl border border-primary/10 backdrop-blur-sm p-4"
+        className="relative bg-gradient-to-br from-slate-900/90 to-slate-800/80 rounded-xl shadow-2xl border border-slate-700/30 backdrop-blur-sm overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="aspect-[1.9/1] relative">
+        <div className="aspect-[2/1] relative w-full">
           <svg
             ref={mapRef}
-            viewBox="0 0 1000 600"
+            viewBox="-50 0 1100 600"
             preserveAspectRatio="xMidYMid meet"
             className="w-full h-full"
             onMouseMove={handleMouseMove}
             style={{ 
-              filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
+              filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2))',
             }}
           >
             <defs>
+              <linearGradient id="satelliteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{ stopColor: '#1e293b', stopOpacity: 0.8 }} />
+                <stop offset="100%" style={{ stopColor: '#334155', stopOpacity: 0.9 }} />
+              </linearGradient>
               <filter id="glow">
                 <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
                 <feMerge>
@@ -120,20 +125,25 @@ const USAMap: React.FC = () => {
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
+              <pattern id="gridPattern" width="10" height="10" patternUnits="userSpaceOnUse">
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#475569" strokeWidth="0.5" opacity="0.2"/>
+              </pattern>
             </defs>
+            <rect width="100%" height="100%" fill="url(#gridPattern)" />
             {statesData.map((state, index) => (
               <motion.path
                 key={state.id}
                 d={state.path}
                 className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
-                  hover:brightness-110 hover:saturate-150`}
+                  hover:brightness-125 hover:saturate-150`}
                 style={{
                   filter: hoveredState === state.id ? 'url(#glow)' : 'none',
+                  opacity: 0.9,
                 }}
                 initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 0.9, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.01 }}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.02, opacity: 1 }}
                 onMouseEnter={() => setHoveredState(state.name)}
                 onMouseLeave={() => setHoveredState(null)}
                 onClick={() => handleStateClick(state.name)}
@@ -148,17 +158,17 @@ const USAMap: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="absolute bg-card/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-primary/20 pointer-events-none z-10"
+              className="absolute bg-slate-900/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-slate-700/30 pointer-events-none z-10"
               style={{
                 left: `${hoverPosition.x}px`,
                 top: `${hoverPosition.y}px`,
                 transform: 'translate(20px, -50%)'
               }}
             >
-              <p className="font-semibold text-lg bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+              <p className="font-semibold text-lg text-slate-100">
                 {getStateName(hoveredState)}
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-slate-300">
                 Population: {getPopulation(hoveredState)}
               </p>
             </motion.div>
