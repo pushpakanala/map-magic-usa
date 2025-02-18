@@ -98,8 +98,8 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
-      <div className="max-w-[1920px] mx-auto">
+    <div className="min-h-[1024px] max-w-[1440px] mx-auto bg-gradient-to-br from-slate-50 via-slate-100 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+      <div className="h-full w-full">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -142,6 +142,44 @@ const Index = () => {
                   Search
                 </Button>
               </motion.div>
+
+              <div className="flex items-center gap-4">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="rounded-full h-10 w-10 p-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700"
+                    >
+                      <User className="h-5 w-5 text-slate-600 dark:text-slate-300" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-56 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 p-4">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <User className="h-10 w-10 text-slate-600 dark:text-slate-300" />
+                        <div>
+                          <p className="font-medium text-slate-900 dark:text-slate-100">
+                            {userData?.name || 'User'}
+                          </p>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">
+                            {userData?.email || 'user@example.com'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
+                        <Button 
+                          variant="ghost" 
+                          className="w-full justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10"
+                          onClick={handleLogout}
+                        >
+                          <LogOut className="h-4 w-4" />
+                          Logout
+                        </Button>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
             </div>
           </div>
 
@@ -154,7 +192,7 @@ const Index = () => {
                 <TabsTrigger value="about" className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md">About</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="map" className="min-h-[800px]">
+              <TabsContent value="map" className="min-h-[600px]">
                 <motion.p 
                   className="text-center text-lg text-slate-600 dark:text-slate-300 mb-8 font-medium"
                   initial={{ opacity: 0, y: 20 }}
