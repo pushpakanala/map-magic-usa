@@ -415,7 +415,7 @@ const CollegePage = () => {
                     </TableBody>
                   </Table>
                 </TabsContent>
-              </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </motion.div>
