@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
@@ -97,81 +98,94 @@ const Index = () => {
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="space-y-8 p-6"
-    >
-      <div className="flex justify-between items-center">
-        <motion.img 
-          src="/lovable-uploads/17d6db8d-3627-4ac9-90a6-5c27912246ed.png" 
-          alt="Uniquest Logo" 
-          className="w-32 h-32"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        />
-        
-        <div className="flex items-center gap-4">
-          <motion.div 
-            className="flex gap-2"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search for a university..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="w-80 pl-10 bg-background/50 backdrop-blur-sm border-primary/20 focus:border-primary/50"
-              />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+      <div className="max-w-[1920px] mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="space-y-8 p-8"
+        >
+          {/* Header Section */}
+          <div className="flex justify-between items-center bg-white/50 dark:bg-slate-900/50 backdrop-blur-lg rounded-2xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+            <motion.img 
+              src="/lovable-uploads/17d6db8d-3627-4ac9-90a6-5c27912246ed.png" 
+              alt="Uniquest Logo" 
+              className="w-32 h-32"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            />
+            
+            <div className="flex items-center gap-6">
+              <motion.div 
+                className="flex gap-3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search for a university..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    className="w-96 pl-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 focus:border-primary/50 rounded-lg"
+                  />
+                </div>
+                <Button 
+                  onClick={handleSearch} 
+                  className="bg-primary hover:bg-primary/90 text-white px-6 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg"
+                >
+                  <Search className="w-4 h-4 mr-2" />
+                  Search
+                </Button>
+              </motion.div>
             </div>
-            <Button onClick={handleSearch} className="bg-primary hover:bg-primary/90">
-              Search
+          </div>
+
+          {/* Main Content */}
+          <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-lg rounded-2xl p-8 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+            <Tabs defaultValue="map" className="w-full">
+              <TabsList className="grid w-full max-w-[600px] mx-auto bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-lg grid-cols-3 p-1 mb-8">
+                <TabsTrigger value="map" className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md">Map View</TabsTrigger>
+                <TabsTrigger value="favorites" className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md">Favorites ({favorites.length})</TabsTrigger>
+                <TabsTrigger value="about" className="data-[state=active]:bg-primary data-[state=active]:text-white rounded-md">About</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="map" className="min-h-[800px]">
+                <motion.p 
+                  className="text-center text-lg text-slate-600 dark:text-slate-300 mb-8 font-medium"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  Click on a state to learn more about its Universities, or hover to see its population
+                </motion.p>
+                <div className="max-w-[1400px] mx-auto">
+                  <USAMap />
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          {/* Chat Button */}
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Button
+              className="fixed bottom-8 right-8 rounded-full h-14 w-14 shadow-lg bg-primary hover:bg-primary/90 text-white transition-all duration-200 hover:shadow-xl"
+              onClick={() => setIsChatOpen(!isChatOpen)}
+            >
+              {isChatOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
             </Button>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
-
-      <Tabs defaultValue="map" className="w-full">
-        <TabsList className="grid w-full max-w-[600px] mx-auto bg-background/50 backdrop-blur-sm border border-primary/20 grid-cols-3">
-          <TabsTrigger value="map">Map View</TabsTrigger>
-          <TabsTrigger value="favorites">Favorites ({favorites.length})</TabsTrigger>
-          <TabsTrigger value="about">About</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="map" className="min-h-[800px]">
-          <motion.p 
-            className="text-center text-muted-foreground mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            Click on a state to learn more about its Universities, or hover to see its population
-          </motion.p>
-          <div className="max-w-[1600px] mx-auto px-4">
-            <USAMap />
-          </div>
-        </TabsContent>
-      </Tabs>
-
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Button
-          className="fixed bottom-4 right-4 rounded-full h-12 w-12 shadow-lg bg-primary hover:bg-primary/90"
-          onClick={() => setIsChatOpen(!isChatOpen)}
-        >
-          <Bot className="h-6 w-6" />
-        </Button>
-      </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
