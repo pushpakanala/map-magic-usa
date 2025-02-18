@@ -22,6 +22,7 @@ const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
           size="icon"
           className="absolute top-2 right-2 z-10 hover:bg-primary/10"
           onClick={handleFavoriteClick}
+          type="button"
         >
           <Heart 
             className={`h-5 w-5 transition-colors ${
