@@ -87,7 +87,7 @@ const Index = () => {
         sender: 'bot'
       }]);
     } catch (error) {
-      if (error.response?.status === 401) {
+      if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
         setIsSessionExpired(true);
       } else {
         toast({

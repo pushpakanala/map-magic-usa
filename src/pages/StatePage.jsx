@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -11,6 +10,7 @@ import PopulationStats from '../components/state/PopulationStats';
 import UniversitiesList from '../components/state/UniversitiesList';
 import { useFavorites } from '../hooks/use-favorites';
 import { GraduationCap } from 'lucide-react';
+import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 
 const LoadingState = () => (
   <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
@@ -45,6 +45,7 @@ const StatePage = () => {
   const navigate = useNavigate();
   const { favorites, handleFavoriteClick } = useFavorites();
   const token = sessionStorage.getItem("token");
+  const [isSessionExpired, setIsSessionExpired] = useState(false);
 
   const { data: stateData, isLoading: stateLoading } = useQuery({
     queryKey: ['stateDetails', stateName],
@@ -71,12 +72,19 @@ const StatePage = () => {
   const { data: universities, isLoading: universitiesLoading } = useQuery({
     queryKey: ['universities', stateName],
     queryFn: async () => {
-      const response = await axios.get(`${TOP_GPT_UNIVERSITIES_LLM}?state_name=${stateName}`,{
-        headers: { Authorization: `Bearer ${token}` }
-    });
-      return response.data.data.map((item) => ({
-        name: item.university_name,
-      }));
+      try {
+        const response = await axios.get(`${TOP_GPT_UNIVERSITIES_LLM}?state_name=${stateName}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        return response.data.data.map((item) => ({
+          name: item.university_name,
+        }));
+      } catch (error) {
+        if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
+          setIsSessionExpired(true);
+        }
+        throw error;
+      }
     }
   });
 
@@ -89,41 +97,47 @@ const StatePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-background to-background">
-      <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        <div className="w-full max-w-7xl text-left">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate('/')} 
-            className="mb-8 hover:bg-background/80 backdrop-blur-sm"
-          >
-            ← Back to Map
-          </Button>
-        </div>
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }} 
-          animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.5 }} 
-          className="space-y-8"
-        >
-          <h1 className="text-4xl font-bold mb-6 capitalize bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-            {stateName}
-          </h1>
+    <>
+      <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-background to-background">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+          <div className="w-full max-w-7xl text-left">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/')} 
+              className="mb-8 hover:bg-background/80 backdrop-blur-sm"
+            >
+              ← Back to Map
+            </Button>
+          </div>
           
-          <PopulationStats stateData={stateData} />
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.5 }} 
+            className="space-y-8"
+          >
+            <h1 className="text-4xl font-bold mb-6 capitalize bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+              {stateName}
+            </h1>
+            
+            <PopulationStats stateData={stateData} />
 
-          {universities && universities.length > 0 && (
-            <UniversitiesList
-              universities={universities}
-              favorites={favorites}
-              onFavoriteClick={handleFavoriteClick}
-              onUniversityClick={handleCollegeClick}
-            />
-          )}
-        </motion.div>
+            {universities && universities.length > 0 && (
+              <UniversitiesList
+                universities={universities}
+                favorites={favorites}
+                onFavoriteClick={handleFavoriteClick}
+                onUniversityClick={handleCollegeClick}
+              />
+            )}
+          </motion.div>
+        </div>
       </div>
-    </div>
+      <SessionExpiredDialog 
+        open={isSessionExpired} 
+        onOpenChange={setIsSessionExpired}
+      />
+    </>
   );
 };
 
