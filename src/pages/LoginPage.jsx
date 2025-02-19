@@ -57,7 +57,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary/10 to-background flex items-center justify-center p-4">
-      <div className="absolute top-0 right-0 w-72 h-72 md:w-96 md:h-96">
+      <div className="absolute top-0 left-0 w-72 h-72 md:w-96 md:h-96">
         <img 
           src="/lovable-uploads/e0689fd1-93f8-43da-8622-0ab01ffe42e8.png"
           alt="Graduate"
@@ -68,7 +68,7 @@ const LoginPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md relative z-10"
+        className="w-full max-w-md relative z-10 ml-auto mr-12 lg:mr-24"
       >
         <div className="bg-background/80 backdrop-blur-lg rounded-lg shadow-lg p-8 border border-primary/20">
           <div className="flex justify-center mb-6">
