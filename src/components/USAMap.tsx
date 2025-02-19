@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -6,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { statesData } from '@/lib/states-data';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GraduationCap, Search, Users, Building2, BookOpen, Award, Map, School } from 'lucide-react';
+import { GraduationCap, Search, Users, Building2, BookOpen, Award, Map, School, Compass, BrainCircuit, Globe2, BarChart3 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 interface StateData {
@@ -80,12 +81,63 @@ const USAMap: React.FC = () => {
   };
 
   const features = [
-    { icon: GraduationCap, title: "Universities", description: "Explore top universities state by state" },
-    { icon: Users, title: "Population Data", description: "Access demographic information" },
-    { icon: Building2, title: "Campus Info", description: "View detailed campus information" },
-    { icon: BookOpen, title: "Programs", description: "Browse academic programs" },
-    { icon: Award, title: "Rankings", description: "Check university rankings" },
-    { icon: School, title: "Admissions", description: "Get admission details" },
+    { 
+      icon: GraduationCap, 
+      title: "Academic Excellence", 
+      description: "Browse top-ranked universities and colleges",
+      theme: "bg-gradient-to-br from-blue-500/10 to-blue-600/5 hover:from-blue-500/20 hover:to-blue-600/10"
+    },
+    { 
+      icon: BrainCircuit, 
+      title: "Research Opportunities", 
+      description: "Discover cutting-edge research programs",
+      theme: "bg-gradient-to-br from-purple-500/10 to-purple-600/5 hover:from-purple-500/20 hover:to-purple-600/10"
+    },
+    { 
+      icon: Globe2, 
+      title: "Global Connections", 
+      description: "International student programs and exchanges",
+      theme: "bg-gradient-to-br from-green-500/10 to-green-600/5 hover:from-green-500/20 hover:to-green-600/10"
+    },
+    { 
+      icon: BarChart3, 
+      title: "Career Outcomes", 
+      description: "Employment rates and alumni success stories",
+      theme: "bg-gradient-to-br from-orange-500/10 to-orange-600/5 hover:from-orange-500/20 hover:to-orange-600/10"
+    },
+    { 
+      icon: Compass, 
+      title: "Campus Life", 
+      description: "Student activities and campus culture",
+      theme: "bg-gradient-to-br from-pink-500/10 to-pink-600/5 hover:from-pink-500/20 hover:to-pink-600/10"
+    },
+    { 
+      icon: Award, 
+      title: "Scholarships", 
+      description: "Financial aid and merit-based opportunities",
+      theme: "bg-gradient-to-br from-teal-500/10 to-teal-600/5 hover:from-teal-500/20 hover:to-teal-600/10"
+    }
+  ];
+
+  const highlights = [
+    { 
+      title: "Universities Mapped", 
+      value: "3,000+",
+      icon: School,
+      theme: "bg-gradient-to-br from-indigo-500/10 to-indigo-600/5"
+    },
+    { 
+      title: "Total States", 
+      value: statesData.length.toString(),
+      icon: Map,
+      theme: "bg-gradient-to-br from-cyan-500/10 to-cyan-600/5"
+    },
+    { 
+      title: "Student Population", 
+      value: "20M+",
+      icon: Users,
+      theme: "bg-gradient-to-br from-violet-500/10 to-violet-600/5"
+    }
   ];
 
   if (isLoading) return (
@@ -107,30 +159,73 @@ const USAMap: React.FC = () => {
     <div className="min-h-screen w-full bg-gradient-to-b from-background to-background/80">
       <div className="max-w-[1800px] mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-3 space-y-4">
+          {/* Left Sidebar with all information */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* Highlights Section */}
             <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
+              className="grid grid-cols-1 gap-4"
+            >
+              {highlights.map((highlight, index) => (
+                <motion.div
+                  key={highlight.title}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className={`${highlight.theme} backdrop-blur-sm border-primary/10`}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 rounded-full bg-white/20">
+                          <highlight.icon className="h-5 w-5 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-primary">{highlight.value}</p>
+                          <p className="text-sm text-muted-foreground">{highlight.title}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Features Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
               className="space-y-4"
             >
-              <Card className="bg-primary/5 backdrop-blur-sm border-primary/10">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Map className="h-6 w-6 text-primary" />
-                    <h3 className="text-lg font-semibold">Quick Stats</h3>
-                  </div>
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <p>Total States: {statesData.length}</p>
-                    <p>Total Universities: 3000+</p>
-                    <p>States with Data: {populationData?.length || 0}</p>
-                  </div>
-                </CardContent>
-              </Card>
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+                >
+                  <Card className={`${feature.theme} backdrop-blur-sm border-primary/10 transition-all duration-300`}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-full bg-white/20">
+                          <feature.icon className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-sm font-medium text-primary">{feature.title}</h3>
+                          <p className="text-xs text-muted-foreground">{feature.description}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
 
-          <div className="lg:col-span-6">
+          {/* Main Map Area - Now spans the remaining space */}
+          <div className="lg:col-span-9">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -177,39 +272,6 @@ const USAMap: React.FC = () => {
                   />
                 ))}
               </svg>
-            </motion.div>
-          </div>
-
-          <div className="lg:col-span-3 space-y-4">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="grid gap-4">
-                {features.map((feature, index) => (
-                  <motion.div
-                    key={feature.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                  >
-                    <Card className="bg-white/50 hover:bg-white/80 backdrop-blur-sm border-primary/10 transition-colors">
-                      <CardContent className="p-4">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-full bg-primary/10">
-                            <feature.icon className="h-4 w-4 text-primary" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="text-sm font-medium">{feature.title}</h3>
-                            <p className="text-xs text-muted-foreground">{feature.description}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
             </motion.div>
           </div>
         </div>
