@@ -73,6 +73,17 @@ const CollegePage = () => {
   const [universityData, setUniversityData] = useState(null);
   const token = sessionStorage.getItem('token');
 
+  const renderSchoolPrograms = (programs) => {
+    if (!programs) return [];
+    if (typeof programs === 'string') {
+      return [programs];
+    }
+    if (Array.isArray(programs)) {
+      return programs;
+    }
+    return [];
+  };
+
   useEffect(() => {
     const fetchUniversityData = async () => {
       try {
@@ -116,13 +127,6 @@ const CollegePage = () => {
 
   const studentDemographics = prepareChartData(students.race_ethnicity);
   const facultyDemographics = prepareChartData(faculty.race_ethnicity);
-
-  const renderSchoolPrograms = (programs) => {
-    if (Array.isArray(programs)) {
-      return programs.join(', ');
-    }
-    return programs;
-  };
 
   const renderContactDetails = (contact) => {
     if (typeof contact === 'string') {
@@ -177,7 +181,7 @@ const CollegePage = () => {
                 transition={{ delay: 0.4 }}
                 className="flex flex-wrap gap-2"
               >
-                {school.school_programs.map((program) => (
+                {renderSchoolPrograms(school.school_programs).map((program) => (
                   <span
                     key={program}
                     className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium backdrop-blur-sm border border-primary/20 hover:bg-primary/20 transition-colors"
