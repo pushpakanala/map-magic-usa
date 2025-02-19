@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -159,9 +158,7 @@ const USAMap: React.FC = () => {
     <div className="min-h-screen w-full bg-gradient-to-b from-background to-background/80">
       <div className="max-w-[1800px] mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Sidebar with all information */}
           <div className="lg:col-span-3 space-y-6">
-            {/* Highlights Section */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -192,7 +189,6 @@ const USAMap: React.FC = () => {
               ))}
             </motion.div>
 
-            {/* Features Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -224,7 +220,6 @@ const USAMap: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Main Map Area - Now spans the remaining space */}
           <div className="lg:col-span-9">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -235,7 +230,7 @@ const USAMap: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent rounded-3xl -z-10" />
               <svg
                 ref={mapRef}
-                viewBox="-50 -50 1100 800"
+                viewBox="-0 -0 1300 1000"
                 preserveAspectRatio="xMidYMid meet"
                 className="w-full h-full"
                 onMouseMove={handleMouseMove}

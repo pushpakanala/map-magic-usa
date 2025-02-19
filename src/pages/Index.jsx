@@ -17,6 +17,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
 import { BOT_GEMINI } from '../constants';
+import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, BarChart3, Compass, School } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -223,28 +224,93 @@ const Index = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl mx-auto p-6 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg space-y-6"
+            className="max-w-6xl mx-auto p-6 space-y-8"
           >
-            <h2 className="text-3xl font-bold text-primary">About UniQuest</h2>
-            
-            <div className="space-y-4">
-              <p className="text-lg text-muted-foreground">
-                Welcome to UniQuest, your comprehensive platform for exploring universities across the United States. Our interactive map allows you to discover educational institutions state by state, while our powerful search features help you find specific universities that match your interests.
-              </p>
-              
-              <h3 className="text-xl font-semibold text-primary">Key Features</h3>
-              <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                <li>Interactive state-by-state university exploration</li>
-                <li>Comprehensive university information and details</li>
-                <li>Personalized favorites list</li>
-                <li>Intelligent chat assistance</li>
-                <li>Advanced search capabilities</li>
-              </ul>
-              
-              <h3 className="text-xl font-semibold text-primary">Our Mission</h3>
-              <p className="text-muted-foreground">
-                Our mission is to simplify the university search process and help students make informed decisions about their educational future. We believe in providing accurate, up-to-date information in an accessible and user-friendly format.
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-gradient-to-br from-blue-500/10 to-purple-600/5 p-6 rounded-lg backdrop-blur-sm border border-primary/10"
+                >
+                  <h2 className="text-3xl font-bold text-primary mb-4">About UniQuest</h2>
+                  <p className="text-lg text-muted-foreground">
+                    Welcome to UniQuest, your comprehensive platform for exploring universities across the United States. Our interactive map allows you to discover educational institutions state by state, while our powerful search features help you find specific universities that match your interests.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="bg-gradient-to-br from-green-500/10 to-teal-600/5 p-6 rounded-lg backdrop-blur-sm border border-primary/10"
+                >
+                  <h3 className="text-xl font-semibold text-primary mb-3">Our Mission</h3>
+                  <p className="text-muted-foreground">
+                    Our mission is to simplify the university search process and help students make informed decisions about their educational future. We believe in providing accurate, up-to-date information in an accessible and user-friendly format.
+                  </p>
+                </motion.div>
+              </div>
+
+              <div className="space-y-4">
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-gradient-to-br from-orange-500/10 to-pink-600/5 p-6 rounded-lg backdrop-blur-sm border border-primary/10"
+                >
+                  <h3 className="text-xl font-semibold text-primary mb-4">Key Features</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      { icon: Map, text: "Interactive Maps" },
+                      { icon: Search, text: "Advanced Search" },
+                      { icon: GraduationCap, text: "University Profiles" },
+                      { icon: Users, text: "Student Community" },
+                      { icon: Globe2, text: "Global Perspective" },
+                      { icon: BrainCircuit, text: "Smart Recommendations" }
+                    ].map((feature, index) => (
+                      <motion.div
+                        key={feature.text}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                        className="flex items-center gap-2 text-muted-foreground"
+                      >
+                        <feature.icon className="h-4 w-4 text-primary" />
+                        <span>{feature.text}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="bg-gradient-to-br from-indigo-500/10 to-violet-600/5 p-6 rounded-lg backdrop-blur-sm border border-primary/10"
+                >
+                  <h3 className="text-xl font-semibold text-primary mb-3">Why Choose UniQuest?</h3>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li className="flex items-center gap-2">
+                      <Award className="h-4 w-4 text-primary" />
+                      Comprehensive university database
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <BarChart3 className="h-4 w-4 text-primary" />
+                      Real-time statistics and insights
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Compass className="h-4 w-4 text-primary" />
+                      Personalized navigation experience
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <School className="h-4 w-4 text-primary" />
+                      Expert educational guidance
+                    </li>
+                  </ul>
+                </motion.div>
+              </div>
             </div>
           </motion.div>
         </TabsContent>
