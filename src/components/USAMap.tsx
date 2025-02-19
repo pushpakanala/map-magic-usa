@@ -6,6 +6,8 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { statesData } from '@/lib/states-data';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GraduationCap, Search, Users, Building2, BookOpen, Award, Map, School } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface StateData {
   state: string;
@@ -77,6 +79,15 @@ const USAMap: React.FC = () => {
     return colors[index % colors.length];
   };
 
+  const features = [
+    { icon: GraduationCap, title: "Universities", description: "Explore top universities state by state" },
+    { icon: Users, title: "Population Data", description: "Access demographic information" },
+    { icon: Building2, title: "Campus Info", description: "View detailed campus information" },
+    { icon: BookOpen, title: "Programs", description: "Browse academic programs" },
+    { icon: Award, title: "Rankings", description: "Check university rankings" },
+    { icon: School, title: "Admissions", description: "Get admission details" },
+  ];
+
   if (isLoading) return (
     <div className="w-full h-[600px] relative">
       <Skeleton className="absolute inset-0" />
@@ -93,69 +104,139 @@ const USAMap: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-[600px] relative">
-      <svg
-        ref={mapRef}
-        viewBox="-50 -50 1100 800"
-        preserveAspectRatio="xMidYMid meet"
-        className="w-full h-full"
-        onMouseMove={handleMouseMove}
-        style={{ 
-          filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
-        }}
-      >
-        <defs>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-        {statesData.map((state, index) => (
-          <motion.path
-            key={state.id}
-            d={state.path}
-            className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
-              hover:brightness-110 hover:saturate-150`}
-            style={{
-              filter: hoveredState === state.id ? 'url(#glow)' : 'none',
-              opacity: 0.85,
-            }}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 0.85, scale: 1 }}
-            transition={{ duration: 0.5, delay: index * 0.01 }}
-            whileHover={{ scale: 1.02, opacity: 1 }}
-            onMouseEnter={() => setHoveredState(state.name)}
-            onMouseLeave={() => setHoveredState(null)}
-            onClick={() => handleStateClick(state.name)}
-          />
-        ))}
-      </svg>
-      
-      <AnimatePresence>
-        {hoveredState && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="absolute bg-white/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-slate-200/50 pointer-events-none z-10"
-            style={{
-              left: `${hoverPosition.x}px`,
-              top: `${hoverPosition.y}px`,
-              transform: 'translate(20px, -50%)'
-            }}
-          >
-            <p className="font-semibold text-lg text-slate-700">
-              {getStateName(hoveredState)}
-            </p>
-            <p className="text-sm text-slate-500">
-              Population: {getPopulation(hoveredState)}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="min-h-screen w-full bg-gradient-to-b from-background to-background/80">
+      <div className="max-w-[1800px] mx-auto p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-3 space-y-4">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-4"
+            >
+              <Card className="bg-primary/5 backdrop-blur-sm border-primary/10">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Map className="h-6 w-6 text-primary" />
+                    <h3 className="text-lg font-semibold">Quick Stats</h3>
+                  </div>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p>Total States: {statesData.length}</p>
+                    <p>Total Universities: 3000+</p>
+                    <p>States with Data: {populationData?.length || 0}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+
+          <div className="lg:col-span-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent rounded-3xl -z-10" />
+              <svg
+                ref={mapRef}
+                viewBox="-50 -50 1100 800"
+                preserveAspectRatio="xMidYMid meet"
+                className="w-full h-full"
+                onMouseMove={handleMouseMove}
+                style={{ 
+                  filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
+                }}
+              >
+                <defs>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                {statesData.map((state, index) => (
+                  <motion.path
+                    key={state.id}
+                    d={state.path}
+                    className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
+                      hover:brightness-110 hover:saturate-150`}
+                    style={{
+                      filter: hoveredState === state.id ? 'url(#glow)' : 'none',
+                      opacity: 0.85,
+                    }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 0.85, scale: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.01 }}
+                    whileHover={{ scale: 1.02, opacity: 1 }}
+                    onMouseEnter={() => setHoveredState(state.name)}
+                    onMouseLeave={() => setHoveredState(null)}
+                    onClick={() => handleStateClick(state.name)}
+                  />
+                ))}
+              </svg>
+            </motion.div>
+          </div>
+
+          <div className="lg:col-span-3 space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="grid gap-4">
+                {features.map((feature, index) => (
+                  <motion.div
+                    key={feature.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <Card className="bg-white/50 hover:bg-white/80 backdrop-blur-sm border-primary/10 transition-colors">
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-full bg-primary/10">
+                            <feature.icon className="h-4 w-4 text-primary" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-sm font-medium">{feature.title}</h3>
+                            <p className="text-xs text-muted-foreground">{feature.description}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {hoveredState && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="absolute bg-white/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-slate-200/50 pointer-events-none z-10"
+              style={{
+                left: `${hoverPosition.x}px`,
+                top: `${hoverPosition.y}px`,
+                transform: 'translate(20px, -50%)'
+              }}
+            >
+              <p className="font-semibold text-lg text-slate-700">
+                {getStateName(hoveredState)}
+              </p>
+              <p className="text-sm text-slate-500">
+                Population: {getPopulation(hoveredState)}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };
