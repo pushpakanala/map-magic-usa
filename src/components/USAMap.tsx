@@ -228,71 +228,72 @@ const USAMap: React.FC = () => {
               className="relative"
             >
               <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent rounded-3xl -z-10" />
-              <svg
-                ref={mapRef}
-                viewBox="-0 -0 1300 1000"
-                preserveAspectRatio="xMidYMid meet"
-                className="w-full h-full"
-                onMouseMove={handleMouseMove}
-                style={{ 
-                  filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
-                }}
-              >
-                <defs>
-                  <filter id="glow">
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                    <feMerge>
-                      <feMergeNode in="coloredBlur"/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                </defs>
-                {statesData.map((state, index) => (
-                  <motion.path
-                    key={state.id}
-                    d={state.path}
-                    className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
-                      hover:brightness-110 hover:saturate-150`}
-                    style={{
-                      filter: hoveredState === state.id ? 'url(#glow)' : 'none',
-                      opacity: 0.85,
-                    }}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 0.85, scale: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.01 }}
-                    whileHover={{ scale: 1.02, opacity: 1 }}
-                    onMouseEnter={() => setHoveredState(state.name)}
-                    onMouseLeave={() => setHoveredState(null)}
-                    onClick={() => handleStateClick(state.name)}
-                  />
-                ))}
-              </svg>
+              <div className="relative">
+                <svg
+                  ref={mapRef}
+                  viewBox="-0 -0 1300 1000"
+                  preserveAspectRatio="xMidYMid meet"
+                  className="w-full h-full"
+                  onMouseMove={handleMouseMove}
+                  style={{ 
+                    filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
+                  }}
+                >
+                  <defs>
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                      <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                  </defs>
+                  {statesData.map((state, index) => (
+                    <motion.path
+                      key={state.id}
+                      d={state.path}
+                      className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
+                        hover:brightness-110 hover:saturate-150`}
+                      style={{
+                        filter: hoveredState === state.id ? 'url(#glow)' : 'none',
+                        opacity: 0.85,
+                      }}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 0.85, scale: 1 }}
+                      transition={{ duration: 0.5, delay: index * 0.01 }}
+                      whileHover={{ scale: 1.02, opacity: 1 }}
+                      onMouseEnter={() => setHoveredState(state.name)}
+                      onMouseLeave={() => setHoveredState(null)}
+                      onClick={() => handleStateClick(state.name)}
+                    />
+                  ))}
+                </svg>
+
+                <AnimatePresence>
+                  {hoveredState && (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      className="absolute bg-white/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-slate-200/50 pointer-events-none z-10"
+                      style={{
+                        left: `${hoverPosition.x}px`,
+                        top: `${hoverPosition.y}px`,
+                      }}
+                    >
+                      <p className="font-semibold text-lg text-slate-700">
+                        {getStateName(hoveredState)}
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        Population: {getPopulation(hoveredState)}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
           </div>
         </div>
-
-        <AnimatePresence>
-          {hoveredState && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="absolute bg-white/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-slate-200/50 pointer-events-none z-10"
-              style={{
-                left: `${hoverPosition.x}px`,
-                top: `${hoverPosition.y}px`,
-                transform: 'translate(20px, -50%)'
-              }}
-            >
-              <p className="font-semibold text-lg text-slate-700">
-                {getStateName(hoveredState)}
-              </p>
-              <p className="text-sm text-slate-500">
-                Population: {getPopulation(hoveredState)}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </div>
   );
