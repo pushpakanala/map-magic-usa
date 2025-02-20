@@ -139,15 +139,6 @@ const LoginPage = () => {
                 </div>
               </motion.div>
 
-              <div className="flex justify-end">
-                <Link 
-                  to="/forgot-password" 
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
