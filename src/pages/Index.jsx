@@ -1,9 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LogOut, User, Bot, X, Send } from 'lucide-react';
+import { LogOut, User, Bot, X, Send, KeyRound } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
@@ -181,6 +182,14 @@ const Index = () => {
                     <p className="text-xs text-muted-foreground capitalize">Role: {userData?.role}</p>
                   </div>
                 </div>
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start mb-2"
+                  onClick={() => navigate('/forgot-password')}
+                >
+                  <KeyRound className="mr-2 h-4 w-4" />
+                  Change Password
+                </Button>
                 <Button 
                   variant="ghost" 
                   className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
