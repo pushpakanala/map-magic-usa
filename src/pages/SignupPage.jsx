@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
-import { UserRound, AtSign, KeyRound } from 'lucide-react';
+import { UserRound, AtSign } from 'lucide-react';
 import axios from 'axios';
 import { USER_RESOURCE } from '../constants';
 
@@ -14,66 +14,38 @@ const SignupPage = () => {
   const { toast } = useToast();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [passwordError, setPasswordError] = useState('');
-
-  const validatePasswords = () => {
-    if (password === '' || confirmPassword === '') {
-      setPasswordError('');
-      return false;
-    }
-    
-    if (password !== confirmPassword) {
-      setPasswordError('Passwords do not match');
-      return false;
-    }
-    setPasswordError('');
-    return true;
-  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    
-    if (!validatePasswords()) {
-      if (password !== confirmPassword) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Passwords do not match. Please try again.",
-        });
-        return;
-      }
-    }
-
     setIsLoading(true);
 
     try {
+      // Generate a random temporary password
+      const tempPassword = Math.random().toString(36).slice(-8);
+      
       const response = await axios.post(USER_RESOURCE, {
         name,
         email,
-        password,
+        password: tempPassword, // Send the temporary password to the backend
         role: 'user'
       });
       
       if (response.status === 200) {
         toast({
           title: "Success!",
-          description: "Account created successfully! Please login.",
-          duration: 3000,
+          description: "Account created successfully! Please check your email for login credentials.",
+          duration: 5000,
         });
         
         // Clear form data
         setName('');
         setEmail('');
-        setPassword('');
-        setConfirmPassword('');
         
         // Wait for toast to be visible before navigating
         setTimeout(() => {
           navigate('/login', { replace: true });
-        }, 1000);
+        }, 2000);
       }
     } catch (error) {
       let errorMessage = "Failed to create account. Please try again.";
@@ -92,30 +64,6 @@ const SignupPage = () => {
       });
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handlePasswordChange = (e) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-    if (confirmPassword) {
-      if (newPassword === confirmPassword) {
-        setPasswordError('');
-      } else {
-        setPasswordError('Passwords do not match');
-      }
-    }
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    const newConfirmPassword = e.target.value;
-    setConfirmPassword(newConfirmPassword);
-    if (password) {
-      if (password === newConfirmPassword) {
-        setPasswordError('');
-      } else {
-        setPasswordError('Passwords do not match');
-      }
     }
   };
 
@@ -202,59 +150,21 @@ const SignupPage = () => {
                   />
                 </div>
               </motion.div>
-              
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
-                className="space-y-2"
-              >
-                <div className="relative">
-                  <KeyRound className="absolute left-3 top-3 h-5 w-5 text-primary/70" />
-                  <Input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    className="pl-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80"
-                    required
-                  />
-                </div>
-              </motion.div>
-
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 }}
-                className="space-y-2"
-              >
-                <div className="relative">
-                  <KeyRound className="absolute left-3 top-3 h-5 w-5 text-primary/70" />
-                  <Input
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={handleConfirmPasswordChange}
-                    className={`pl-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80 ${
-                      passwordError ? 'border-red-500' : ''
-                    }`}
-                    required
-                  />
-                </div>
-                {passwordError && (
-                  <p className="text-sm text-red-500 mt-1">{passwordError}</p>
-                )}
-              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
+                transition={{ delay: 0.5 }}
+                className="space-y-4"
               >
+                <p className="text-sm text-muted-foreground text-center px-4 py-3 bg-primary/5 rounded-lg border border-primary/10">
+                  Once you sign up, your login credentials will be sent to your email address.
+                </p>
+                
                 <Button 
                   type="submit" 
                   className="w-full h-12 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-300"
-                  disabled={isLoading || passwordError}
+                  disabled={isLoading}
                 >
                   {isLoading ? "Creating account..." : "Sign Up"}
                 </Button>
@@ -264,7 +174,7 @@ const SignupPage = () => {
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
+              transition={{ delay: 0.6 }}
               className="text-center mt-6 text-sm text-muted-foreground"
             >
               Already have an account?{" "}
