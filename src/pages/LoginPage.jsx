@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -138,6 +137,15 @@ const LoginPage = () => {
                   />
                 </div>
               </motion.div>
+
+              <div className="flex justify-end">
+                <Link 
+                  to="/forgot-password" 
+                  className="text-sm text-primary hover:underline"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

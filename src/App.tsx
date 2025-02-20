@@ -1,30 +1,25 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Index from './pages/Index';
-import StatePage from './pages/StatePage';
-import CollegePage from './pages/CollegePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import { Toaster } from "@/components/ui/toaster";
-import './App.css';
-
-const queryClient = new QueryClient();
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import { Toaster } from './components/ui/toaster';
+import Dashboard from './pages/Dashboard';
+import UniversityPage from './pages/UniversityPage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/" element={<Index />} />
-          <Route path="/state/:stateName" element={<StatePage />} />
-          <Route path="/college/:collegeName" element={<CollegePage />} />
-        </Routes>
-        <Toaster />
-      </Router>
-    </QueryClientProvider>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/university/:id" element={<UniversityPage />} />
+        <Route path="/chat" element={<ChatPage />} />
+      </Routes>
+      <Toaster />
+    </Router>
   );
 }
 
