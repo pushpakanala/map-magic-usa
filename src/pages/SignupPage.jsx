@@ -21,13 +21,10 @@ const SignupPage = () => {
     setIsLoading(true);
 
     try {
-      // Generate a random temporary password
-      const tempPassword = Math.random().toString(36).slice(-8);
       
       const response = await axios.post(USER_RESOURCE, {
         name,
         email,
-        password: tempPassword, // Send the temporary password to the backend
         role: 'user'
       });
       

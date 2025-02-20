@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { AtSign, KeyRound } from 'lucide-react';
 import axios from 'axios';
+import { VERIFY_MAIL, UPDATE_PWD } from '../constants';
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const ForgotPasswordPage = () => {
 
     try {
       // Sample API endpoint - Replace with your actual endpoint
-      const response = await axios.post('http://api.example.com/verify-email', { email });
+      const response = await axios.post(`${VERIFY_MAIL}?email=${email}`);
       
       if (response.status === 200) {
         setIsEmailVerified(true);
@@ -60,7 +61,7 @@ const ForgotPasswordPage = () => {
 
     try {
       // Sample API endpoint - Replace with your actual endpoint
-      const response = await axios.put('http://api.example.com/reset-password', {
+      const response = await axios.put(`${UPDATE_PWD}`, {
         email,
         otp,
         password
