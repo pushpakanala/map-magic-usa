@@ -15,17 +15,21 @@ const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
   };
 
   return (
-    <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
+    <motion.div 
+      whileHover={{ scale: 1.03 }} 
+      transition={{ duration: 0.2 }}
+      className="h-full"
+    >
       <Card 
-        className="cursor-pointer relative overflow-hidden bg-gradient-to-br from-card to-card/50 backdrop-blur-sm border-primary/10 hover:shadow-lg hover:shadow-primary/5 transition-all"
+        className="cursor-pointer relative overflow-hidden bg-gradient-to-br from-card/80 to-card/30 backdrop-blur-sm border-primary/10 hover:shadow-lg hover:shadow-primary/10 transition-all h-full"
         onClick={onClick}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-70" />
         <div className="absolute top-2 right-2 z-20">
           <Button
             variant="ghost"
             size="icon"
-            className="hover:bg-primary/10"
+            className="hover:bg-primary/10 bg-background/40 backdrop-blur-sm"
             type="button"
             onClick={handleFavoriteClick}
           >
@@ -40,7 +44,7 @@ const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
         </div>
         <CardHeader className="relative z-10">
           <div className="flex items-start gap-3">
-            <div className="mt-1 p-2 rounded-full bg-primary/10">
+            <div className="mt-1 p-2.5 rounded-full bg-primary/10 border border-primary/20">
               <GraduationCap className="h-5 w-5 text-primary" />
             </div>
             <CardTitle className="text-xl leading-tight">

@@ -1,4 +1,4 @@
-
+<lov-code>
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -360,7 +360,6 @@ const CollegePage = () => {
                             fill="#8884d8"
                             dataKey="value"
                             nameKey="name"
-                            label={({name, percent}) => `${name}: ${(percent * 100).toFixed(0)}%`}
                           >
                             {studentDemographics.map((entry, index) => (
                               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -409,7 +408,6 @@ const CollegePage = () => {
                             fill="#8884d8"
                             dataKey="value"
                             nameKey="name"
-                            label={({name, percent}) => `${name}: ${(percent * 100).toFixed(0)}%`}
                           >
                             {facultyDemographics.map((entry, index) => (
                               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -429,82 +427,91 @@ const CollegePage = () => {
               </Card>
             </div>
 
-            <Card>
-              <CardHeader>
+            <Card className="overflow-hidden border border-primary/10 shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent">
                 <CardTitle className="text-2xl font-bold flex items-center gap-2">
-                  <BookOpen className="h-5 w-5" />
+                  <BookOpen className="h-5 w-5 text-primary" />
                   Academic Programs
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-0">
                 <Tabs defaultValue="undergrad" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
-                    <TabsTrigger value="undergrad">Undergraduate Programs</TabsTrigger>
-                    <TabsTrigger value="grad">Graduate Programs</TabsTrigger>
-                  </TabsList>
+                  <div className="px-6 pt-6">
+                    <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
+                      <TabsTrigger value="undergrad">Undergraduate Programs</TabsTrigger>
+                      <TabsTrigger value="grad">Graduate Programs</TabsTrigger>
+                    </TabsList>
+                  </div>
 
-                  <TabsContent value="undergrad" className="mt-6">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Program Name</TableHead>
-                          <TableHead>Duration</TableHead>
-                          <TableHead>Fees</TableHead>
-                          <TableHead>Ranking</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {programs.undergrad_programs && programs.undergrad_programs.map((program, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{program.program_name}</TableCell>
-                            <TableCell>{program.program_duration}</TableCell>
-                            <TableCell>{formatFees(program.total_fees)}</TableCell>
-                            <TableCell>{formatCourseRank(program.course_rank)}</TableCell>
-                          </TableRow>
+                  <TabsContent value="undergrad" className="mt-6 px-6 pb-6">
+                    {programs.undergrad_programs && programs.undergrad_programs.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {programs.undergrad_programs.map((program, index) => (
+                          <Card key={index} className="overflow-hidden border border-primary/10 hover:shadow-md transition-shadow">
+                            <div className="bg-gradient-to-r from-primary/10 to-transparent p-4">
+                              <h3 className="font-semibold text-lg">{program.program_name}</h3>
+                            </div>
+                            <div className="p-4 space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Duration:</span>
+                                <span className="font-medium">{program.program_duration}</span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Total Fees:</span>
+                                <span className="font-medium">{formatFees(program.total_fees)}</span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Ranking:</span>
+                                <span className="font-medium">{formatCourseRank(program.course_rank)}</span>
+                              </div>
+                            </div>
+                          </Card>
                         ))}
-                        {(!programs.undergrad_programs || programs.undergrad_programs.length === 0) && (
-                          <TableRow>
-                            <TableCell colSpan={4} className="text-center py-4">No undergraduate programs data available</TableCell>
-                          </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
+                      </div>
+                    ) : (
+                      <div className="text-center py-10">
+                        <p className="text-muted-foreground">No undergraduate programs data available</p>
+                      </div>
+                    )}
                   </TabsContent>
 
-                  <TabsContent value="grad" className="mt-6">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Program Name</TableHead>
-                          <TableHead>Duration</TableHead>
-                          <TableHead>Fees</TableHead>
-                          <TableHead>Ranking</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {programs.grad_programs && programs.grad_programs.map((program, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{program.program_name}</TableCell>
-                            <TableCell>{program.program_duration}</TableCell>
-                            <TableCell>{formatFees(program.total_fees)}</TableCell>
-                            <TableCell>{formatCourseRank(program.course_rank)}</TableCell>
-                          </TableRow>
+                  <TabsContent value="grad" className="mt-6 px-6 pb-6">
+                    {programs.grad_programs && programs.grad_programs.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {programs.grad_programs.map((program, index) => (
+                          <Card key={index} className="overflow-hidden border border-primary/10 hover:shadow-md transition-shadow">
+                            <div className="bg-gradient-to-r from-primary/10 to-transparent p-4">
+                              <h3 className="font-semibold text-lg">{program.program_name}</h3>
+                            </div>
+                            <div className="p-4 space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Duration:</span>
+                                <span className="font-medium">{program.program_duration}</span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Total Fees:</span>
+                                <span className="font-medium">{formatFees(program.total_fees)}</span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Ranking:</span>
+                                <span className="font-medium">{formatCourseRank(program.course_rank)}</span>
+                              </div>
+                            </div>
+                          </Card>
                         ))}
-                        {(!programs.grad_programs || programs.grad_programs.length === 0) && (
-                          <TableRow>
-                            <TableCell colSpan={4} className="text-center py-4">No graduate programs data available</TableCell>
-                          </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
+                      </div>
+                    ) : (
+                      <div className="text-center py-10">
+                        <p className="text-muted-foreground">No graduate programs data available</p>
+                      </div>
+                    )}
                   </TabsContent>
                 </Tabs>
               </CardContent>
             </Card>
 
-            {/* Application Fees Section */}
-            <Card>
-              <CardHeader>
+            <Card className="border border-primary/10 shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent">
                 <CardTitle className="text-2xl font-bold flex items-center gap-2">
                   <DollarSign className="h-5 w-5" />
                   Application Fees
@@ -592,164 +599,123 @@ const CollegePage = () => {
               </CardContent>
             </Card>
 
-            {/* Required Documents Section */}
-            <Card>
-              <CardHeader>
+            <Card className="border border-primary/10 shadow-lg overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent">
                 <CardTitle className="text-2xl font-bold flex items-center gap-2">
                   <FileText className="h-5 w-5" />
                   Required Documents
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-0">
                 <Tabs defaultValue="int-docs" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
-                    <TabsTrigger value="int-docs">International Students</TabsTrigger>
-                    <TabsTrigger value="local-docs">Local Students</TabsTrigger>
-                  </TabsList>
+                  <div className="px-6 pt-6">
+                    <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
+                      <TabsTrigger value="int-docs">International Students</TabsTrigger>
+                      <TabsTrigger value="local-docs">Local Students</TabsTrigger>
+                    </TabsList>
+                  </div>
 
-                  <TabsContent value="int-docs" className="mt-6">
-                    <ul className="space-y-2 list-disc pl-5">
+                  <TabsContent value="int-docs" className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {requiredDocuments.international_students && requiredDocuments.international_students.map((doc, index) => (
-                        <li key={index} className="text-base">{doc}</li>
+                        <div 
+                          key={index} 
+                          className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-primary/5 to-transparent border border-primary/10"
+                        >
+                          <div className="flex-shrink-0 h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <FileText className="h-4 w-4 text-primary" />
+                          </div>
+                          <span className="text-sm font-medium">{doc}</span>
+                        </div>
                       ))}
                       {(!requiredDocuments.international_students || requiredDocuments.international_students.length === 0) && (
-                        <li className="text-muted-foreground">No document information available for international students</li>
+                        <div className="col-span-2 text-center py-8">
+                          <p className="text-muted-foreground">No document information available for international students</p>
+                        </div>
                       )}
-                    </ul>
+                    </div>
                   </TabsContent>
 
-                  <TabsContent value="local-docs" className="mt-6">
-                    <ul className="space-y-2 list-disc pl-5">
+                  <TabsContent value="local-docs" className="p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {requiredDocuments.local_students && requiredDocuments.local_students.map((doc, index) => (
-                        <li key={index} className="text-base">{doc}</li>
+                        <div 
+                          key={index} 
+                          className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-primary/5 to-transparent border border-primary/10"
+                        >
+                          <div className="flex-shrink-0 h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <FileText className="h-4 w-4 text-primary" />
+                          </div>
+                          <span className="text-sm font-medium">{doc}</span>
+                        </div>
                       ))}
                       {(!requiredDocuments.local_students || requiredDocuments.local_students.length === 0) && (
-                        <li className="text-muted-foreground">No document information available for local students</li>
+                        <div className="col-span-2 text-center py-8">
+                          <p className="text-muted-foreground">No document information available for local students</p>
+                        </div>
                       )}
-                    </ul>
+                    </div>
                   </TabsContent>
                 </Tabs>
               </CardContent>
             </Card>
 
-            {/* Part-time Opportunities Section */}
-            <Card>
-              <CardHeader>
+            <Card className="border border-primary/10 shadow-lg overflow-hidden">
+              <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent">
                 <CardTitle className="text-2xl font-bold flex items-center gap-2">
                   <Briefcase className="h-5 w-5" />
                   Part-time Opportunities
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">On-Campus Jobs</h3>
-                    <ul className="space-y-2 list-disc pl-5">
+                  <motion.div 
+                    className="relative overflow-hidden rounded-xl border border-primary/10 p-6 bg-gradient-to-br from-background to-background/80"
+                    whileHover={{ y: -5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 rounded-full bg-blue-500/10">
+                        <Briefcase className="h-5 w-5 text-blue-500" />
+                      </div>
+                      <h3 className="font-semibold text-lg">On-Campus Jobs</h3>
+                    </div>
+                    <ul className="space-y-2 mb-4">
                       {partTimeOpportunities.on_campus_jobs && partTimeOpportunities.on_campus_jobs.map((job, index) => (
-                        <li key={index}>{job}</li>
+                        <li key={index} className="flex items-center gap-2">
+                          <div className="h-1.5 w-1.5 rounded-full bg-blue-500"></div>
+                          <span className="text-sm">{job}</span>
+                        </li>
                       ))}
+                      {(!partTimeOpportunities.on_campus_jobs || partTimeOpportunities.on_campus_jobs.length === 0) && (
+                        <li className="text-muted-foreground text-sm">No on-campus job information available</li>
+                      )}
                     </ul>
                     {partTimeOpportunities.availability_probability && (
-                      <p className="text-sm mt-2">
-                        Availability: <span className="font-medium capitalize">{partTimeOpportunities.availability_probability.on_campus_jobs}</span>
-                      </p>
+                      <div className="mt-auto pt-2 border-t border-primary/10">
+                        <p className="text-sm">
+                          Availability: 
+                          <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500 capitalize">
+                            {partTimeOpportunities.availability_probability.on_campus_jobs}
+                          </span>
+                        </p>
+                      </div>
                     )}
-                  </div>
+                  </motion.div>
                   
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">Internships</h3>
-                    <ul className="space-y-2 list-disc pl-5">
+                  <motion.div 
+                    className="relative overflow-hidden rounded-xl border border-primary/10 p-6 bg-gradient-to-br from-background to-background/80"
+                    whileHover={{ y: -5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-400 to-green-600"></div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 rounded-full bg-green-500/10">
+                        <Briefcase className="h-5 w-5 text-green-500" />
+                      </div>
+                      <h3 className="font-semibold text-lg">Internships</h3>
+                    </div>
+                    <ul className="space-y-2 mb-4">
                       {partTimeOpportunities.internships && partTimeOpportunities.internships.map((internship, index) => (
-                        <li key={index}>{internship}</li>
-                      ))}
-                    </ul>
-                    {partTimeOpportunities.availability_probability && (
-                      <p className="text-sm mt-2">
-                        Availability: <span className="font-medium capitalize">{partTimeOpportunities.availability_probability.internships}</span>
-                      </p>
-                    )}
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">Assistantships</h3>
-                    <ul className="space-y-2 list-disc pl-5">
-                      {partTimeOpportunities.assistantships && partTimeOpportunities.assistantships.map((assistantship, index) => (
-                        <li key={index}>{assistantship}</li>
-                      ))}
-                    </ul>
-                    {partTimeOpportunities.availability_probability && (
-                      <p className="text-sm mt-2">
-                        Availability: <span className="font-medium capitalize">{partTimeOpportunities.availability_probability.assistantships}</span>
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Admission Deadlines Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
-                  Admission Deadlines
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="space-y-4 border p-4 rounded-lg">
-                    <h3 className="font-semibold text-lg text-center">Fall Semester</h3>
-                    <div className="space-y-2">
-                      <p className="flex justify-between">
-                        <span className="text-muted-foreground">International Students:</span>
-                        <span className="font-medium">{admissionDeadlines.fall?.international_students || "N/A"}</span>
-                      </p>
-                      <p className="flex justify-between">
-                        <span className="text-muted-foreground">Local Students:</span>
-                        <span className="font-medium">{admissionDeadlines.fall?.local_students || "N/A"}</span>
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4 border p-4 rounded-lg">
-                    <h3 className="font-semibold text-lg text-center">Spring Semester</h3>
-                    <div className="space-y-2">
-                      <p className="flex justify-between">
-                        <span className="text-muted-foreground">International Students:</span>
-                        <span className="font-medium">{admissionDeadlines.spring?.international_students || "N/A"}</span>
-                      </p>
-                      <p className="flex justify-between">
-                        <span className="text-muted-foreground">Local Students:</span>
-                        <span className="font-medium">{admissionDeadlines.spring?.local_students || "N/A"}</span>
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4 border p-4 rounded-lg">
-                    <h3 className="font-semibold text-lg text-center">Summer Semester</h3>
-                    <div className="space-y-2">
-                      <p className="flex justify-between">
-                        <span className="text-muted-foreground">International Students:</span>
-                        <span className="font-medium">{admissionDeadlines.summer?.international_students || "N/A"}</span>
-                      </p>
-                      <p className="flex justify-between">
-                        <span className="text-muted-foreground">Local Students:</span>
-                        <span className="font-medium">{admissionDeadlines.summer?.local_students || "N/A"}</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-      </div>
-      <SessionExpiredDialog 
-        open={isSessionExpired} 
-        onOpenChange={setIsSessionExpired}
-      />
-    </>
-  );
-};
-
-export default CollegePage;
+                        <li key={index} className="flex items-center gap-2
