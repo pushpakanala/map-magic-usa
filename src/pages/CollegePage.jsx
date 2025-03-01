@@ -1,4 +1,3 @@
-<lov-code>
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import { UNIVERSITIS_DATA_GPT } from '../constants';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
@@ -128,7 +127,6 @@ const CollegePage = () => {
 
   const { school } = universityData.data;
   
-  // Safely access nested properties
   const programs = school.programs || { undergrad_programs: [], grad_programs: [] };
   const students = school.students || { race_ethnicity: {} };
   const faculty = school.faculty || { race_ethnicity: {} };
@@ -137,10 +135,8 @@ const CollegePage = () => {
   const partTimeOpportunities = school.part_time_opportunities || { on_campus_jobs: [], internships: [], assistantships: [] };
   const admissionDeadlines = school.admission_deadlines || { fall: {}, spring: {}, summer: {} };
 
-  // Prepare chart data with proper handling
   const prepareChartData = (data = {}) => {
     return Object.entries(data).map(([name, value]) => {
-      // Handle both string percentages and numeric values
       const numericValue = typeof value === 'string' 
         ? parseFloat(value.toString().replace('%', '')) 
         : (typeof value === 'number' ? value : 0);
@@ -718,4 +714,34 @@ const CollegePage = () => {
                     </div>
                     <ul className="space-y-2 mb-4">
                       {partTimeOpportunities.internships && partTimeOpportunities.internships.map((internship, index) => (
-                        <li key={index} className="flex items-center gap-2
+                        <li key={index} className="flex items-center gap-2">
+                          <div className="h-1.5 w-1.5 rounded-full bg-green-500"></div>
+                          <span className="text-sm">{internship}</span>
+                        </li>
+                      ))}
+                      {(!partTimeOpportunities.internships || partTimeOpportunities.internships.length === 0) && (
+                        <li className="text-muted-foreground text-sm">No internship information available</li>
+                      )}
+                    </ul>
+                    {partTimeOpportunities.availability_probability && (
+                      <div className="mt-auto pt-2 border-t border-primary/10">
+                        <p className="text-sm">
+                          Availability: 
+                          <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-500 capitalize">
+                            {partTimeOpportunities.availability_probability.internships}
+                          </span>
+                        </p>
+                      </div>
+                    )}
+                  </motion.div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CollegePage;
