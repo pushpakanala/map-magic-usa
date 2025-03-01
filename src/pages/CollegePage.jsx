@@ -738,6 +738,41 @@ const CollegePage = () => {
                       </div>
                     )}
                   </motion.div>
+
+                  <motion.div 
+                    className="relative overflow-hidden rounded-xl border border-primary/10 p-6 bg-gradient-to-br from-background to-background/80"
+                    whileHover={{ y: -5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-400 to-purple-600"></div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-2 rounded-full bg-purple-500/10">
+                        <School className="h-5 w-5 text-purple-500" />
+                      </div>
+                      <h3 className="font-semibold text-lg">Assistantships</h3>
+                    </div>
+                    <ul className="space-y-2 mb-4">
+                      {partTimeOpportunities.assistantships && partTimeOpportunities.assistantships.map((assistantship, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                          <div className="h-1.5 w-1.5 rounded-full bg-purple-500"></div>
+                          <span className="text-sm">{assistantship}</span>
+                        </li>
+                      ))}
+                      {(!partTimeOpportunities.assistantships || partTimeOpportunities.assistantships.length === 0) && (
+                        <li className="text-muted-foreground text-sm">No assistantship information available</li>
+                      )}
+                    </ul>
+                    {partTimeOpportunities.availability_probability && (
+                      <div className="mt-auto pt-2 border-t border-primary/10">
+                        <p className="text-sm">
+                          Availability: 
+                          <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-500 capitalize">
+                            {partTimeOpportunities.availability_probability.assistantships}
+                          </span>
+                        </p>
+                      </div>
+                    )}
+                  </motion.div>
                 </div>
               </CardContent>
             </Card>
