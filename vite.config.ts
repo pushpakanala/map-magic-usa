@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -33,5 +34,14 @@ export default defineConfig(({ mode }) => ({
         entryFileNames: "assets/[name].[hash].js",
       },
     },
+  },
+  optimizeDeps: {
+    include: [
+      "@radix-ui/react-avatar",
+      "@radix-ui/react-toast",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-slot",
+      // Add other Radix UI packages used in your project
+    ],
   },
 }));
