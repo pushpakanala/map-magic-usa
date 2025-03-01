@@ -441,28 +441,30 @@ const CollegePage = () => {
 
                   <TabsContent value="undergrad" className="mt-6 px-6 pb-6">
                     {programs.undergrad_programs && programs.undergrad_programs.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {programs.undergrad_programs.map((program, index) => (
-                          <Card key={index} className="overflow-hidden border border-primary/10 hover:shadow-md transition-shadow">
-                            <div className="bg-gradient-to-r from-primary/10 to-transparent p-4">
-                              <h3 className="font-semibold text-lg">{program.program_name}</h3>
-                            </div>
-                            <div className="p-4 space-y-2">
-                              <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Duration:</span>
-                                <span className="font-medium">{program.program_duration}</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Total Fees:</span>
-                                <span className="font-medium">{formatFees(program.total_fees)}</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Ranking:</span>
-                                <span className="font-medium">{formatCourseRank(program.course_rank)}</span>
-                              </div>
-                            </div>
-                          </Card>
-                        ))}
+                      <div className="rounded-md overflow-hidden border border-primary/10">
+                        <Table>
+                          <TableHeader className="bg-primary/5">
+                            <TableRow>
+                              <TableHead className="font-semibold text-primary">Program Name</TableHead>
+                              <TableHead className="font-semibold text-primary">Duration</TableHead>
+                              <TableHead className="font-semibold text-primary">Total Fees</TableHead>
+                              <TableHead className="font-semibold text-primary">Ranking</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {programs.undergrad_programs.map((program, index) => (
+                              <TableRow 
+                                key={index}
+                                className={index % 2 === 0 ? "bg-primary/[0.02]" : ""}
+                              >
+                                <TableCell className="font-medium">{program.program_name}</TableCell>
+                                <TableCell>{program.program_duration}</TableCell>
+                                <TableCell>{formatFees(program.total_fees)}</TableCell>
+                                <TableCell>{formatCourseRank(program.course_rank)}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
                       </div>
                     ) : (
                       <div className="text-center py-10">
@@ -473,28 +475,30 @@ const CollegePage = () => {
 
                   <TabsContent value="grad" className="mt-6 px-6 pb-6">
                     {programs.grad_programs && programs.grad_programs.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {programs.grad_programs.map((program, index) => (
-                          <Card key={index} className="overflow-hidden border border-primary/10 hover:shadow-md transition-shadow">
-                            <div className="bg-gradient-to-r from-primary/10 to-transparent p-4">
-                              <h3 className="font-semibold text-lg">{program.program_name}</h3>
-                            </div>
-                            <div className="p-4 space-y-2">
-                              <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Duration:</span>
-                                <span className="font-medium">{program.program_duration}</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Total Fees:</span>
-                                <span className="font-medium">{formatFees(program.total_fees)}</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Ranking:</span>
-                                <span className="font-medium">{formatCourseRank(program.course_rank)}</span>
-                              </div>
-                            </div>
-                          </Card>
-                        ))}
+                      <div className="rounded-md overflow-hidden border border-primary/10">
+                        <Table>
+                          <TableHeader className="bg-primary/5">
+                            <TableRow>
+                              <TableHead className="font-semibold text-primary">Program Name</TableHead>
+                              <TableHead className="font-semibold text-primary">Duration</TableHead>
+                              <TableHead className="font-semibold text-primary">Total Fees</TableHead>
+                              <TableHead className="font-semibold text-primary">Ranking</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {programs.grad_programs.map((program, index) => (
+                              <TableRow 
+                                key={index}
+                                className={index % 2 === 0 ? "bg-primary/[0.02]" : ""}
+                              >
+                                <TableCell className="font-medium">{program.program_name}</TableCell>
+                                <TableCell>{program.program_duration}</TableCell>
+                                <TableCell>{formatFees(program.total_fees)}</TableCell>
+                                <TableCell>{formatCourseRank(program.course_rank)}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
                       </div>
                     ) : (
                       <div className="text-center py-10">
@@ -740,6 +744,7 @@ const CollegePage = () => {
           </motion.div>
         </div>
       </div>
+      {isSessionExpired && <SessionExpiredDialog />}
     </>
   );
 };
