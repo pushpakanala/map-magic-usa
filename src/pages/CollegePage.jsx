@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -5,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from 'axios';
-import { MapPin, Globe, Award, School, BookOpen, Users, Building2, GraduationCap, DollarSign, Star } from 'lucide-react';
+import { MapPin, Globe, Award, School, BookOpen, Users, Building2, GraduationCap, DollarSign, Star, Calendar, FileText, Briefcase } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -72,6 +73,7 @@ const CollegePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [universityData, setUniversityData] = useState(null);
+  const [error, setError] = useState(false);
   const [isSessionExpired, setIsSessionExpired] = useState(false);
   const token = sessionStorage.getItem('token');
 
@@ -93,8 +95,10 @@ const CollegePage = () => {
         const response = await axios.get(`${UNIVERSITIS_DATA_GPT}?university_name=${collegeName}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        console.log("University data response:", response.data);
         setUniversityData(response.data);
       } catch (error) {
+        console.error("Error fetching university data:", error);
         if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
           setIsSessionExpired(true);
         }
@@ -111,7 +115,7 @@ const CollegePage = () => {
     return <LoadingState />;
   }
 
-  if (!universityData) {
+  if (!universityData || error) {
     return (
       <div className="min-h-screen bg-background p-8 flex items-center justify-center">
         <div className="space-y-4 text-center">
@@ -122,26 +126,46 @@ const CollegePage = () => {
     );
   }
 
-  const { school, programs, students, faculty } = universityData.data;
+  const { school } = universityData.data;
+  
+  // Safely access nested properties
+  const programs = school.programs || { undergrad_programs: [], grad_programs: [] };
+  const students = school.students || { race_ethnicity: {} };
+  const faculty = school.faculty || { race_ethnicity: {} };
+  const applicationFee = school.application_fee || { undergraduate: {}, graduate: {} };
+  const requiredDocuments = school.required_documents || { international_students: [], local_students: [] };
+  const partTimeOpportunities = school.part_time_opportunities || { on_campus_jobs: [], internships: [], assistantships: [] };
+  const admissionDeadlines = school.admission_deadlines || { fall: {}, spring: {}, summer: {} };
 
-  const prepareChartData = (data) => {
-    return Object.entries(data).map(([name, value]) => ({
-      name,
-      value: parseFloat(value.toString().replace('%', ''))
-    }));
+  // Prepare chart data with proper handling
+  const prepareChartData = (data = {}) => {
+    return Object.entries(data).map(([name, value]) => {
+      // Handle both string percentages and numeric values
+      const numericValue = typeof value === 'string' 
+        ? parseFloat(value.toString().replace('%', '')) 
+        : (typeof value === 'number' ? value : 0);
+      
+      return {
+        name,
+        value: numericValue
+      };
+    });
   };
 
   const studentDemographics = prepareChartData(students.race_ethnicity);
   const facultyDemographics = prepareChartData(faculty.race_ethnicity);
 
   const renderContactDetails = (contact) => {
+    if (!contact) return null;
+    
     if (typeof contact === 'string') {
       return contact;
     }
+    
     return (
       <div className="space-y-1">
-        <p className="text-sm"><span className="font-medium">Phone:</span> {contact.phone}</p>
-        <p className="text-sm"><span className="font-medium">Email:</span> {contact.email}</p>
+        {contact.mobile && <p className="text-sm"><span className="font-medium">Phone:</span> {contact.mobile}</p>}
+        {contact.email && <p className="text-sm"><span className="font-medium">Email:</span> {contact.email}</p>}
       </div>
     );
   };
@@ -225,7 +249,7 @@ const CollegePage = () => {
                     <div className="flex justify-between items-center">
                       <span className="text-muted-foreground">Required Exams</span>
                       <div className="flex flex-wrap justify-end gap-1">
-                        {school.eligibility_addmission_exams.map((exam) => (
+                        {school.eligibility_admission_exams && school.eligibility_admission_exams.map((exam) => (
                           <span key={exam} className="text-xs bg-primary/10 px-2 py-1 rounded-full">
                             {exam}
                           </span>
@@ -247,11 +271,11 @@ const CollegePage = () => {
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between items-center pb-2 border-b border-primary/10">
                       <span className="text-muted-foreground">Graduation Rate</span>
-                      <span className="font-medium">{school.graduation_rate}</span>
+                      <span className="font-medium">{formatPercentage(school.graduation_rate)}</span>
                     </div>
                     <div className="flex justify-between items-center pb-2 border-b border-primary/10">
                       <span className="text-muted-foreground">Acceptance Rate</span>
-                      <span className="font-medium">{school.acceptance_rate}</span>
+                      <span className="font-medium">{formatPercentage(school.acceptance_rate)}</span>
                     </div>
                     <div className="space-y-2">
                       <span className="text-muted-foreground block">Accreditation</span>
@@ -281,6 +305,17 @@ const CollegePage = () => {
                       <Globe className="h-4 w-4" />
                       Visit Website
                     </a>
+                    {school.application_link && (
+                      <a 
+                        href={school.application_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block mt-2 inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+                      >
+                        <FileText className="h-4 w-4" />
+                        Application Portal
+                      </a>
+                    )}
                   </div>
                 </motion.div>
               </div>
@@ -298,11 +333,11 @@ const CollegePage = () => {
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="space-y-2">
                       <p className="text-sm text-muted-foreground">Total Students</p>
-                      <p className="text-3xl font-bold text-primary">{students.total_students.toLocaleString()}</p>
+                      <p className="text-3xl font-bold text-primary">{students.total_students ? students.total_students.toLocaleString() : 'N/A'}</p>
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm text-muted-foreground">Graduate Students</p>
-                      <p className="text-3xl font-bold text-primary">{students.grad_students.toLocaleString()}</p>
+                      <p className="text-3xl font-bold text-primary">{students.grad_students ? students.grad_students.toLocaleString() : 'N/A'}</p>
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm text-muted-foreground">Male Students</p>
@@ -314,24 +349,32 @@ const CollegePage = () => {
                     </div>
                   </div>
                   <div className="h-[300px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={studentDemographics}
-                          cx="50%"
-                          cy="50%"
-                          outerRadius={80}
-                          fill="#8884d8"
-                          dataKey="value"
-                        >
-                          {studentDemographics.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip formatter={(value) => `${value}%`} />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
+                    {Object.keys(students.race_ethnicity || {}).length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={studentDemographics}
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                            nameKey="name"
+                            label={({name, percent}) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          >
+                            {studentDemographics.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip formatter={(value) => `${value}%`} />
+                          <Legend />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <div className="h-full flex items-center justify-center">
+                        <p className="text-muted-foreground">No demographic data available</p>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -355,24 +398,32 @@ const CollegePage = () => {
                     </div>
                   </div>
                   <div className="h-[300px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={facultyDemographics}
-                          cx="50%"
-                          cy="50%"
-                          outerRadius={80}
-                          fill="#8884d8"
-                          dataKey="value"
-                        >
-                          {facultyDemographics.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip formatter={(value) => `${value}%`} />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
+                    {Object.keys(faculty.race_ethnicity || {}).length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={facultyDemographics}
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                            nameKey="name"
+                            label={({name, percent}) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          >
+                            {facultyDemographics.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip formatter={(value) => `${value}%`} />
+                          <Legend />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <div className="h-full flex items-center justify-center">
+                        <p className="text-muted-foreground">No demographic data available</p>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -403,14 +454,19 @@ const CollegePage = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {programs.undergrad_programs.map((program, index) => (
+                        {programs.undergrad_programs && programs.undergrad_programs.map((program, index) => (
                           <TableRow key={index}>
                             <TableCell>{program.program_name}</TableCell>
                             <TableCell>{program.program_duration}</TableCell>
-                            <TableCell>{formatFees(program.fees)}</TableCell>
+                            <TableCell>{formatFees(program.total_fees)}</TableCell>
                             <TableCell>{formatCourseRank(program.course_rank)}</TableCell>
                           </TableRow>
                         ))}
+                        {(!programs.undergrad_programs || programs.undergrad_programs.length === 0) && (
+                          <TableRow>
+                            <TableCell colSpan={4} className="text-center py-4">No undergraduate programs data available</TableCell>
+                          </TableRow>
+                        )}
                       </TableBody>
                     </Table>
                   </TabsContent>
@@ -426,18 +482,263 @@ const CollegePage = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {programs.grad_programs.map((program, index) => (
+                        {programs.grad_programs && programs.grad_programs.map((program, index) => (
                           <TableRow key={index}>
                             <TableCell>{program.program_name}</TableCell>
                             <TableCell>{program.program_duration}</TableCell>
-                            <TableCell>{formatFees(program.fees)}</TableCell>
+                            <TableCell>{formatFees(program.total_fees)}</TableCell>
                             <TableCell>{formatCourseRank(program.course_rank)}</TableCell>
                           </TableRow>
                         ))}
+                        {(!programs.grad_programs || programs.grad_programs.length === 0) && (
+                          <TableRow>
+                            <TableCell colSpan={4} className="text-center py-4">No graduate programs data available</TableCell>
+                          </TableRow>
+                        )}
                       </TableBody>
                     </Table>
                   </TabsContent>
                 </Tabs>
+              </CardContent>
+            </Card>
+
+            {/* Application Fees Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold flex items-center gap-2">
+                  <DollarSign className="h-5 w-5" />
+                  Application Fees
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Tabs defaultValue="undergrad-fees" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
+                    <TabsTrigger value="undergrad-fees">Undergraduate</TabsTrigger>
+                    <TabsTrigger value="grad-fees">Graduate</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="undergrad-fees" className="mt-6">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Student Type</TableHead>
+                          <TableHead>Fee Amount</TableHead>
+                          <TableHead>Waivers Available</TableHead>
+                          <TableHead>Waiver Criteria</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {applicationFee.undergraduate && (
+                          <>
+                            <TableRow>
+                              <TableCell>International Students</TableCell>
+                              <TableCell>${applicationFee.undergraduate.international_students}</TableCell>
+                              <TableCell>{applicationFee.undergraduate.waivers_available ? "Yes" : "No"}</TableCell>
+                              <TableCell>{applicationFee.undergraduate.waiver_criteria || "N/A"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Local Students</TableCell>
+                              <TableCell>${applicationFee.undergraduate.local_students}</TableCell>
+                              <TableCell>{applicationFee.undergraduate.waivers_available ? "Yes" : "No"}</TableCell>
+                              <TableCell>{applicationFee.undergraduate.waiver_criteria || "N/A"}</TableCell>
+                            </TableRow>
+                          </>
+                        )}
+                        {!applicationFee.undergraduate && (
+                          <TableRow>
+                            <TableCell colSpan={4} className="text-center py-4">No undergraduate application fee data available</TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TabsContent>
+
+                  <TabsContent value="grad-fees" className="mt-6">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Student Type</TableHead>
+                          <TableHead>Fee Amount</TableHead>
+                          <TableHead>Waivers Available</TableHead>
+                          <TableHead>Waiver Criteria</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {applicationFee.graduate && (
+                          <>
+                            <TableRow>
+                              <TableCell>International Students</TableCell>
+                              <TableCell>${applicationFee.graduate.international_students}</TableCell>
+                              <TableCell>{applicationFee.graduate.waivers_available ? "Yes" : "No"}</TableCell>
+                              <TableCell>{applicationFee.graduate.waiver_criteria || "N/A"}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell>Local Students</TableCell>
+                              <TableCell>${applicationFee.graduate.local_students}</TableCell>
+                              <TableCell>{applicationFee.graduate.waivers_available ? "Yes" : "No"}</TableCell>
+                              <TableCell>{applicationFee.graduate.waiver_criteria || "N/A"}</TableCell>
+                            </TableRow>
+                          </>
+                        )}
+                        {!applicationFee.graduate && (
+                          <TableRow>
+                            <TableCell colSpan={4} className="text-center py-4">No graduate application fee data available</TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+
+            {/* Required Documents Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Required Documents
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Tabs defaultValue="int-docs" className="w-full">
+                  <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
+                    <TabsTrigger value="int-docs">International Students</TabsTrigger>
+                    <TabsTrigger value="local-docs">Local Students</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="int-docs" className="mt-6">
+                    <ul className="space-y-2 list-disc pl-5">
+                      {requiredDocuments.international_students && requiredDocuments.international_students.map((doc, index) => (
+                        <li key={index} className="text-base">{doc}</li>
+                      ))}
+                      {(!requiredDocuments.international_students || requiredDocuments.international_students.length === 0) && (
+                        <li className="text-muted-foreground">No document information available for international students</li>
+                      )}
+                    </ul>
+                  </TabsContent>
+
+                  <TabsContent value="local-docs" className="mt-6">
+                    <ul className="space-y-2 list-disc pl-5">
+                      {requiredDocuments.local_students && requiredDocuments.local_students.map((doc, index) => (
+                        <li key={index} className="text-base">{doc}</li>
+                      ))}
+                      {(!requiredDocuments.local_students || requiredDocuments.local_students.length === 0) && (
+                        <li className="text-muted-foreground">No document information available for local students</li>
+                      )}
+                    </ul>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+
+            {/* Part-time Opportunities Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold flex items-center gap-2">
+                  <Briefcase className="h-5 w-5" />
+                  Part-time Opportunities
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-4">
+                    <h3 className="font-semibold text-lg">On-Campus Jobs</h3>
+                    <ul className="space-y-2 list-disc pl-5">
+                      {partTimeOpportunities.on_campus_jobs && partTimeOpportunities.on_campus_jobs.map((job, index) => (
+                        <li key={index}>{job}</li>
+                      ))}
+                    </ul>
+                    {partTimeOpportunities.availability_probability && (
+                      <p className="text-sm mt-2">
+                        Availability: <span className="font-medium capitalize">{partTimeOpportunities.availability_probability.on_campus_jobs}</span>
+                      </p>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h3 className="font-semibold text-lg">Internships</h3>
+                    <ul className="space-y-2 list-disc pl-5">
+                      {partTimeOpportunities.internships && partTimeOpportunities.internships.map((internship, index) => (
+                        <li key={index}>{internship}</li>
+                      ))}
+                    </ul>
+                    {partTimeOpportunities.availability_probability && (
+                      <p className="text-sm mt-2">
+                        Availability: <span className="font-medium capitalize">{partTimeOpportunities.availability_probability.internships}</span>
+                      </p>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h3 className="font-semibold text-lg">Assistantships</h3>
+                    <ul className="space-y-2 list-disc pl-5">
+                      {partTimeOpportunities.assistantships && partTimeOpportunities.assistantships.map((assistantship, index) => (
+                        <li key={index}>{assistantship}</li>
+                      ))}
+                    </ul>
+                    {partTimeOpportunities.availability_probability && (
+                      <p className="text-sm mt-2">
+                        Availability: <span className="font-medium capitalize">{partTimeOpportunities.availability_probability.assistantships}</span>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Admission Deadlines Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold flex items-center gap-2">
+                  <Calendar className="h-5 w-5" />
+                  Admission Deadlines
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-4 border p-4 rounded-lg">
+                    <h3 className="font-semibold text-lg text-center">Fall Semester</h3>
+                    <div className="space-y-2">
+                      <p className="flex justify-between">
+                        <span className="text-muted-foreground">International Students:</span>
+                        <span className="font-medium">{admissionDeadlines.fall?.international_students || "N/A"}</span>
+                      </p>
+                      <p className="flex justify-between">
+                        <span className="text-muted-foreground">Local Students:</span>
+                        <span className="font-medium">{admissionDeadlines.fall?.local_students || "N/A"}</span>
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 border p-4 rounded-lg">
+                    <h3 className="font-semibold text-lg text-center">Spring Semester</h3>
+                    <div className="space-y-2">
+                      <p className="flex justify-between">
+                        <span className="text-muted-foreground">International Students:</span>
+                        <span className="font-medium">{admissionDeadlines.spring?.international_students || "N/A"}</span>
+                      </p>
+                      <p className="flex justify-between">
+                        <span className="text-muted-foreground">Local Students:</span>
+                        <span className="font-medium">{admissionDeadlines.spring?.local_students || "N/A"}</span>
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4 border p-4 rounded-lg">
+                    <h3 className="font-semibold text-lg text-center">Summer Semester</h3>
+                    <div className="space-y-2">
+                      <p className="flex justify-between">
+                        <span className="text-muted-foreground">International Students:</span>
+                        <span className="font-medium">{admissionDeadlines.summer?.international_students || "N/A"}</span>
+                      </p>
+                      <p className="flex justify-between">
+                        <span className="text-muted-foreground">Local Students:</span>
+                        <span className="font-medium">{admissionDeadlines.summer?.local_students || "N/A"}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
