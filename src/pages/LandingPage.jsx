@@ -8,30 +8,55 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const letters = "UNIQUEST".split("");
   const [hoveredLetter, setHoveredLetter] = useState(null);
+  const [hoveredPart, setHoveredPart] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [glowSegments, setGlowSegments] = useState([]);
   
-  // Create random glow segments for each letter when hovered
-  useEffect(() => {
-    if (hoveredLetter !== null) {
-      const numSegments = Math.floor(Math.random() * 2) + 2; // 2-3 segments
-      const newSegments = [];
+  // Handle mouse movement to track position within a letter
+  const handleMouseMove = (event, index) => {
+    if (hoveredLetter === index) {
+      const letterRect = event.currentTarget.getBoundingClientRect();
+      const x = (event.clientX - letterRect.left) / letterRect.width;
+      const y = (event.clientY - letterRect.top) / letterRect.height;
+      setMousePosition({ x, y });
       
-      for (let i = 0; i < numSegments; i++) {
-        newSegments.push({
-          startPosition: Math.random() * 0.7, // Random start position (0-70% of outline)
-          length: 0.2 + Math.random() * 0.3, // Length between 20-50% of the outline
-          color: getRandomNeonColor(),
-          delay: Math.random() * 0.2, // Random delay for animation
-          pulseDuration: 1.5 + Math.random(), // Random pulse duration
-          side: Math.random() > 0.5 ? 'left' : 'right', // Randomly choose side
-        });
-      }
+      // Determine which part of the letter is being hovered
+      // Divide letter into 9 parts (3x3 grid)
+      const partX = Math.floor(x * 3);
+      const partY = Math.floor(y * 3);
+      const partIndex = partY * 3 + partX;
+      setHoveredPart(partIndex);
+    }
+  };
+  
+  // Create random glow segment for the hovered part
+  useEffect(() => {
+    if (hoveredLetter !== null && hoveredPart !== null) {
+      // Create segments based on the hovered part
+      const newSegments = [{
+        partIndex: hoveredPart,
+        color: getRandomNeonColor(),
+        pulseDuration: 1.2 + Math.random() * 0.8,
+      }];
       
       setGlowSegments(newSegments);
     } else {
       setGlowSegments([]);
     }
-  }, [hoveredLetter]);
+  }, [hoveredLetter, hoveredPart]);
+
+  // Create clip path for the specific part of the letter
+  const getClipPath = (partIndex) => {
+    const row = Math.floor(partIndex / 3);
+    const col = partIndex % 3;
+    
+    const startX = (col * 33.33);
+    const startY = (row * 33.33);
+    const endX = startX + 33.33;
+    const endY = startY + 33.33;
+    
+    return `polygon(${startX}% ${startY}%, ${endX}% ${startY}%, ${endX}% ${endY}%, ${startX}% ${endY}%)`;
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white p-4">
@@ -45,7 +70,11 @@ const LandingPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: index * 0.1 }}
               onMouseEnter={() => setHoveredLetter(index)}
-              onMouseLeave={() => setHoveredLetter(null)}
+              onMouseMove={(e) => handleMouseMove(e, index)}
+              onMouseLeave={() => {
+                setHoveredLetter(null);
+                setHoveredPart(null);
+              }}
             >
               {/* Base letter with minimalist styling */}
               <span 
@@ -74,7 +103,7 @@ const LandingPage = () => {
                 )}
               </span>
               
-              {/* Glowing neon segments that appear on hover */}
+              {/* Glowing segments for the hovered part of the letter */}
               {hoveredLetter === index && glowSegments.map((segment, i) => (
                 <motion.span
                   key={`segment-${i}`}
@@ -89,10 +118,7 @@ const LandingPage = () => {
                     fontSize: 'inherit',
                     lineHeight: 'inherit',
                     letterSpacing: 'inherit',
-                    // Create partial outline with clip-path
-                    clipPath: segment.side === 'left' 
-                      ? `polygon(0% ${segment.startPosition * 100}%, 50% ${segment.startPosition * 100}%, 50% ${(segment.startPosition + segment.length) * 100}%, 0% ${(segment.startPosition + segment.length) * 100}%)`
-                      : `polygon(50% ${segment.startPosition * 100}%, 100% ${segment.startPosition * 100}%, 100% ${(segment.startPosition + segment.length) * 100}%, 50% ${(segment.startPosition + segment.length) * 100}%)`,
+                    clipPath: getClipPath(segment.partIndex),
                   }}
                   initial={{ opacity: 0 }}
                   animate={{ 
@@ -106,7 +132,6 @@ const LandingPage = () => {
                   }}
                   transition={{ 
                     duration: segment.pulseDuration, 
-                    delay: segment.delay,
                     repeat: Infinity,
                     repeatType: "reverse",
                     ease: "easeInOut",
