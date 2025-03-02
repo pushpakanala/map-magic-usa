@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { GraduationCap, ArrowUpRight } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -55,6 +56,8 @@ const LandingPage = () => {
                   <span className="relative">
                     U
                     <span className="absolute h-[4px] w-[50%] bg-[#7e22ce] top-[18%] left-[25%] opacity-20 rounded-full"></span>
+                    {/* Graduation cap on U */}
+                    <GraduationCap className="absolute -top-6 -left-2 w-12 h-12 text-[#8B5CF6] opacity-80" />
                   </span>
                 ) : letter === 'Q' ? (
                   <span className="relative">
@@ -70,7 +73,7 @@ const LandingPage = () => {
         </div>
         
         {/* Modern gradient text showcase */}
-        <div className="bg-[#1A1F2C] p-8 rounded-xl mb-16 w-full max-w-3xl">
+        <div className="bg-[#1A1F2C] p-8 rounded-xl mb-16 w-full max-w-3xl shadow-lg shadow-[#8B5CF6]/10">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">Experience the Future of College Search</h2>
           <p className="text-lg text-gray-300 mb-6">
             Our platform uses advanced algorithms to help you find the perfect 
@@ -91,20 +94,18 @@ const LandingPage = () => {
           </p>
         </div>
         
-        {/* Modern "Try Now" button replacing the login/signup buttons */}
+        {/* Modern "Try Now" button styled like the reference image */}
         <motion.div 
           className="mt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.7 }}
         >
-          <div 
-            onClick={() => navigate('/login')}
-            className="group cursor-pointer relative overflow-hidden py-4 px-10 rounded-full bg-gradient-to-r from-[#7e22ce] to-[#5b21b6] hover:shadow-lg hover:shadow-[#7e22ce]/20 transition-all duration-300"
-          >
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#7e22ce]/10 to-[#1EAEDB]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute -inset-y-full right-0 w-1/3 h-[300%] bg-gradient-to-r from-transparent to-white/20 group-hover:animate-[shine_1.5s_ease]"></div>
-            <span className="relative text-white text-lg font-semibold tracking-wide">Try Now</span>
+          <div onClick={() => navigate('/login')} className="try-now-button group">
+            <span className="flex items-center gap-2">
+              Try now <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+            </span>
+            <div className="underline-effect"></div>
           </div>
         </motion.div>
       </div>

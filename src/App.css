@@ -1,3 +1,4 @@
+
 #root {
   max-width: 100%;
   margin: 0 auto;
@@ -36,6 +37,11 @@
   }
 }
 
+@keyframes text-shimmer {
+  0% { backgroundPosition: 0% 50%; }
+  100% { backgroundPosition: 100% 50%; }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -48,4 +54,46 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Modern Try Now button styling */
+.try-now-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.87);
+  cursor: pointer;
+  padding-bottom: 0.25rem;
+  margin-top: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.try-now-button:hover {
+  color: white;
+}
+
+.underline-effect {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.try-now-button:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.try-now-button:hover:after {
+  width: 100%;
 }
