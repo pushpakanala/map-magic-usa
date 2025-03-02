@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,7 +23,6 @@ import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 
 const Index = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { toast } = useToast();
   const { favorites, handleFavoriteClick } = useFavorites();
   const [userData, setUserData] = useState(null);
@@ -43,16 +43,8 @@ const Index = () => {
       if (userStr) {
         setUserData(JSON.parse(userStr));
       }
-      
-      const isRedirected = location.state?.fromLogin;
-      if (isRedirected) {
-        toast({
-          title: "Login Successful",
-          description: "Welcome back!",
-        });
-      }
     }
-  }, [navigate, location, toast]);
+  }, [navigate]);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
