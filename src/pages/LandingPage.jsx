@@ -1,24 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [hoveredLetter, setHoveredLetter] = useState(null);
   
-  // Handle mouse movement for precise cursor tracking
-  const handleMouseMove = (event, index) => {
-    if (index === hoveredLetter) {
-      const letterRect = event.currentTarget.getBoundingClientRect();
-      const x = event.clientX - letterRect.left;
-      const y = event.clientY - letterRect.top;
-      setMousePosition({ x, y });
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white p-4">
       <div className="max-w-5xl w-full flex flex-col items-center">
@@ -50,13 +38,10 @@ const LandingPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: index * 0.1 }}
-              onMouseEnter={() => setHoveredLetter(index)}
-              onMouseMove={(e) => handleMouseMove(e, index)}
-              onMouseLeave={() => setHoveredLetter(null)}
             >
               {/* Base letter with minimalist styling */}
               <span 
-                className="text-[8rem] sm:text-[10rem] md:text-[12rem] font-bold leading-none tracking-tighter hover:cursor-pointer inline-block relative"
+                className="text-[8rem] sm:text-[10rem] md:text-[12rem] font-bold leading-none tracking-tighter inline-block relative"
                 style={{
                   fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
                   fontWeight: 800,
@@ -80,25 +65,6 @@ const LandingPage = () => {
                   letter
                 )}
               </span>
-              
-              {/* Glowing effect that follows the mouse with 3cm diameter */}
-              {hoveredLetter === index && (
-                <div 
-                  className="absolute pointer-events-none"
-                  style={{
-                    left: `${mousePosition.x - 15}px`,  // Center the glow (3cm ≈ 30px radius)
-                    top: `${mousePosition.y - 15}px`,
-                    width: '60px',  // 3cm diameter ≈ 60px
-                    height: '60px',
-                    borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 40%, rgba(126,34,206,0.7) 45%, rgba(74,222,128,0.7) 50%, rgba(6,182,212,0.7) 55%, rgba(37,99,235,0.7) 60%, rgba(236,72,153,0.7) 65%, rgba(255,255,255,0) 70%)',
-                    mixBlendMode: 'screen',
-                    filter: 'blur(2px)',
-                    opacity: 0.9,
-                    zIndex: 10,
-                  }}
-                />
-              )}
             </motion.div>
           ))}
         </div>
