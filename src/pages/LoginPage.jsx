@@ -36,7 +36,7 @@ const LoginPage = () => {
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('token', token);
         
-        navigate('/', { replace: true });
+        navigate('/map', { replace: true }); // Change navigation to map page
         toast({
           title: "Success",
           description: "Successfully logged in!",

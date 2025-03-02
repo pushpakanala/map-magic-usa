@@ -7,61 +7,23 @@ import { Button } from '@/components/ui/button';
 const LandingPage = () => {
   const navigate = useNavigate();
   const letters = "UNIQUEST".split("");
-  const [hoveredLetter, setHoveredLetter] = useState(null);
-  const [hoveredPart, setHoveredPart] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [glowSegments, setGlowSegments] = useState([]);
+  const [hoveredLetter, setHoveredLetter] = useState(null);
   
-  // Handle mouse movement to track position within a letter
+  // Handle mouse movement for precise cursor tracking
   const handleMouseMove = (event, index) => {
-    if (hoveredLetter === index) {
+    if (index === hoveredLetter) {
       const letterRect = event.currentTarget.getBoundingClientRect();
-      const x = (event.clientX - letterRect.left) / letterRect.width;
-      const y = (event.clientY - letterRect.top) / letterRect.height;
+      const x = event.clientX - letterRect.left;
+      const y = event.clientY - letterRect.top;
       setMousePosition({ x, y });
-      
-      // Determine which part of the letter is being hovered
-      // Divide letter into 9 parts (3x3 grid)
-      const partX = Math.floor(x * 3);
-      const partY = Math.floor(y * 3);
-      const partIndex = partY * 3 + partX;
-      setHoveredPart(partIndex);
     }
-  };
-  
-  // Create random glow segment for the hovered part
-  useEffect(() => {
-    if (hoveredLetter !== null && hoveredPart !== null) {
-      // Create segments based on the hovered part
-      const newSegments = [{
-        partIndex: hoveredPart,
-        color: getRandomNeonColor(),
-        pulseDuration: 1.2 + Math.random() * 0.8,
-      }];
-      
-      setGlowSegments(newSegments);
-    } else {
-      setGlowSegments([]);
-    }
-  }, [hoveredLetter, hoveredPart]);
-
-  // Create clip path for the specific part of the letter
-  const getClipPath = (partIndex) => {
-    const row = Math.floor(partIndex / 3);
-    const col = partIndex % 3;
-    
-    const startX = (col * 33.33);
-    const startY = (row * 33.33);
-    const endX = startX + 33.33;
-    const endY = startY + 33.33;
-    
-    return `polygon(${startX}% ${startY}%, ${endX}% ${startY}%, ${endX}% ${endY}%, ${startX}% ${endY}%)`;
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white p-4">
       <div className="max-w-5xl w-full flex flex-col items-center">
-        <div className="flex flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center relative">
           {letters.map((letter, index) => (
             <motion.div
               key={index}
@@ -71,10 +33,7 @@ const LandingPage = () => {
               transition={{ duration: 0.7, delay: index * 0.1 }}
               onMouseEnter={() => setHoveredLetter(index)}
               onMouseMove={(e) => handleMouseMove(e, index)}
-              onMouseLeave={() => {
-                setHoveredLetter(null);
-                setHoveredPart(null);
-              }}
+              onMouseLeave={() => setHoveredLetter(null)}
             >
               {/* Base letter with minimalist styling */}
               <span 
@@ -103,66 +62,24 @@ const LandingPage = () => {
                 )}
               </span>
               
-              {/* Glowing segments for the hovered part of the letter */}
-              {hoveredLetter === index && glowSegments.map((segment, i) => (
-                <motion.div
-                  key={`segment-${i}`}
-                  className="absolute left-0 top-0 w-full h-full overflow-hidden pointer-events-none"
+              {/* Glowing effect that follows the mouse with 3cm diameter */}
+              {hoveredLetter === index && (
+                <div 
+                  className="absolute pointer-events-none"
                   style={{
-                    clipPath: getClipPath(segment.partIndex),
+                    left: `${mousePosition.x - 15}px`,  // Center the glow (3cm ≈ 30px radius)
+                    top: `${mousePosition.y - 15}px`,
+                    width: '60px',  // 3cm diameter ≈ 60px
+                    height: '60px',
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 40%, rgba(126,34,206,0.7) 45%, rgba(74,222,128,0.7) 50%, rgba(6,182,212,0.7) 55%, rgba(37,99,235,0.7) 60%, rgba(236,72,153,0.7) 65%, rgba(255,255,255,0) 70%)',
+                    mixBlendMode: 'screen',
+                    filter: 'blur(2px)',
+                    opacity: 0.9,
+                    zIndex: 10,
                   }}
-                >
-                  <span
-                    className="absolute left-0 top-0 w-full h-full"
-                    style={{
-                      fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
-                      fontWeight: 800,
-                      WebkitTextStroke: `2.5px ${segment.color}`,
-                      textStroke: `2.5px ${segment.color}`,
-                      color: 'transparent',
-                      textShadow: `0 0 10px ${segment.color}80`,
-                      fontSize: 'inherit',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transform: 'scale(1)',
-                      fontSize: 'inherit',
-                    }}
-                  >
-                    {letter}
-                  </span>
-                  <motion.span
-                    className="absolute left-0 top-0 w-full h-full flex items-center justify-center"
-                    style={{
-                      fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
-                      fontWeight: 800,
-                      WebkitTextStroke: `2.5px ${segment.color}`,
-                      textStroke: `2.5px ${segment.color}`,
-                      color: 'transparent',
-                      textShadow: `0 0 10px ${segment.color}80`,
-                      fontSize: 'inherit',
-                    }}
-                    initial={{ opacity: 0 }}
-                    animate={{ 
-                      opacity: [0, 1, 0.7, 1],
-                      textShadow: [
-                        `0 0 8px ${segment.color}40`,
-                        `0 0 12px ${segment.color}90`,
-                        `0 0 8px ${segment.color}40`,
-                        `0 0 15px ${segment.color}90`
-                      ]
-                    }}
-                    transition={{ 
-                      duration: segment.pulseDuration, 
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                      ease: "easeInOut",
-                    }}
-                  >
-                    {letter}
-                  </motion.span>
-                </motion.div>
-              ))}
+                />
+              )}
             </motion.div>
           ))}
         </div>
@@ -191,19 +108,5 @@ const LandingPage = () => {
     </div>
   );
 };
-
-// Helper function to get random neon color for the segments
-function getRandomNeonColor() {
-  const colors = [
-    '#9333ea', // Purple
-    '#4ade80', // Green
-    '#06b6d4', // Cyan
-    '#2563eb', // Blue
-    '#ec4899', // Pink
-    '#8b5cf6', // Violet
-    '#f97316', // Orange
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
-}
 
 export default LandingPage;
