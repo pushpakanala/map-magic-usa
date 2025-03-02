@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -103,7 +104,7 @@ const StatePage = () => {
           <div className="w-full max-w-7xl text-left">
             <Button 
               variant="ghost" 
-              onClick={() => navigate('/')} 
+              onClick={() => navigate('/explore')} 
               className="mb-8 hover:bg-background/80 backdrop-blur-sm"
             >
               ← Back to Map
