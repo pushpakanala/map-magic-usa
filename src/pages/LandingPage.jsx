@@ -39,9 +39,9 @@ const LandingPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: index * 0.1 }}
             >
-              {/* Base letter with minimalist styling */}
+              {/* Base letter with minimalist styling and hover effect */}
               <span 
-                className="text-[8rem] sm:text-[10rem] md:text-[12rem] font-bold leading-none tracking-tighter inline-block relative"
+                className="text-[8rem] sm:text-[10rem] md:text-[12rem] font-bold leading-none tracking-tighter inline-block relative transition-all duration-300 hover:brightness-150 hover:cursor-pointer"
                 style={{
                   fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
                   fontWeight: 800,
