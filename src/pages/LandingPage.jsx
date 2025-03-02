@@ -53,7 +53,9 @@ const LandingPage = () => {
                 style={{
                   fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
                   fontWeight: 800,
-                  color: 'rgba(255, 255, 255, 0.2)', // Very dull color for base
+                  color: 'transparent', // Make text hollow (no fill)
+                  WebkitTextStroke: '1px rgba(255, 255, 255, 0.2)', // Light outline for all letters
+                  textStroke: '1px rgba(255, 255, 255, 0.2)',
                 }}
               >
                 {/* Special styling for U and Q */}
