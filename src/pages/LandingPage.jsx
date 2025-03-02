@@ -18,7 +18,7 @@ const LandingPage = () => {
               key={index}
               className={`text-[8rem] sm:text-[10rem] md:text-[15rem] font-bold leading-none tracking-tighter ${
                 hoveredIndex === index 
-                  ? 'text-transparent bg-clip-text bg-gradient-to-r from-[#9b87f5] to-[#D6BCFA]' 
+                  ? 'text-black border-b-4 border-[#9b87f5]' 
                   : 'text-white'
               }`}
               onMouseEnter={() => setHoveredIndex(index)}
