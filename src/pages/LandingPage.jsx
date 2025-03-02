@@ -51,13 +51,17 @@ const LandingPage = () => {
                   textStroke: '1px rgba(255, 255, 255, 0.2)',
                 }}
               >
-                {/* Special styling for U and Q */}
+                {/* Updated graduation cap styling for the letter U */}
                 {letter === 'U' && index === 0 ? (
                   <span className="relative">
                     U
-                    <span className="absolute h-[4px] w-[50%] bg-[#7e22ce] top-[18%] left-[25%] opacity-20 rounded-full"></span>
-                    {/* Graduation cap on U - increased size */}
-                    <GraduationCap className="absolute -top-8 -left-3 w-16 h-16 text-[#8B5CF6] opacity-80" />
+                    {/* Custom graduation cap positioned like the reference image */}
+                    <div className="absolute -top-[3.5rem] -left-[1rem] transform rotate-[10deg] w-32 h-24">
+                      <div className="absolute w-full h-10 bg-[#1a365d] skew-x-[-20deg] top-8 left-0"></div>
+                      <div className="absolute w-[120%] h-2 bg-[#1a365d] skew-x-[-20deg] top-[4.5rem] left-0"></div>
+                      <div className="absolute w-8 h-2 bg-[#1a365d] skew-x-[-20deg] top-[4.5rem] right-6 transform rotate-[30deg]"></div>
+                      <div className="absolute w-3 h-3 bg-[#1a365d] rounded-full top-[4.7rem] right-3"></div>
+                    </div>
                   </span>
                 ) : letter === 'Q' ? (
                   <span className="relative">
