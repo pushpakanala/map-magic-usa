@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -28,6 +29,11 @@ export default {
         },
         mapHover: "#1e40af",
         mapActive: "#1e3a8a",
+        uniquestPurple: {
+          light: "#D6BCFA",
+          DEFAULT: "#9b87f5",
+          dark: "#7E69AB"
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -67,9 +73,17 @@ export default {
           "0%": { transform: "scale(1)" },
           "100%": { transform: "scale(1.02)" },
         },
+        "text-shimmer": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "100%": { backgroundPosition: "100% 50%" },
+        },
       },
       animation: {
         "map-hover": "map-hover 0.2s ease-in-out forwards",
+        "text-shimmer": "text-shimmer 2s ease-in-out infinite",
+      },
+      backgroundSize: {
+        "300%": "300%",
       },
     },
   },

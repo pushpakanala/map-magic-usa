@@ -7,6 +7,7 @@ import CollegePage from './pages/CollegePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import LandingPage from './pages/LandingPage';
 import { Toaster } from "@/components/ui/toaster";
 import './App.css';
 
@@ -17,10 +18,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/explore" element={<Index />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/" element={<Index />} />
           <Route path="/state/:stateName" element={<StatePage />} />
           <Route path="/college/:collegeName" element={<CollegePage />} />
         </Routes>
