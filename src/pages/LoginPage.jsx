@@ -36,7 +36,7 @@ const LoginPage = () => {
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('token', token);
         
-        navigate('/index', { replace: true }); // Change navigation to index page
+        navigate('/explore', { replace: true }); // Changed navigation to explore page
         toast({
           title: "Success",
           description: "Successfully logged in!",

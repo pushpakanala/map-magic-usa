@@ -14,7 +14,7 @@ const LandingPage = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-6xl font-bold mb-2">
             Discover Your <span 
-              className="bg-clip-text text-transparent"
+              className="bg-clip-text text-transparent transition-all duration-300 hover:brightness-150"
               style={{
                 backgroundImage: 'linear-gradient(90deg, #1EAEDB 0%, #8B5CF6 100%)',
                 backgroundSize: '200% auto',
@@ -75,7 +75,7 @@ const LandingPage = () => {
           <p className="text-lg text-gray-300 mb-6">
             Our platform uses advanced algorithms to help you find the perfect 
             <span 
-              className="mx-2 font-bold bg-clip-text text-transparent"
+              className="mx-2 font-bold bg-clip-text text-transparent transition-all duration-300 hover:brightness-150"
               style={{
                 backgroundImage: 'linear-gradient(90deg, #8B5CF6 0%, #1EAEDB 50%, #8B5CF6 100%)',
                 backgroundSize: '200% auto',
