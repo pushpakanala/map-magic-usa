@@ -1,113 +1,181 @@
-import React, { useState } from 'react';
+
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useToast } from "@/hooks/use-toast"
-import { Eye, EyeOff } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { AtSign, KeyRound } from 'lucide-react';
 import axios from 'axios';
-import { AUTH_API_URL } from '../constants';
+import { LOGIN } from '../constants';
+import { useToast } from '@/hooks/use-toast';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { toast } = useToast()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
-
-  const validateForm = () => {
-    let newErrors = {};
-    if (!email) newErrors.email = 'Email is required';
-    if (!password) newErrors.password = 'Password is required';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
+    setIsLoading(true);
 
     try {
-      const response = await axios.post(`${AUTH_API_URL}/login`, {
-        email: email,
-        password: password
-      });
-
-      const { token, user } = response.data.data;
-      sessionStorage.setItem('user', JSON.stringify(user));
-      sessionStorage.setItem('isLoggedIn', 'true');
-      sessionStorage.setItem('token', token);
-
-      navigate('/explore', { replace: true }); // Changed to navigate to the explore page with the US map
-      toast({
-        title: "Success",
-        description: "Successfully logged in!",
-      });
+      const response = await axios.post(`${LOGIN}?email=${email}&password=${password}`);
+      
+      if (response.data) {
+        const userData = {
+          email,
+          name: response.data.data.name,
+          role: 'user'
+        };
+        
+        const token = response.data.data.access_token;
+        
+        sessionStorage.setItem('user', JSON.stringify(userData));
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('token', token);
+        
+        navigate('/index', { replace: true }); // Change navigation to index page
+        toast({
+          title: "Success",
+          description: "Successfully logged in!",
+        });
+      } else {
+        throw new Error('Invalid credentials');
+      }
     } catch (error) {
       toast({
-        title: "Error",
-        description: error.response?.data?.message || "Failed to login",
         variant: "destructive",
-      })
+        title: "Error",
+        description: "Login failed. Please check your credentials.",
+      });
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-semibold mb-6">Login</h2>
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full"
-            />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-          </div>
-          <div className="mb-6 relative">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full"
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 focus:outline-none"
-              onClick={togglePasswordVisibility}
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-background flex items-center justify-center p-8">
+      <div className="w-full max-w-[1100px] flex items-center justify-between">
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="w-[450px] h-[500px]"
+        >
+          <img 
+            src="/lovable-uploads/e0689fd1-93f8-43da-8622-0ab01ffe42e8.png"
+            alt="Graduate"
+            className="w-full h-full object-contain drop-shadow-2xl"
+          />
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
+        >
+          <div className="bg-background/90 backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-primary/20 p-8">
+            <motion.div 
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="flex justify-center mb-6"
             >
-              {showPassword ? <EyeOff className="h-5 w-5 text-gray-500" /> : <Eye className="h-5 w-5 text-gray-500" />}
-            </button>
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+              <img 
+                src="/lovable-uploads/3cb78e1e-9ba3-42b1-8f0f-03e4218fe231.png"
+                alt="Logo"
+                className="w-28 h-28 object-contain"
+              />
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70"
+            >
+              Welcome Back
+            </motion.h1>
+            
+            <form onSubmit={handleLogin} className="space-y-6">
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className="space-y-2"
+              >
+                <div className="relative">
+                  <AtSign className="absolute left-3 top-3 h-5 w-5 text-primary/70" />
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80"
+                    required
+                  />
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="space-y-2"
+              >
+                <div className="relative">
+                  <KeyRound className="absolute left-3 top-3 h-5 w-5 text-primary/70" />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80"
+                    required
+                  />
+                </div>
+              </motion.div>
+
+              <div className="flex justify-end">
+                <Link 
+                  to="/forgot-password" 
+                  className="text-sm text-primary hover:underline"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-300"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Logging in..." : "Login"}
+                </Button>
+              </motion.div>
+            </form>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="text-center mt-6 text-sm text-muted-foreground"
+            >
+              Don't have an account?{" "}
+              <Link to="/signup" className="text-primary hover:underline font-medium">
+                Sign up
+              </Link>
+            </motion.p>
           </div>
-          <Button className="w-full bg-primary text-white py-2 rounded hover:bg-primary/80 transition-colors">
-            Login
-          </Button>
-        </form>
-        <div className="mt-4 text-center">
-          <Link to="/forgot-password" className="text-sm text-gray-600 hover:text-gray-800">
-            Forgot Password?
-          </Link>
-        </div>
-        <div className="mt-4 text-center">
-          Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

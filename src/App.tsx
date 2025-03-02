@@ -20,7 +20,6 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/explore" element={<Index />} />
-          <Route path="/index" element={<Index />} />  {/* Added this route for backward compatibility */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
