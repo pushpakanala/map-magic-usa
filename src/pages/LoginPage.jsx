@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
@@ -11,10 +11,19 @@ import { useToast } from '@/hooks/use-toast';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  
+  // Check if user is already logged in, redirect to explore page
+  useEffect(() => {
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    if (isLoggedIn) {
+      navigate('/explore', { replace: true });
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,7 +45,7 @@ const LoginPage = () => {
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('token', token);
         
-        navigate('/explore', { replace: true }); // Changed navigation to explore page
+        navigate('/explore', { replace: true });
         toast({
           title: "Success",
           description: "Successfully logged in!",
