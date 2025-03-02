@@ -1,12 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const letters = "UNIQUEST".split("");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [hoveredLetter, setHoveredLetter] = useState(null);
   
@@ -23,8 +22,28 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white p-4">
       <div className="max-w-5xl w-full flex flex-col items-center">
-        <div className="flex flex-wrap justify-center relative">
-          {letters.map((letter, index) => (
+        {/* Main headline with gradient highlight */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-6xl font-bold mb-2">
+            Discover Your <span 
+              className="bg-clip-text text-transparent"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, #1EAEDB 0%, #8B5CF6 100%)',
+                backgroundSize: '200% auto',
+                animation: 'text-shimmer 2s ease-in-out infinite'
+              }}
+            >
+              UNIQUEST
+            </span>
+          </h1>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            Find the perfect college journey tailored to your ambitions
+          </p>
+        </div>
+        
+        {/* Interactive letters display */}
+        <div className="flex flex-wrap justify-center relative mb-12">
+          {"UNIQUEST".split('').map((letter, index) => (
             <motion.div
               key={index}
               className="relative"
@@ -84,8 +103,30 @@ const LandingPage = () => {
           ))}
         </div>
         
+        {/* Modern gradient text showcase */}
+        <div className="bg-[#1A1F2C] p-8 rounded-xl mb-16 w-full max-w-3xl">
+          <h2 className="text-2xl md:text-3xl font-semibold mb-4">Experience the Future of College Search</h2>
+          <p className="text-lg text-gray-300 mb-6">
+            Our platform uses advanced algorithms to help you find the perfect 
+            <span 
+              className="mx-2 font-bold bg-clip-text text-transparent"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, #8B5CF6 0%, #1EAEDB 50%, #8B5CF6 100%)',
+                backgroundSize: '200% auto',
+                animation: 'text-shimmer 3s linear infinite'
+              }}
+            >
+              Grok
+            </span>
+            for your academic journey.
+          </p>
+          <p className="text-gray-400">
+            Discover colleges that match your interests, budget, and career goals with our intelligent recommendation system.
+          </p>
+        </div>
+        
         <motion.div 
-          className="mt-16 flex flex-col sm:flex-row gap-6"
+          className="mt-8 flex flex-col sm:flex-row gap-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.7 }}
