@@ -9,16 +9,16 @@ const LandingPage = () => {
   const letters = "UNIQUEST".split("");
   const [hoveredIndex, setHoveredIndex] = useState(null);
   
-  // Colors for the highlight effect
-  const highlightColors = [
-    'border-purple-500',
-    'border-green-400',
-    'border-blue-400',
-    'border-pink-500',
-    'border-yellow-400',
-    'border-cyan-400',
-    'border-red-400',
-    'border-emerald-400',
+  // Colors for the outline highlight effect
+  const outlineColors = [
+    '#9b87f5', // Purple
+    '#4ade80', // Green
+    '#60a5fa', // Blue
+    '#f472b6', // Pink
+    '#fbbf24', // Yellow
+    '#22d3ee', // Cyan
+    '#f87171', // Red
+    '#34d399', // Emerald
   ];
 
   return (
@@ -29,11 +29,11 @@ const LandingPage = () => {
             <motion.span
               key={index}
               className={`text-[8rem] sm:text-[10rem] md:text-[15rem] font-bold leading-none tracking-tighter relative
-                ${hoveredIndex === index ? `text-black ${highlightColors[index % highlightColors.length]}` : 'text-transparent'}
                 hover:cursor-pointer`}
               style={{
-                WebkitTextStroke: '1px #333', 
-                textStroke: '1px #333'
+                WebkitTextStroke: hoveredIndex === index ? `3px ${outlineColors[index % outlineColors.length]}` : '2px #555',
+                textStroke: hoveredIndex === index ? `3px ${outlineColors[index % outlineColors.length]}` : '2px #555',
+                color: 'transparent'
               }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
@@ -44,15 +44,17 @@ const LandingPage = () => {
               {letter}
               {hoveredIndex === index && (
                 <motion.span 
-                  className={`absolute inset-0 z-[-1] opacity-80`}
+                  className="absolute inset-0 z-[-1]"
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.8 }}
+                  animate={{ opacity: 1 }}
                   style={{
                     background: `linear-gradient(90deg, ${getRandomColor()}, ${getRandomColor()})`,
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
                     textFillColor: 'transparent',
+                    WebkitTextStroke: `3px ${outlineColors[index % outlineColors.length]}`,
+                    textStroke: `3px ${outlineColors[index % outlineColors.length]}`,
                   }}
                 >
                   {letter}
