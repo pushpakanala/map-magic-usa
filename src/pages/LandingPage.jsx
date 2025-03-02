@@ -29,7 +29,7 @@ const LandingPage = () => {
           </p>
         </div>
         
-        {/* Interactive letters display */}
+        {/* Interactive letters display with hover effect */}
         <div className="flex flex-wrap justify-center relative mb-12">
           {"UNIQUEST".split('').map((letter, index) => (
             <motion.div
@@ -39,9 +39,9 @@ const LandingPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: index * 0.1 }}
             >
-              {/* Base letter with minimalist styling */}
+              {/* Base letter with minimalist styling and hover effect */}
               <span 
-                className="text-[8rem] sm:text-[10rem] md:text-[12rem] font-bold leading-none tracking-tighter inline-block relative"
+                className="text-[8rem] sm:text-[10rem] md:text-[12rem] font-bold leading-none tracking-tighter inline-block relative hover:brightness-125 transition-all duration-300"
                 style={{
                   fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
                   fontWeight: 800,
@@ -91,25 +91,21 @@ const LandingPage = () => {
           </p>
         </div>
         
+        {/* Modern "Try Now" button replacing the login/signup buttons */}
         <motion.div 
-          className="mt-8 flex flex-col sm:flex-row gap-6"
+          className="mt-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.7 }}
         >
-          <Button 
-            variant="outline"
-            className="px-8 py-6 text-lg bg-transparent border-[#7e22ce] text-white hover:bg-[#7e22ce]/20 transition-all"
+          <div 
             onClick={() => navigate('/login')}
+            className="group cursor-pointer relative overflow-hidden py-4 px-10 rounded-full bg-gradient-to-r from-[#7e22ce] to-[#5b21b6] hover:shadow-lg hover:shadow-[#7e22ce]/20 transition-all duration-300"
           >
-            Login
-          </Button>
-          <Button 
-            className="px-8 py-6 text-lg bg-[#7e22ce] hover:bg-[#7e22ce]/80 transition-all"
-            onClick={() => navigate('/signup')}
-          >
-            Sign Up
-          </Button>
+            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#7e22ce]/10 to-[#1EAEDB]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute -inset-y-full right-0 w-1/3 h-[300%] bg-gradient-to-r from-transparent to-white/20 group-hover:animate-[shine_1.5s_ease]"></div>
+            <span className="relative text-white text-lg font-semibold tracking-wide">Try Now</span>
+          </div>
         </motion.div>
       </div>
     </div>
