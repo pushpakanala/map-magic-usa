@@ -105,40 +105,63 @@ const LandingPage = () => {
               
               {/* Glowing segments for the hovered part of the letter */}
               {hoveredLetter === index && glowSegments.map((segment, i) => (
-                <motion.span
+                <motion.div
                   key={`segment-${i}`}
-                  className="absolute left-0 top-0 pointer-events-none"
+                  className="absolute left-0 top-0 w-full h-full overflow-hidden pointer-events-none"
                   style={{
-                    fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
-                    fontWeight: 800,
-                    WebkitTextStroke: `2.5px ${segment.color}`,
-                    textStroke: `2.5px ${segment.color}`,
-                    color: 'transparent',
-                    textShadow: `0 0 10px ${segment.color}80`,
-                    fontSize: 'inherit',
-                    lineHeight: 'inherit',
-                    letterSpacing: 'inherit',
                     clipPath: getClipPath(segment.partIndex),
                   }}
-                  initial={{ opacity: 0 }}
-                  animate={{ 
-                    opacity: [0, 1, 0.7, 1],
-                    textShadow: [
-                      `0 0 8px ${segment.color}40`,
-                      `0 0 12px ${segment.color}90`,
-                      `0 0 8px ${segment.color}40`,
-                      `0 0 15px ${segment.color}90`
-                    ]
-                  }}
-                  transition={{ 
-                    duration: segment.pulseDuration, 
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                    ease: "easeInOut",
-                  }}
                 >
-                  {letter}
-                </motion.span>
+                  <span
+                    className="absolute left-0 top-0 w-full h-full"
+                    style={{
+                      fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
+                      fontWeight: 800,
+                      WebkitTextStroke: `2.5px ${segment.color}`,
+                      textStroke: `2.5px ${segment.color}`,
+                      color: 'transparent',
+                      textShadow: `0 0 10px ${segment.color}80`,
+                      fontSize: 'inherit',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transform: 'scale(1)',
+                      fontSize: 'inherit',
+                    }}
+                  >
+                    {letter}
+                  </span>
+                  <motion.span
+                    className="absolute left-0 top-0 w-full h-full flex items-center justify-center"
+                    style={{
+                      fontFamily: '"Montserrat", "Segoe UI", Arial, sans-serif',
+                      fontWeight: 800,
+                      WebkitTextStroke: `2.5px ${segment.color}`,
+                      textStroke: `2.5px ${segment.color}`,
+                      color: 'transparent',
+                      textShadow: `0 0 10px ${segment.color}80`,
+                      fontSize: 'inherit',
+                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ 
+                      opacity: [0, 1, 0.7, 1],
+                      textShadow: [
+                        `0 0 8px ${segment.color}40`,
+                        `0 0 12px ${segment.color}90`,
+                        `0 0 8px ${segment.color}40`,
+                        `0 0 15px ${segment.color}90`
+                      ]
+                    }}
+                    transition={{ 
+                      duration: segment.pulseDuration, 
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "easeInOut",
+                    }}
+                  >
+                    {letter}
+                  </motion.span>
+                </motion.div>
               ))}
             </motion.div>
           ))}
