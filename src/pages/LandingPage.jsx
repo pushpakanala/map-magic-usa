@@ -86,12 +86,16 @@ const LandingPage = () => {
           </span>
         </div>
         <div className="hidden md:flex space-x-8 items-center">
-          <Button 
-            onClick={() => navigate('/login')}
-            className="bg-gradient-to-r from-amber-400 to-pink-500 hover:opacity-90 transition-opacity text-white"
-          >
-            Try now
-          </Button>
+          {/* Updated top-right "Try now" button to match the new design */}
+          <div className="relative inline-block">
+            <button 
+              onClick={() => navigate('/login')} 
+              className="try-now-button group"
+            >
+              Try now <ArrowUpRight size={18} className="ml-1 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+              <div className="underline-effect"></div>
+            </button>
+          </div>
         </div>
       </div>
       
@@ -111,9 +115,9 @@ const LandingPage = () => {
           </p>
         </div>
         
-        {/* Card Display - Updated for carousel style display */}
-        <div className="relative w-full max-w-4xl mb-12">
-          <div className="flex justify-center items-center h-[350px] mb-8">
+        {/* Card Display - Updated height and reduced bottom margin to prevent overlap */}
+        <div className="relative w-full max-w-4xl mb-4">
+          <div className="flex justify-center items-center h-[320px] mb-8">
             <div className="relative w-full flex justify-center">
               {cards.map((card, idx) => {
                 // Calculate position based on active card
@@ -154,7 +158,7 @@ const LandingPage = () => {
                     }}
                     style={{ 
                       width: '320px',
-                      height: '380px'
+                      height: '320px' // Reduced card height
                     }}
                   >
                     <Card 
@@ -261,7 +265,8 @@ const LandingPage = () => {
           </div>
         </div>
         
-        <div className="text-center mb-20">
+        {/* Increased vertical spacing to ensure button is clearly visible */}
+        <div className="text-center mb-20 mt-10">
           {/* Updated Try Now button to match the design in the image */}
           <div className="relative inline-block">
             <button 
