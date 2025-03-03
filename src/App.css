@@ -132,10 +132,33 @@
   overflow: hidden;
 }
 
-/* Update animation for card swapping */
-@keyframes card-swap {
-  0% { opacity: 0; transform: translateY(20px); }
-  10% { opacity: 1; transform: translateY(0); }
-  90% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-20px); }
+/* Review Cards styles */
+.review-card {
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.review-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Rating stars styling */
+.star-rating {
+  display: flex;
+  align-items: center;
+}
+
+.star-filled {
+  color: #FFB400;
 }
