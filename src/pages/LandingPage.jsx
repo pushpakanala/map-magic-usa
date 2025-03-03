@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -43,27 +42,27 @@ const LandingPage = () => {
     }
   ];
   
-  // Review data
+  // Updated Review data to reflect they were written by students
   const reviews = [
     {
       id: 1,
       name: "Pushpak Praneeth",
-      role: "Student",
+      role: "Computer Science Student",
       content: "As a student aiming for top engineering programs, UNIQUEST helped me discover universities that perfectly matched my academic interests and career goals. The interactive map made my college search enjoyable and less stressful.",
       rating: 5
     },
     {
       id: 2,
       name: "Durga Rao",
-      role: "Student",
-      content: "Finding the right college for my daughter was overwhelming until we found UNIQUEST. The personalized recommendations and detailed university profiles gave us confidence in making this important decision for her future.",
+      role: "Pre-Med Student",
+      content: "Finding the right college for my pre-med journey was overwhelming until I found UNIQUEST. The personalized recommendations and detailed university profiles gave me confidence in making this important decision for my future.",
       rating: 5
     },
     {
       id: 3,
       name: "Leela Krishna",
-      role: "Student",
-      content: "UNIQUEST has transformed how I guide students through the college application process. The interactive tools and comprehensive data help me provide better advice tailored to each student's unique aspirations.",
+      role: "Graduate Student",
+      content: "As a graduate student looking for specialized programs, UNIQUEST transformed my search process. The interactive tools and comprehensive data helped me find programs perfectly aligned with my research interests.",
       rating: 5
     }
   ];
@@ -331,7 +330,7 @@ const LandingPage = () => {
         {/* Reviews Section */}
         <div className="w-full mb-20">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            What Our <span className="text-uniquestPurple">Users Say</span>
+            What Our <span className="text-uniquestPurple">Students Say</span>
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -384,4 +383,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-
