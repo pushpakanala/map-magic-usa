@@ -3,7 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { GraduationCap, ArrowUpRight } from 'lucide-react';
+import { GraduationCap, ArrowUpRight, Heart, Star, House, Map, User } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ const LandingPage = () => {
         <div className="bg-[#1A1F2C] p-8 rounded-xl mb-12 w-full max-w-3xl shadow-lg shadow-[#8B5CF6]/10">
           <h2 className="text-2xl md:text-3xl font-semibold mb-4">Experience the Future of College Search</h2>
           <p className="text-lg text-gray-300 mb-6">
-            Our platform uses advanced algorithms to help you find the perfect 
+            Our platform uses advanced algorithms to help you find the perfect match
             <span 
               className="mx-2 font-bold bg-clip-text text-transparent transition-all duration-300 hover:brightness-150"
               style={{
@@ -86,9 +86,9 @@ const LandingPage = () => {
                 animation: 'text-shimmer 3s linear infinite'
               }}
             >
-              Grok
+              for you
             </span>
-            for your academic journey.
+            on your academic journey.
           </p>
           <p className="text-gray-400">
             Discover colleges that match your interests, budget, and career goals with our intelligent recommendation system.
@@ -99,7 +99,7 @@ const LandingPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl mb-10">
           <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-primary/5 hover:border-primary/20 transition-all duration-300">
             <div className="w-12 h-12 bg-gradient-to-br from-[#8B5CF6] to-[#1EAEDB] rounded-lg mb-4 flex items-center justify-center">
-              <GraduationCap className="text-white h-6 w-6" />
+              <Map className="text-white h-6 w-6" />
             </div>
             <h3 className="text-lg font-semibold mb-2">Interactive Map</h3>
             <p className="text-gray-400 text-sm">Explore universities state by state with our interactive map visualization.</p>
@@ -107,7 +107,7 @@ const LandingPage = () => {
           
           <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-primary/5 hover:border-primary/20 transition-all duration-300">
             <div className="w-12 h-12 bg-gradient-to-br from-[#8B5CF6] to-[#1EAEDB] rounded-lg mb-4 flex items-center justify-center">
-              <ArrowUpRight className="text-white h-6 w-6" />
+              <Star className="text-white h-6 w-6" />
             </div>
             <h3 className="text-lg font-semibold mb-2">AI Advisor</h3>
             <p className="text-gray-400 text-sm">Get personalized college recommendations with our advanced AI chat assistant.</p>
@@ -115,9 +115,7 @@ const LandingPage = () => {
           
           <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-primary/5 hover:border-primary/20 transition-all duration-300">
             <div className="w-12 h-12 bg-gradient-to-br from-[#8B5CF6] to-[#1EAEDB] rounded-lg mb-4 flex items-center justify-center">
-              <svg className="text-white h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+              <Heart className="text-white h-6 w-6" />
             </div>
             <h3 className="text-lg font-semibold mb-2">Favorite Schools</h3>
             <p className="text-gray-400 text-sm">Save and compare your favorite universities to make informed decisions.</p>
