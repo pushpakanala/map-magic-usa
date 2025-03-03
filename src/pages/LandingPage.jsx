@@ -48,21 +48,21 @@ const LandingPage = () => {
     {
       id: 1,
       name: "Pushpak Praneeth",
-      role: "Engineering Student",
+      role: "Student",
       content: "As a student aiming for top engineering programs, UNIQUEST helped me discover universities that perfectly matched my academic interests and career goals. The interactive map made my college search enjoyable and less stressful.",
       rating: 5
     },
     {
       id: 2,
       name: "Durga Rao",
-      role: "Parent",
+      role: "Student",
       content: "Finding the right college for my daughter was overwhelming until we found UNIQUEST. The personalized recommendations and detailed university profiles gave us confidence in making this important decision for her future.",
       rating: 5
     },
     {
       id: 3,
       name: "Leela Krishna",
-      role: "High School Counselor",
+      role: "Student",
       content: "UNIQUEST has transformed how I guide students through the college application process. The interactive tools and comprehensive data help me provide better advice tailored to each student's unique aspirations.",
       rating: 5
     }
@@ -90,7 +90,7 @@ const LandingPage = () => {
             onClick={() => navigate('/login')}
             className="bg-gradient-to-r from-amber-400 to-pink-500 hover:opacity-90 transition-opacity text-white"
           >
-            Get Started
+            Try now
           </Button>
         </div>
       </div>
@@ -112,8 +112,8 @@ const LandingPage = () => {
         </div>
         
         {/* Card Display - Updated for carousel style display */}
-        <div className="relative w-full max-w-4xl mb-20">
-          <div className="flex justify-center items-center h-[400px] mb-8">
+        <div className="relative w-full max-w-4xl mb-12">
+          <div className="flex justify-center items-center h-[350px] mb-8">
             <div className="relative w-full flex justify-center">
               {cards.map((card, idx) => {
                 // Calculate position based on active card
@@ -262,11 +262,16 @@ const LandingPage = () => {
         </div>
         
         <div className="text-center mb-20">
-          <Button onClick={() => navigate('/login')} className="bg-gradient-to-r from-amber-400 to-pink-500 hover:opacity-90 transition-opacity text-white text-lg px-8 py-6">
-            <span className="flex items-center gap-2">
-              Try now <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-            </span>
-          </Button>
+          {/* Updated Try Now button to match the design in the image */}
+          <div className="relative inline-block">
+            <button 
+              onClick={() => navigate('/login')} 
+              className="try-now-button group"
+            >
+              Try now <ArrowUpRight size={18} className="ml-1 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+              <div className="underline-effect"></div>
+            </button>
+          </div>
         </div>
         
         {/* Features Section */}
@@ -380,12 +385,16 @@ const LandingPage = () => {
             <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
               Join thousands of students who have found their dream colleges with UNIQUEST.
             </p>
-            <Button 
-              onClick={() => navigate('/login')} 
-              className="bg-gradient-to-r from-amber-400 to-pink-500 hover:opacity-90 transition-opacity text-white text-lg px-10 py-6"
-            >
-              Get Started Today
-            </Button>
+            {/* Updated "Get Started" to "Try now" */}
+            <div className="relative inline-block">
+              <button 
+                onClick={() => navigate('/login')} 
+                className="try-now-button group text-lg"
+              >
+                Try now <ArrowUpRight size={20} className="ml-1 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                <div className="underline-effect"></div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
