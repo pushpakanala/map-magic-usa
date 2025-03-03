@@ -98,24 +98,24 @@ const LandingPage = () => {
         </div>
       </div>
       
-      <div className="max-w-5xl w-full flex flex-col items-center">
-        {/* Main headline with gradient - Reduced spacing */}
-        <div className="text-center mb-2">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
+      <div className="max-w-5xl w-full flex flex-col items-center mt-10">
+        {/* Main headline with gradient */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-pink-500 to-purple-600">
               Think College Search is Hard?
             </span>
             <br />
             <span className="text-white">Think again.</span>
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto mt-6">
             Find, analyze, and apply to the perfect colleges tailored to your unique journey.
             Don't take chances with your future education.
           </p>
         </div>
         
-        {/* Card Display - Moved upward by adjusting margins */}
-        <div className="relative w-full max-w-4xl mt-2 mb-8">
+        {/* Card Display - Repositioned higher with more space */}
+        <div className="relative w-full max-w-4xl mt-4 mb-16">
           <div className="flex justify-center items-center h-[420px]">
             <div className="relative w-full flex justify-center">
               {cards.map((card, idx) => {
@@ -253,7 +253,7 @@ const LandingPage = () => {
           </div>
           
           {/* Card indicator dots */}
-          <div className="flex justify-center space-x-2">
+          <div className="flex justify-center space-x-2 mt-4">
             {cards.map((_, idx) => (
               <button
                 key={idx}
@@ -265,7 +265,7 @@ const LandingPage = () => {
         </div>
         
         {/* Try Now button - Clearly visible below cards */}
-        <div className="text-center mb-14 mt-2">
+        <div className="text-center mb-16 mt-8">
           <div className="relative inline-block">
             <button 
               onClick={() => navigate('/login')} 
