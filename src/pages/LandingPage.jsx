@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -118,10 +117,10 @@ const LandingPage = () => {
           </p>
         </div>
         
-        {/* Card Display - Updated layout with centered position */}
-        <div className="w-full max-w-4xl mb-20">
-          <div className="flex flex-col items-center justify-center h-[500px] relative mx-auto">
-            {/* Cards rendering with updated positioning */}
+        {/* Card Display - Centered properly */}
+        <div className="w-full flex justify-center mb-20">
+          <div className="h-[500px] flex items-center justify-center relative w-full max-w-4xl">
+            {/* Cards rendering with updated positioning for better centering */}
             {cards.map((card, idx) => {
               // Calculate position based on active index
               let position;
@@ -140,20 +139,15 @@ const LandingPage = () => {
                   animate={{
                     scale: position === "center" ? 1 : 0.85,
                     opacity: position === "center" ? 1 : 0.5,
-                    top: position === "center" ? "0%" : "50%",
+                    top: position === "center" ? "50%" : "70%",
                     left: position === "center" 
                       ? "50%" 
                       : position === "bottomRight"
-                        ? "65%"
-                        : "35%",
+                        ? "70%"
+                        : "30%",
                     zIndex: position === "center" ? 20 : 10,
-                  }}
-                  style={{
-                    transform: position === "center" 
-                      ? "translate(-50%, 0%)" 
-                      : position === "bottomRight"
-                        ? "translate(-50%, 0%)"
-                        : "translate(-50%, 0%)"
+                    translateX: "-50%",
+                    translateY: "-50%"
                   }}
                   transition={{ duration: 0.5 }}
                 >
