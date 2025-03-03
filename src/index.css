@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -99,3 +100,39 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom button style with modern, professional colors */
+.try-now-button {
+  @apply relative px-4 py-2 text-white flex items-center font-medium;
+  transition: all 0.3s;
+  background: linear-gradient(90deg, #9b87f5 0%, #7E69AB 100%);
+  border-radius: 0.5rem;
+}
+
+.try-now-button:hover {
+  background: linear-gradient(90deg, #D6BCFA 0%, #9b87f5 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(155, 135, 245, 0.3);
+}
+
+.try-now-button:active {
+  transform: translateY(0);
+}
+
+.underline-effect {
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #9b87f5 0%, #D6BCFA 100%);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.try-now-button:hover .underline-effect {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+

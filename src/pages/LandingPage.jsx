@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -19,7 +20,7 @@ const LandingPage = () => {
         { text: "Finding matching colleges", checked: false },
         { text: "Generating recommendations", checked: false }
       ],
-      gradientClass: "from-orange-500 to-red-400",
+      gradientClass: "from-uniquestPurple-light to-uniquestPurple-dark",
       result: "Result: Perfect College Match",
       tags: ["Enhanced AI", "Real-time", "99.9% Accurate"]
     },
@@ -30,14 +31,14 @@ const LandingPage = () => {
         { category: "College Type", options: ["Public", "Private", "Community"] },
         { category: "Location", options: ["Urban", "Suburban", "Rural"] }
       ],
-      gradientClass: "from-amber-400 to-pink-500",
+      gradientClass: "from-blue-400 to-uniquestPurple",
       tags: ["Interactive", "Nationwide", "Up-to-date"]
     },
     {
       id: 3,
       title: "College Comparison Tool",
       content: "Compare universities side by side to make informed decisions",
-      gradientClass: "from-purple-600 to-blue-500",
+      gradientClass: "from-uniquestPurple to-blue-500",
       buttonText: "Start Comparing"
     }
   ];
@@ -76,11 +77,11 @@ const LandingPage = () => {
   }, [cards.length]);
   
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-black text-white p-4">
+    <div className="min-h-screen flex flex-col items-center justify-start bg-[#111827] text-white p-4">
       {/* Navigation */}
       <div className="w-full max-w-7xl flex justify-between items-center py-6">
         <div className="text-3xl font-bold">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-300 to-pink-500">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-uniquestPurple-light to-uniquestPurple">
             UNIQUEST
           </span>
         </div>
@@ -102,7 +103,7 @@ const LandingPage = () => {
         {/* Main headline with gradient */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-pink-500 to-purple-600">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-uniquestPurple-light via-uniquestPurple to-blue-500">
               Think College Search is Hard?
             </span>
             <br />
@@ -161,26 +162,26 @@ const LandingPage = () => {
                   >
                     <Card 
                       className={`h-full p-1 rounded-xl overflow-hidden ${
-                        idx === activeCardIndex ? 'shadow-lg shadow-orange-500/20' : ''
+                        idx === activeCardIndex ? 'shadow-lg shadow-uniquestPurple/20' : ''
                       }`} 
-                      style={{ background: "#FF5722", border: "none" }}
+                      style={{ background: "#9b87f5", border: "none" }}
                     >
-                      <CardContent className="bg-black rounded-lg h-full p-6 flex flex-col">
+                      <CardContent className="bg-[#111827] rounded-lg h-full p-6 flex flex-col">
                         <div className="flex items-center mb-4">
-                          <Lock className="w-5 h-5 text-green-500 mr-2" />
-                          <h3 className="text-green-500 font-medium">{card.title}</h3>
+                          <Lock className="w-5 h-5 text-uniquestPurple mr-2" />
+                          <h3 className="text-uniquestPurple font-medium">{card.title}</h3>
                         </div>
                         
                         {idx === 0 && (
                           <>
-                            <Button className="w-full bg-red-500 hover:bg-red-600 text-white mb-6">
+                            <Button className="w-full bg-uniquestPurple hover:bg-uniquestPurple-dark text-white mb-6">
                               Find Your College
                             </Button>
                             <div className="space-y-4 mb-6">
                               {card.content.map((item, i) => (
                                 <div key={i} className="flex items-center">
                                   {i === 0 ? (
-                                    <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                                    <CheckCircle className="w-5 h-5 text-uniquestPurple mr-2" />
                                   ) : (
                                     <div className="w-5 h-5 border border-gray-500 rounded-full mr-2" />
                                   )}
@@ -190,14 +191,14 @@ const LandingPage = () => {
                             </div>
                             <div className="mt-auto">
                               <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden mb-6">
-                                <div className="h-full bg-gradient-to-r from-red-500 to-amber-500 w-3/4"></div>
+                                <div className="h-full bg-gradient-to-r from-uniquestPurple-light to-uniquestPurple w-3/4"></div>
                               </div>
-                              <div className="bg-red-500 text-white p-3 rounded-lg mb-4 text-center">
+                              <div className="bg-uniquestPurple text-white p-3 rounded-lg mb-4 text-center">
                                 {card.result}
                               </div>
                               <div className="flex justify-between">
                                 {card.tags.map((tag, i) => (
-                                  <div key={i} className="flex items-center text-xs text-green-500">
+                                  <div key={i} className="flex items-center text-xs text-uniquestPurple">
                                     <CheckCircle className="w-4 h-4 mr-1" />
                                     {tag}
                                   </div>
@@ -215,9 +216,9 @@ const LandingPage = () => {
                                   <h4 className="text-gray-300 mb-2">{section.category}</h4>
                                   <div className="space-y-2">
                                     {section.options.map((option, j) => (
-                                      <div key={j} className={`p-2 rounded-md text-center ${j === 0 ? 'bg-gray-800 border border-green-500 text-white' : 'bg-gray-900 text-gray-400'}`}>
+                                      <div key={j} className={`p-2 rounded-md text-center ${j === 0 ? 'bg-gray-800 border border-uniquestPurple text-white' : 'bg-gray-900 text-gray-400'}`}>
                                         {option}
-                                        {j === 0 && <CheckCircle className="inline w-4 h-4 ml-2 text-green-500" />}
+                                        {j === 0 && <CheckCircle className="inline w-4 h-4 ml-2 text-uniquestPurple" />}
                                       </div>
                                     ))}
                                   </div>
@@ -226,7 +227,7 @@ const LandingPage = () => {
                             </div>
                             <div className="flex justify-between mt-6">
                               {card.tags.map((tag, i) => (
-                                <div key={i} className="flex items-center text-xs text-green-500">
+                                <div key={i} className="flex items-center text-xs text-uniquestPurple">
                                   <CheckCircle className="w-4 h-4 mr-1" />
                                   {tag}
                                 </div>
@@ -238,7 +239,7 @@ const LandingPage = () => {
                         {idx === 2 && (
                           <div className="flex-1 flex flex-col items-center justify-center">
                             <p className="text-center text-lg mb-8">{card.content}</p>
-                            <Button className="bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 text-white px-8 py-2 rounded-lg">
+                            <Button className="bg-gradient-to-r from-uniquestPurple to-blue-500 hover:opacity-90 text-white px-8 py-2 rounded-lg">
                               {card.buttonText}
                             </Button>
                           </div>
@@ -258,28 +259,28 @@ const LandingPage = () => {
         {/* Features Section */}
         <div className="w-full mb-20">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Everything You Need for a <span className="text-pink-500">Perfect College Match</span>
+            Everything You Need for a <span className="text-uniquestPurple">Perfect College Match</span>
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-pink-500/30 transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-pink-500 rounded-lg mb-4 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-uniquestPurple/30 transition-all duration-300">
+              <div className="w-12 h-12 bg-gradient-to-br from-uniquestPurple-light to-uniquestPurple rounded-lg mb-4 flex items-center justify-center">
                 <School className="text-white h-6 w-6" />
               </div>
               <h3 className="text-xl font-semibold mb-3">College Profiles</h3>
               <p className="text-gray-400">Detailed information on thousands of colleges including programs, tuition, campus life, and more.</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-pink-500/30 transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-pink-500 rounded-lg mb-4 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-uniquestPurple/30 transition-all duration-300">
+              <div className="w-12 h-12 bg-gradient-to-br from-uniquestPurple-light to-uniquestPurple rounded-lg mb-4 flex items-center justify-center">
                 <BarChart className="text-white h-6 w-6" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Admission Chances</h3>
               <p className="text-gray-400">Get a personalized assessment of your admission chances based on your profile and achievements.</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-pink-500/30 transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-pink-500 rounded-lg mb-4 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-uniquestPurple/30 transition-all duration-300">
+              <div className="w-12 h-12 bg-gradient-to-br from-uniquestPurple-light to-uniquestPurple rounded-lg mb-4 flex items-center justify-center">
                 <FileText className="text-white h-6 w-6" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Application Tracker</h3>
@@ -291,13 +292,13 @@ const LandingPage = () => {
         {/* User Types Section */}
         <div className="w-full mb-20">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Who is UNIQUEST <span className="text-pink-500">for?</span>
+            Who is UNIQUEST <span className="text-uniquestPurple">for?</span>
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-pink-500/30 transition-all duration-300">
+            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-uniquestPurple/30 transition-all duration-300">
               <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-pink-500 rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-uniquestPurple-light to-uniquestPurple rounded-full flex items-center justify-center">
                   <GraduationCap className="text-white h-8 w-8" />
                 </div>
               </div>
@@ -305,9 +306,9 @@ const LandingPage = () => {
               <p className="text-gray-400 text-center">Find your dream college that aligns with your academic goals, interests, and budget.</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-pink-500/30 transition-all duration-300">
+            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-uniquestPurple/30 transition-all duration-300">
               <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-pink-500 rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-uniquestPurple-light to-uniquestPurple rounded-full flex items-center justify-center">
                   <Briefcase className="text-white h-8 w-8" />
                 </div>
               </div>
@@ -315,9 +316,9 @@ const LandingPage = () => {
               <p className="text-gray-400 text-center">Access powerful tools to help guide your students to colleges that match their unique profiles.</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-pink-500/30 transition-all duration-300">
+            <div className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-uniquestPurple/30 transition-all duration-300">
               <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-pink-500 rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-uniquestPurple-light to-uniquestPurple rounded-full flex items-center justify-center">
                   <LineChart className="text-white h-8 w-8" />
                 </div>
               </div>
@@ -330,20 +331,20 @@ const LandingPage = () => {
         {/* Reviews Section */}
         <div className="w-full mb-20">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            What Our <span className="text-pink-500">Users Say</span>
+            What Our <span className="text-uniquestPurple">Users Say</span>
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {reviews.map((review) => (
               <div 
                 key={review.id}
-                className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-pink-500/30 transition-all duration-300"
+                className="bg-gradient-to-br from-[#1A1F2C] to-[#141824] p-6 rounded-xl border border-gray-800 hover:border-uniquestPurple/30 transition-all duration-300"
               >
                 <div className="flex mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star 
                       key={i} 
-                      className={`w-5 h-5 ${i < review.rating ? 'text-amber-400 fill-amber-400' : 'text-gray-500'}`} 
+                      className={`w-5 h-5 ${i < review.rating ? 'text-uniquestPurple-light fill-uniquestPurple-light' : 'text-gray-500'}`} 
                     />
                   ))}
                 </div>
@@ -358,7 +359,7 @@ const LandingPage = () => {
         </div>
         
         {/* CTA Section */}
-        <div className="w-full mb-20 bg-gradient-to-r from-orange-500/10 to-pink-500/10 p-12 rounded-2xl border border-pink-500/20">
+        <div className="w-full mb-20 bg-gradient-to-r from-uniquestPurple/10 to-blue-500/10 p-12 rounded-2xl border border-uniquestPurple/20">
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to Find Your Perfect College Match?
@@ -383,3 +384,4 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
