@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -88,7 +89,7 @@ const LandingPage = () => {
           <Button 
             onClick={() => navigate('/pricing')}
             variant="ghost"
-            className="text-gray-300 hover:text-white hover:bg-purple-600/20 transition-colors"
+            className="text-gray-300 hover:text-white transition-colors"
           >
             Pricing
           </Button>
@@ -117,43 +118,39 @@ const LandingPage = () => {
           </p>
         </div>
         
-        {/* Card Display - Centered properly */}
-        <div className="w-full flex justify-center mb-20">
-          <div className="h-[500px] flex items-center justify-center relative w-full max-w-4xl">
-            {/* Cards rendering with updated positioning for better centering */}
+        {/* Card Display - Updated layout with staggered cards */}
+        <div className="relative w-full max-w-4xl mb-20">
+          <div className="flex flex-col items-center h-[400px] relative">
+            {/* Cards rendering with staggered positioning */}
             {cards.map((card, idx) => {
-              // Calculate position based on active index
-              let position;
-              if (idx === activeCardIndex) {
-                position = "center"; // Active card in center
-              } else if (idx === (activeCardIndex + 1) % cards.length) {
-                position = "bottomRight"; // Next card bottom right
-              } else {
-                position = "bottomLeft"; // Previous card bottom left
-              }
+              // Determine the position for each card based on the active index
+              const positionClass = 
+                idx === activeCardIndex
+                  ? "z-20 top-0 left-1/2 transform -translate-x-1/2" // Main card in the middle
+                  : idx === (activeCardIndex + 1) % cards.length
+                    ? "z-10 top-40 left-3/4 transform -translate-x-1/2 scale-85" // Card to the right bottom
+                    : "z-10 top-40 left-1/4 transform -translate-x-1/2 scale-85"; // Card to the left bottom
               
               return (
                 <motion.div
                   key={card.id}
-                  className="absolute"
+                  className={`absolute transition-all duration-500 ${positionClass}`}
                   animate={{
-                    scale: position === "center" ? 1 : 0.85,
-                    opacity: position === "center" ? 1 : 0.5,
-                    top: position === "center" ? "50%" : "70%",
-                    left: position === "center" 
-                      ? "50%" 
-                      : position === "bottomRight"
-                        ? "70%"
-                        : "30%",
-                    zIndex: position === "center" ? 20 : 10,
-                    translateX: "-50%",
-                    translateY: "-50%"
+                    scale: idx === activeCardIndex ? 1 : 0.85,
+                    opacity: idx === activeCardIndex ? 1 : 0.5,
+                    top: idx === activeCardIndex ? 0 : '10rem',
+                    left: idx === activeCardIndex 
+                      ? '50%' 
+                      : idx === (activeCardIndex + 1) % cards.length
+                        ? '75%'
+                        : '25%',
+                    zIndex: idx === activeCardIndex ? 20 : 10,
                   }}
                   transition={{ duration: 0.5 }}
                 >
                   <Card 
-                    className={`p-1 rounded-xl overflow-hidden w-[300px] h-[360px] shadow-lg ${
-                      position === "center" ? 'shadow-orange-500/30' : ''
+                    className={`p-1 rounded-xl overflow-hidden w-[320px] shadow-lg ${
+                      idx === activeCardIndex ? 'shadow-orange-500/30' : ''
                     }`} 
                     style={{ background: "#FF5722" }}
                   >

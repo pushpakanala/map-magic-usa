@@ -22,7 +22,7 @@ const PricingPage = () => {
         <div className="flex space-x-8 items-center">
           <Button 
             onClick={() => navigate('/login')}
-            className="bg-gradient-to-r from-amber-400 to-pink-500 hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-600 transition-all text-white"
+            className="bg-gradient-to-r from-amber-400 to-pink-500 hover:opacity-90 transition-opacity text-white"
           >
             Get Started
           </Button>
