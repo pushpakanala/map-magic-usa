@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -89,7 +88,7 @@ const LandingPage = () => {
           <Button 
             onClick={() => navigate('/pricing')}
             variant="ghost"
-            className="text-gray-300 hover:text-white transition-colors"
+            className="text-gray-300 hover:text-white hover:bg-purple-600/20 transition-colors"
           >
             Pricing
           </Button>
