@@ -14,32 +14,32 @@ const LandingPage = () => {
   const cards = [
     {
       id: 1,
-      title: "Secure AI Detection",
+      title: "College Recommendation AI",
       content: [
-        { text: "Initializing scan...", checked: true },
-        { text: "Deep pattern analysis", checked: false },
-        { text: "Verifying authenticity", checked: false }
+        { text: "Analyzing your preferences...", checked: true },
+        { text: "Finding matching colleges", checked: false },
+        { text: "Generating recommendations", checked: false }
       ],
       gradientClass: "from-orange-500 to-red-400",
-      result: "Result: 100% AI Score",
+      result: "Result: Perfect College Match",
       tags: ["Enhanced AI", "Real-time", "99.9% Accurate"]
     },
     {
       id: 2,
-      title: "Secure Analysis",
+      title: "Interactive College Map",
       content: [
-        { category: "Readability", options: ["Journalist", "University", "Marketing"] },
-        { category: "Purpose", options: ["Essay", "Article", "Legal Material"] }
+        { category: "College Type", options: ["Public", "Private", "Community"] },
+        { category: "Location", options: ["Urban", "Suburban", "Rural"] }
       ],
       gradientClass: "from-amber-400 to-pink-500",
-      tags: ["Enhanced", "Real-time", "99.9% Accurate"]
+      tags: ["Interactive", "Nationwide", "Up-to-date"]
     },
     {
       id: 3,
-      title: "AI Content Detector",
-      content: "Check if your content might be flagged as AI-generated",
+      title: "College Application Tracker",
+      content: "Track your application progress and deadlines",
       gradientClass: "from-purple-600 to-blue-500",
-      buttonText: "Scan Content"
+      buttonText: "Start Tracking"
     }
   ];
 
@@ -61,9 +61,13 @@ const LandingPage = () => {
           </span>
         </div>
         <div className="hidden md:flex space-x-8 items-center">
-          <a href="#features" className="text-gray-300 hover:text-white transition-colors">Features</a>
-          <a href="#product" className="text-gray-300 hover:text-white transition-colors">Product</a>
-          <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
+          <Button 
+            onClick={() => navigate('/pricing')}
+            variant="ghost"
+            className="text-gray-300 hover:text-white transition-colors"
+          >
+            Pricing
+          </Button>
           <Button 
             onClick={() => navigate('/login')}
             className="bg-gradient-to-r from-amber-400 to-pink-500 hover:opacity-90 transition-opacity text-white"
@@ -89,7 +93,7 @@ const LandingPage = () => {
           </p>
         </div>
         
-        {/* Card Display */}
+        {/* Card Display - Updated to match the design in the image */}
         <div className="relative w-full max-w-md h-[400px] mb-12">
           <AnimatePresence mode="wait">
             <motion.div
@@ -100,7 +104,7 @@ const LandingPage = () => {
               transition={{ duration: 0.5 }}
               className="absolute inset-0"
             >
-              <Card className={`w-full h-full bg-gradient-to-br ${cards[activeCardIndex].gradientClass} p-1 rounded-xl shadow-xl overflow-hidden`}>
+              <Card className={`w-full h-full p-1 rounded-xl overflow-hidden`} style={{ background: "#FF5722" }}>
                 <CardContent className="bg-black rounded-lg h-full p-6 flex flex-col">
                   <div className="flex items-center mb-4">
                     <Lock className="w-5 h-5 text-green-500 mr-2" />
@@ -110,12 +114,12 @@ const LandingPage = () => {
                   {activeCardIndex === 0 && (
                     <>
                       <Button className="w-full bg-red-500 hover:bg-red-600 text-white mb-6">
-                        Check for AI
+                        Find Your College
                       </Button>
                       <div className="space-y-4 mb-6">
                         {cards[0].content.map((item, idx) => (
                           <div key={idx} className="flex items-center">
-                            {item.checked ? (
+                            {idx === 0 ? (
                               <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
                             ) : (
                               <div className="w-5 h-5 border border-gray-500 rounded-full mr-2" />

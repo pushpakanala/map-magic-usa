@@ -1,4 +1,3 @@
-
 #root {
   max-width: 100%;
   margin: 0 auto;
@@ -123,4 +122,20 @@
   background: rgba(30, 30, 30, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Updated Card styles to match the new design */
+.card-orange-border {
+  background: #FF5722;
+  padding: 1px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Update animation for card swapping */
+@keyframes card-swap {
+  0% { opacity: 0; transform: translateY(20px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
 }
