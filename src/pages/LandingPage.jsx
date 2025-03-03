@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -86,7 +85,7 @@ const LandingPage = () => {
           </span>
         </div>
         <div className="hidden md:flex space-x-8 items-center">
-          {/* Updated top-right "Try now" button to match the new design */}
+          {/* Top-right "Try now" button */}
           <div className="relative inline-block">
             <button 
               onClick={() => navigate('/login')} 
@@ -99,9 +98,9 @@ const LandingPage = () => {
         </div>
       </div>
       
-      <div className="max-w-5xl w-full flex flex-col items-center mt-20">
+      <div className="max-w-5xl w-full flex flex-col items-center mt-10">
         {/* Main headline with gradient */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-pink-500 to-purple-600">
               Think College Search is Hard?
@@ -115,9 +114,9 @@ const LandingPage = () => {
           </p>
         </div>
         
-        {/* Card Display - Updated height and reduced bottom margin to prevent overlap */}
-        <div className="relative w-full max-w-4xl mb-4">
-          <div className="flex justify-center items-center h-[320px] mb-8">
+        {/* Card Display - Repositioned higher with more space */}
+        <div className="relative w-full max-w-4xl mt-4 mb-16">
+          <div className="flex justify-center items-center h-[420px]">
             <div className="relative w-full flex justify-center">
               {cards.map((card, idx) => {
                 // Calculate position based on active card
@@ -157,8 +156,8 @@ const LandingPage = () => {
                       ease: "easeInOut"
                     }}
                     style={{ 
-                      width: '320px',
-                      height: '320px' // Reduced card height
+                      width: '380px',
+                      height: '420px'
                     }}
                   >
                     <Card 
@@ -265,9 +264,8 @@ const LandingPage = () => {
           </div>
         </div>
         
-        {/* Increased vertical spacing to ensure button is clearly visible */}
-        <div className="text-center mb-20 mt-10">
-          {/* Updated Try Now button to match the design in the image */}
+        {/* Try Now button - Clearly visible below cards */}
+        <div className="text-center mb-16 mt-8">
           <div className="relative inline-block">
             <button 
               onClick={() => navigate('/login')} 
@@ -390,7 +388,6 @@ const LandingPage = () => {
             <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
               Join thousands of students who have found their dream colleges with UNIQUEST.
             </p>
-            {/* Updated "Get Started" to "Try now" */}
             <div className="relative inline-block">
               <button 
                 onClick={() => navigate('/login')} 
