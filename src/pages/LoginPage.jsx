@@ -45,6 +45,7 @@ const LoginPage = () => {
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('token', token);
         
+        // Navigate to explore page after successful login
         navigate('/explore', { replace: true });
         toast({
           title: "Success",
