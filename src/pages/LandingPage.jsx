@@ -109,13 +109,12 @@ const LandingPage = () => {
             <span className="text-white">Think again.</span>
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto mt-6">
-            Find, analyze, and apply to the perfect colleges tailored to your unique journey.
-            Don't take chances with your future education.
+          Discover colleges that match your interests, budget, and career goals with our intelligent recommendation system.
           </p>
         </div>
         
         {/* Card Display - Repositioned higher with more space */}
-        <div className="relative w-full max-w-4xl mt-4 mb-16">
+        <div className="relative w-full max-w-4xl -mt-44 mb-24">
           <div className="flex justify-center items-center h-[420px]">
             <div className="relative w-full flex justify-center">
               {cards.map((card, idx) => {
@@ -251,30 +250,9 @@ const LandingPage = () => {
               })}
             </div>
           </div>
-          
-          {/* Card indicator dots */}
-          <div className="flex justify-center space-x-2 mt-4">
-            {cards.map((_, idx) => (
-              <button
-                key={idx}
-                className={`w-3 h-3 rounded-full ${idx === activeCardIndex ? 'bg-white' : 'bg-gray-600'}`}
-                onClick={() => setActiveCardIndex(idx)}
-              />
-            ))}
-          </div>
         </div>
         
-        {/* Try Now button - Clearly visible below cards */}
-        <div className="text-center mb-16 mt-8">
-          <div className="relative inline-block">
-            <button 
-              onClick={() => navigate('/login')} 
-              className="try-now-button group"
-            >
-              Try now <ArrowUpRight size={18} className="ml-1 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-              <div className="underline-effect"></div>
-            </button>
-          </div>
+        <div className="text-center mb-24 mt-16">
         </div>
         
         {/* Features Section */}
