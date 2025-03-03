@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,7 +10,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   
-  // Cards data for swapping animation
+  // Cards data
   const cards = [
     {
       id: 1,
@@ -67,11 +68,11 @@ const LandingPage = () => {
     }
   ];
 
-  // Card swapping effect every 3 seconds
+  // Card highlighting effect every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveCardIndex((prevIndex) => (prevIndex + 1) % cards.length);
-    }, 3000);
+    }, 4000);
     return () => clearInterval(interval);
   }, [cards.length]);
   
@@ -117,103 +118,112 @@ const LandingPage = () => {
           </p>
         </div>
         
-        {/* Card Display - Updated to match the design in the image */}
-        <div className="relative w-full max-w-md h-[400px] mb-12">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCardIndex}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-              className="absolute inset-0"
-            >
-              <Card className={`w-full h-full p-1 rounded-xl overflow-hidden`} style={{ background: "#FF5722" }}>
-                <CardContent className="bg-black rounded-lg h-full p-6 flex flex-col">
-                  <div className="flex items-center mb-4">
-                    <Lock className="w-5 h-5 text-green-500 mr-2" />
-                    <h3 className="text-green-500 font-medium">{cards[activeCardIndex].title}</h3>
-                  </div>
-                  
-                  {activeCardIndex === 0 && (
-                    <>
-                      <Button className="w-full bg-red-500 hover:bg-red-600 text-white mb-6">
-                        Find Your College
-                      </Button>
-                      <div className="space-y-4 mb-6">
-                        {cards[0].content.map((item, idx) => (
-                          <div key={idx} className="flex items-center">
-                            {idx === 0 ? (
-                              <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
-                            ) : (
-                              <div className="w-5 h-5 border border-gray-500 rounded-full mr-2" />
-                            )}
-                            <span className="text-gray-200">{item.text}</span>
+        {/* Card Display - Updated for highlighting effect instead of swapping */}
+        <div className="relative w-full max-w-4xl mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[500px]">
+            {cards.map((card, idx) => (
+              <motion.div
+                key={card.id}
+                className={`relative ${idx === activeCardIndex ? '' : 'opacity-50'}`}
+                animate={{
+                  scale: idx === activeCardIndex ? 1.05 : 1,
+                  opacity: idx === activeCardIndex ? 1 : 0.5,
+                  y: idx === activeCardIndex ? -10 : 0
+                }}
+                transition={{ duration: 0.5 }}
+              >
+                <Card 
+                  className={`h-full p-1 rounded-xl overflow-hidden ${
+                    idx === activeCardIndex ? 'shadow-lg shadow-orange-500/20' : ''
+                  }`} 
+                  style={{ background: "#FF5722" }}
+                >
+                  <CardContent className="bg-black rounded-lg h-full p-6 flex flex-col">
+                    <div className="flex items-center mb-4">
+                      <Lock className="w-5 h-5 text-green-500 mr-2" />
+                      <h3 className="text-green-500 font-medium">{card.title}</h3>
+                    </div>
+                    
+                    {idx === 0 && (
+                      <>
+                        <Button className="w-full bg-red-500 hover:bg-red-600 text-white mb-6">
+                          Find Your College
+                        </Button>
+                        <div className="space-y-4 mb-6">
+                          {card.content.map((item, i) => (
+                            <div key={i} className="flex items-center">
+                              {i === 0 ? (
+                                <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                              ) : (
+                                <div className="w-5 h-5 border border-gray-500 rounded-full mr-2" />
+                              )}
+                              <span className="text-gray-200">{item.text}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="mt-auto">
+                          <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden mb-6">
+                            <div className="h-full bg-gradient-to-r from-red-500 to-amber-500 w-3/4"></div>
                           </div>
-                        ))}
-                      </div>
-                      <div className="mt-auto">
-                        <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden mb-6">
-                          <div className="h-full bg-gradient-to-r from-red-500 to-amber-500 w-3/4"></div>
+                          <div className="bg-red-500 text-white p-3 rounded-lg mb-4 text-center">
+                            {card.result}
+                          </div>
+                          <div className="flex justify-between">
+                            {card.tags.map((tag, i) => (
+                              <div key={i} className="flex items-center text-xs text-green-500">
+                                <CheckCircle className="w-4 h-4 mr-1" />
+                                {tag}
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                        <div className="bg-red-500 text-white p-3 rounded-lg mb-4 text-center">
-                          {cards[0].result}
+                      </>
+                    )}
+                    
+                    {idx === 1 && (
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div className="grid grid-cols-2 gap-4">
+                          {card.content.map((section, i) => (
+                            <div key={i} className="mb-4">
+                              <h4 className="text-gray-300 mb-2">{section.category}</h4>
+                              <div className="space-y-2">
+                                {section.options.map((option, j) => (
+                                  <div key={j} className={`p-2 rounded-md text-center ${j === 0 ? 'bg-gray-800 border border-green-500 text-white' : 'bg-gray-900 text-gray-400'}`}>
+                                    {option}
+                                    {j === 0 && <CheckCircle className="inline w-4 h-4 ml-2 text-green-500" />}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                        <div className="flex justify-between">
-                          {cards[0].tags.map((tag, idx) => (
-                            <div key={idx} className="flex items-center text-xs text-green-500">
+                        <div className="flex justify-between mt-6">
+                          {card.tags.map((tag, i) => (
+                            <div key={i} className="flex items-center text-xs text-green-500">
                               <CheckCircle className="w-4 h-4 mr-1" />
                               {tag}
                             </div>
                           ))}
                         </div>
                       </div>
-                    </>
-                  )}
-                  
-                  {activeCardIndex === 1 && (
-                    <div className="flex-1 flex flex-col justify-between">
-                      <div className="grid grid-cols-2 gap-4">
-                        {cards[1].content.map((section, idx) => (
-                          <div key={idx} className="mb-4">
-                            <h4 className="text-gray-300 mb-2">{section.category}</h4>
-                            <div className="space-y-2">
-                              {section.options.map((option, optIdx) => (
-                                <div key={optIdx} className={`p-2 rounded-md text-center ${optIdx === 0 ? 'bg-gray-800 border border-green-500 text-white' : 'bg-gray-900 text-gray-400'}`}>
-                                  {option}
-                                  {optIdx === 0 && <CheckCircle className="inline w-4 h-4 ml-2 text-green-500" />}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
+                    )}
+                    
+                    {idx === 2 && (
+                      <div className="flex-1 flex flex-col items-center justify-center">
+                        <p className="text-center text-lg mb-8">{card.content}</p>
+                        <Button className="bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 text-white px-8 py-2 rounded-lg">
+                          {card.buttonText}
+                        </Button>
                       </div>
-                      <div className="flex justify-between mt-6">
-                        {cards[1].tags.map((tag, idx) => (
-                          <div key={idx} className="flex items-center text-xs text-green-500">
-                            <CheckCircle className="w-4 h-4 mr-1" />
-                            {tag}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {activeCardIndex === 2 && (
-                    <div className="flex-1 flex flex-col items-center justify-center">
-                      <p className="text-center text-lg mb-8">{cards[2].content}</p>
-                      <Button className="bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 text-white px-8 py-2 rounded-lg">
-                        {cards[2].buttonText}
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-          </AnimatePresence>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
           
           {/* Card indicator dots */}
-          <div className="flex justify-center space-x-2 mt-4 absolute bottom-[-30px] left-0 right-0">
+          <div className="flex justify-center space-x-2 mt-4">
             {cards.map((_, idx) => (
               <button
                 key={idx}
