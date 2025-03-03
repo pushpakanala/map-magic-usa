@@ -10,6 +10,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import LandingPage from './pages/LandingPage';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
+import USAMap from './components/USAMap';
 import './App.css';
 
 const queryClient = new QueryClient();
@@ -19,14 +20,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
-          <Route path="/" element={
-            <ProtectedRoute>
-              <LandingPage />
-            </ProtectedRoute>
-          } />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/explore" element={
             <ProtectedRoute>
-              <Index />
+              <USAMap />
             </ProtectedRoute>
           } />
           <Route path="/index" element={<Navigate to="/explore" replace />} />
