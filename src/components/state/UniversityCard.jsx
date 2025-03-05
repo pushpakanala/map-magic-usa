@@ -35,58 +35,69 @@ const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCo
         onClick={onClick}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-70" />
-        <div className="absolute top-2 right-2 z-20 flex space-x-2">
-          <TooltipProvider>
+        
+        {/* Action buttons positioned at top-right with proper spacing */}
+        <div className="absolute top-3 right-3 z-20 flex gap-2">
+          <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="w-8 h-8 rounded-full bg-background/70 hover:bg-background/90 backdrop-blur-sm border-primary/20 shadow-sm"
+                  className={`w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border-primary/20 shadow-sm ${
+                    isCompared 
+                      ? 'bg-[#0ea5e9]/90 hover:bg-[#0ea5e9]/80 border-[#0ea5e9]/30' 
+                      : 'hover:bg-background/90 hover:border-primary/30'
+                  }`}
                   type="button"
                   onClick={handleCompareClick}
                 >
                   <Check 
                     className={`h-4 w-4 transition-colors ${
                       isCompared 
-                        ? 'text-white fill-[#0ea5e9]' 
+                        ? 'text-white' 
                         : 'text-muted-foreground'
                     }`}
                   />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="left">
+              <TooltipContent side="left" className="bg-slate-800 text-white border-slate-700">
                 {isCompared ? 'Remove from comparison' : 'Add to comparison'}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
           
-          <TooltipProvider>
+          <TooltipProvider delayDuration={300}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="w-8 h-8 rounded-full bg-background/70 hover:bg-background/90 backdrop-blur-sm border-primary/20 shadow-sm"
+                  className={`w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border-primary/20 shadow-sm ${
+                    isFavorite 
+                      ? 'bg-primary/90 hover:bg-primary/80 border-primary/30' 
+                      : 'hover:bg-background/90 hover:border-primary/30'
+                  }`}
                   type="button"
                   onClick={handleFavoriteClick}
                 >
                   <Heart 
                     className={`h-4 w-4 transition-colors ${
                       isFavorite 
-                        ? 'text-white fill-primary' 
+                        ? 'text-white' 
                         : 'text-muted-foreground'
                     }`}
                   />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="left">
+              <TooltipContent side="left" className="bg-slate-800 text-white border-slate-700">
                 {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
-        <CardHeader className="relative z-10">
+        
+        <CardHeader className="relative z-10 pt-14">
           <div className="flex items-start gap-3">
             <div className="mt-1 p-2.5 rounded-full bg-primary/10 border border-primary/20">
               <GraduationCap className="h-5 w-5 text-primary" />
