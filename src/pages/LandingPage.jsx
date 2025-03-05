@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { GraduationCap, ArrowUpRight, CheckCircle, Lock, FileText, Briefcase, School, BarChart, LineChart, Star } from 'lucide-react';
+import { GraduationCap, ArrowUpRight, CheckCircle, Lock, FileText, Briefcase, School, BarChart, LineChart, Star, Check } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -167,8 +168,12 @@ const LandingPage = () => {
                     >
                       <CardContent className="bg-[#111827] rounded-lg h-full p-6 flex flex-col">
                         <div className="flex items-center mb-4">
-                          <Lock className="w-5 h-5 text-uniquestPurple mr-2" />
-                          <h3 className="text-uniquestPurple font-medium">{card.title}</h3>
+                          {idx === 2 ? (
+                            <School className="w-5 h-5 text-[#0ea5e9] mr-2" />
+                          ) : (
+                            <Lock className="w-5 h-5 text-uniquestPurple mr-2" />
+                          )}
+                          <h3 className={`${idx === 2 ? 'text-[#0ea5e9]' : 'text-uniquestPurple'} font-medium`}>{card.title}</h3>
                         </div>
                         
                         {idx === 0 && (
@@ -236,11 +241,88 @@ const LandingPage = () => {
                         )}
                         
                         {idx === 2 && (
-                          <div className="flex-1 flex flex-col items-center justify-center">
-                            <p className="text-center text-lg mb-8">{card.content}</p>
-                            <Button className="bg-gradient-to-r from-uniquestPurple to-blue-500 hover:opacity-90 text-white px-8 py-2 rounded-lg">
-                              {card.buttonText}
-                            </Button>
+                          <div className="flex-1 flex flex-col">
+                            <div className="bg-gradient-to-br from-[#0ea5e9]/10 to-[#06b6d4]/5 p-4 rounded-lg mb-6">
+                              <div className="flex gap-2 mb-3">
+                                <div className="flex-1 py-2 px-3 rounded bg-white/5 backdrop-blur-sm border border-white/10">
+                                  <div className="flex items-center">
+                                    <School className="h-4 w-4 text-[#0ea5e9] mr-2" />
+                                    <span className="text-sm">Stanford</span>
+                                  </div>
+                                </div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="w-8 h-8 rounded-full bg-red-500/10 border border-red-500/20"
+                                >
+                                  <Check className="h-4 w-4 text-[#0ea5e9]" />
+                                </Button>
+                              </div>
+                              <div className="flex gap-2 mb-3">
+                                <div className="flex-1 py-2 px-3 rounded bg-white/5 backdrop-blur-sm border border-white/10">
+                                  <div className="flex items-center">
+                                    <School className="h-4 w-4 text-[#0ea5e9] mr-2" />
+                                    <span className="text-sm">Harvard</span>
+                                  </div>
+                                </div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="w-8 h-8 rounded-full bg-[#0ea5e9]/10 border border-[#0ea5e9]/20"
+                                >
+                                  <Check className="h-4 w-4 text-[#0ea5e9]" />
+                                </Button>
+                              </div>
+                              <div className="flex gap-2">
+                                <div className="flex-1 py-2 px-3 rounded bg-white/5 backdrop-blur-sm border border-white/10">
+                                  <div className="flex items-center">
+                                    <School className="h-4 w-4 text-[#0ea5e9] mr-2" />
+                                    <span className="text-sm">MIT</span>
+                                  </div>
+                                </div>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="w-8 h-8 rounded-full bg-[#0ea5e9]/10 border border-[#0ea5e9]/20"
+                                >
+                                  <Check className="h-4 w-4 text-[#0ea5e9]" />
+                                </Button>
+                              </div>
+                            </div>
+                            
+                            <p className="text-center text-sm text-gray-300 mb-6">{card.content}</p>
+                            
+                            <div className="mt-auto">
+                              <Button 
+                                className="w-full bg-gradient-to-r from-[#0ea5e9] to-[#06b6d4] hover:opacity-90 text-white"
+                              >
+                                {card.buttonText}
+                              </Button>
+                              
+                              <div className="flex justify-between mt-4">
+                                {card.tags ? card.tags.map((tag, i) => (
+                                  <div key={i} className="flex items-center text-xs text-[#0ea5e9]">
+                                    <Check className="w-4 h-4 mr-1" />
+                                    {tag}
+                                  </div>
+                                )) : (
+                                  <>
+                                    <div className="flex items-center text-xs text-[#0ea5e9]">
+                                      <Check className="w-4 h-4 mr-1" />
+                                      Side-by-side
+                                    </div>
+                                    <div className="flex items-center text-xs text-[#0ea5e9]">
+                                      <Check className="w-4 h-4 mr-1" />
+                                      Detailed
+                                    </div>
+                                    <div className="flex items-center text-xs text-[#0ea5e9]">
+                                      <Check className="w-4 h-4 mr-1" />
+                                      Interactive
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            </div>
                           </div>
                         )}
                       </CardContent>
