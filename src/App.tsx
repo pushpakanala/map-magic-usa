@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import LandingPage from './pages/LandingPage';
+import ComparePage from './pages/ComparePage';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
@@ -41,6 +42,11 @@ function App() {
           <Route path="/college/:collegeName" element={
             <ProtectedRoute>
               <CollegePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/compare" element={
+            <ProtectedRoute>
+              <ComparePage />
             </ProtectedRoute>
           } />
         </Routes>

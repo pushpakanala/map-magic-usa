@@ -1,16 +1,26 @@
 
 import { motion } from 'framer-motion';
-import { Heart, GraduationCap } from 'lucide-react';
+import { Heart, GraduationCap, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
+const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCompareClick, onClick }) => {
   const handleFavoriteClick = (e) => {
     if (e && e.stopPropagation) {
       e.stopPropagation();
     }
     if (onFavoriteClick) {
       onFavoriteClick(college.name);
+    }
+  };
+
+  const handleCompareClick = (e) => {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
+    if (onCompareClick) {
+      onCompareClick(college.name);
     }
   };
 
@@ -25,7 +35,32 @@ const UniversityCard = ({ college, isFavorite, onFavoriteClick, onClick }) => {
         onClick={onClick}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-70" />
-        <div className="absolute top-2 right-2 z-20">
+        <div className="absolute top-2 right-2 z-20 flex gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-primary/10 bg-background/40 backdrop-blur-sm"
+                  type="button"
+                  onClick={handleCompareClick}
+                >
+                  <Check 
+                    className={`h-5 w-5 transition-colors ${
+                      isCompared 
+                        ? 'fill-current text-[#0ea5e9]' 
+                        : 'text-muted-foreground'
+                    }`}
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {isCompared ? 'Unselect from comparison' : 'Select for compare'}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
           <Button
             variant="ghost"
             size="icon"

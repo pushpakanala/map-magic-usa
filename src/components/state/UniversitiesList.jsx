@@ -18,7 +18,14 @@ const item = {
   show: { opacity: 1, y: 0 }
 };
 
-const UniversitiesList = ({ universities, favorites, onFavoriteClick, onUniversityClick }) => {
+const UniversitiesList = ({ 
+  universities, 
+  favorites, 
+  comparedUniversities = [], 
+  onFavoriteClick, 
+  onCompareClick, 
+  onUniversityClick 
+}) => {
   if (universities.length === 0) {
     return (
       <motion.div
@@ -55,7 +62,9 @@ const UniversitiesList = ({ universities, favorites, onFavoriteClick, onUniversi
             <UniversityCard
               college={college}
               isFavorite={favorites.includes(college.name)}
+              isCompared={comparedUniversities.includes(college.name)}
               onFavoriteClick={onFavoriteClick}
+              onCompareClick={onCompareClick}
               onClick={() => onUniversityClick(college)}
             />
           </motion.div>

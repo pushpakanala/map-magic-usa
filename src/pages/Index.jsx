@@ -8,6 +8,7 @@ import { LogOut, User, Bot, X, Send, KeyRound } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
+import { useComparison } from '@/hooks/use-comparison';
 import UniversitiesList from '@/components/state/UniversitiesList';
 import axios from 'axios';
 import {
@@ -20,11 +21,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { BOT_GEMINI } from '../constants';
 import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, BarChart3, Compass, School } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
+import ComparisonBanner from '@/components/ComparisonBanner';
 
 const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { favorites, handleFavoriteClick } = useFavorites();
+  const { comparedUniversities, handleCompareClick, clearComparedUniversities } = useComparison();
   const [userData, setUserData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -113,6 +116,8 @@ const Index = () => {
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('token');
+    // Clear compared universities on logout
+    clearComparedUniversities();
     toast({
       title: "Logged out",
       description: "You have been successfully logged out.",
@@ -231,7 +236,9 @@ const Index = () => {
             <UniversitiesList
               universities={favorites.map(name => ({ name }))}
               favorites={favorites}
+              comparedUniversities={comparedUniversities}
               onFavoriteClick={handleFavoriteClick}
+              onCompareClick={handleCompareClick}
               onUniversityClick={(college) => navigate(`/college/${encodeURIComponent(college.name)}`)}
             />
           </TabsContent>
@@ -426,6 +433,11 @@ const Index = () => {
           </motion.div>
         )}
       </motion.div>
+      
+      <ComparisonBanner 
+        comparedUniversities={comparedUniversities} 
+        onClear={clearComparedUniversities} 
+      />
       
       <SessionExpiredDialog 
         open={isSessionExpired} 

@@ -10,8 +10,10 @@ import { TOP_GPT_UNIVERSITIES_LLM } from '../constants';
 import PopulationStats from '../components/state/PopulationStats';
 import UniversitiesList from '../components/state/UniversitiesList';
 import { useFavorites } from '../hooks/use-favorites';
+import { useComparison } from '../hooks/use-comparison';
 import { GraduationCap } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
+import ComparisonBanner from '@/components/ComparisonBanner';
 
 const LoadingState = () => (
   <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
@@ -45,6 +47,7 @@ const StatePage = () => {
   const { stateName } = useParams();
   const navigate = useNavigate();
   const { favorites, handleFavoriteClick } = useFavorites();
+  const { comparedUniversities, handleCompareClick, clearComparedUniversities } = useComparison();
   const token = sessionStorage.getItem("token");
   const [isSessionExpired, setIsSessionExpired] = useState(false);
 
@@ -127,13 +130,21 @@ const StatePage = () => {
               <UniversitiesList
                 universities={universities}
                 favorites={favorites}
+                comparedUniversities={comparedUniversities}
                 onFavoriteClick={handleFavoriteClick}
+                onCompareClick={handleCompareClick}
                 onUniversityClick={handleCollegeClick}
               />
             )}
           </motion.div>
         </div>
       </div>
+
+      <ComparisonBanner 
+        comparedUniversities={comparedUniversities} 
+        onClear={clearComparedUniversities} 
+      />
+
       <SessionExpiredDialog 
         open={isSessionExpired} 
         onOpenChange={setIsSessionExpired}
