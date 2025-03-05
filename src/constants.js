@@ -11,3 +11,4 @@ export const TOP_UNIVERSITIES_LLM = `${API_SERVER_URL}/llm/llm/top-universities`
 export const TOP_GPT_UNIVERSITIES_LLM = `${API_SERVER_URL}/llm/llm/top-universities-gpt`
 export const UNIVERSITIS_DATA_GPT = `${API_SERVER_URL}/llm/llm/gpt-universities-data`
 export const BOT_GEMINI = `${API_SERVER_URL}/llm/llm/`
+export const UNIVERSITIES_COMPARE = `${API_SERVER_URL}/llm/llm/compare-universities-llm`

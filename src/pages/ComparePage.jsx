@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Building2, ArrowLeft, School, MapPin, GraduationCap, Users, BookOpen, Calendar, Clock, DollarSign, Award, GlobeIcon, Briefcase } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { UNIVERSITIS_DATA_GPT } from '../constants';
+import { UNIVERSITIS_DATA_GPT, UNIVERSITIES_COMPARE } from '../constants';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import { useToast } from '@/hooks/use-toast';
 import { useComparison } from '@/hooks/use-comparison';
@@ -42,7 +42,7 @@ const ComparePage = () => {
     queryFn: async () => {
       try {
         const response = await axios.get(
-          `${UNIVERSITIS_DATA_GPT}?university_names=${encodeURIComponent(universities.join(','))}`,
+          `${UNIVERSITIES_COMPARE}?university_names=${encodeURIComponent(universities.join(','))}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         return response.data.data;
