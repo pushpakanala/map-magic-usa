@@ -14,6 +14,26 @@ export const useComparison = () => {
         console.error('Failed to parse compared universities from session storage:', e);
       }
     }
+    
+    // Listen for storage events to update state when sessionStorage changes
+    const handleStorageChange = () => {
+      const storedData = sessionStorage.getItem('comparedUniversities');
+      if (storedData) {
+        try {
+          setComparedUniversities(JSON.parse(storedData));
+        } catch (e) {
+          console.error('Failed to parse compared universities from session storage:', e);
+        }
+      } else {
+        setComparedUniversities([]);
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   // Update sessionStorage when selections change
