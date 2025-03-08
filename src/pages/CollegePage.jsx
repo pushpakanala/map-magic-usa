@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from 'axios';
-import { MapPin, Globe, Award, School, BookOpen, Users, Building2, GraduationCap, DollarSign, Star, Calendar, FileText, Briefcase } from 'lucide-react';
+import { MapPin, Globe, Award, School, BookOpen, Users, Building2, GraduationCap, DollarSign, Star, Calendar, FileText, Briefcase, AlertTriangle } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -67,12 +67,30 @@ const formatCourseRank = (rank) => {
   return `#${rank}`;
 };
 
+const UniversityNotFoundState = ({ onGoBack }) => (
+  <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
+    <div className="max-w-lg text-center space-y-6">
+      <div className="mx-auto w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center">
+        <AlertTriangle className="h-8 w-8 text-amber-600" />
+      </div>
+      <h1 className="text-2xl font-bold text-foreground">University Not Found</h1>
+      <p className="text-muted-foreground">
+        We couldn't find information about this university. It may not exist in our database or there might be an error with the university name.
+      </p>
+      <Button onClick={onGoBack} className="mt-4">
+        Go Back
+      </Button>
+    </div>
+  </div>
+);
+
 const CollegePage = () => {
   const { collegeName } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [universityData, setUniversityData] = useState(null);
   const [error, setError] = useState(false);
+  const [universityNotFound, setUniversityNotFound] = useState(false);
   const [isSessionExpired, setIsSessionExpired] = useState(false);
   const token = sessionStorage.getItem('token');
 
@@ -95,7 +113,18 @@ const CollegePage = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
         console.log("University data response:", response.data);
-        setUniversityData(response.data);
+        
+        if (response.data.data && response.data.data.error === "University Not Found") {
+          setUniversityNotFound(true);
+          setLoading(false);
+          return;
+        }
+        
+        if (response.data.data && response.data.data.school) {
+          setUniversityData(response.data);
+        } else {
+          setUniversityNotFound(true);
+        }
       } catch (error) {
         console.error("Error fetching university data:", error);
         if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
@@ -114,6 +143,10 @@ const CollegePage = () => {
     return <LoadingState />;
   }
 
+  if (universityNotFound) {
+    return <UniversityNotFoundState onGoBack={() => navigate(-1)} />;
+  }
+
   if (!universityData || error) {
     return (
       <div className="min-h-screen bg-background p-8 flex items-center justify-center">
@@ -126,6 +159,10 @@ const CollegePage = () => {
   }
 
   const { school } = universityData.data;
+  
+  if (!school) {
+    return <UniversityNotFoundState onGoBack={() => navigate(-1)} />;
+  }
   
   const programs = school.programs || { undergrad_programs: [], grad_programs: [] };
   const students = school.students || { race_ethnicity: {} };
