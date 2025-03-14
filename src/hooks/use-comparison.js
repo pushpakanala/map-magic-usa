@@ -25,36 +25,6 @@ export const useComparison = () => {
         console.error('Failed to parse cached university data from session storage:', e);
       }
     }
-    
-    // Listen for storage events to update state when sessionStorage changes
-    const handleStorageChange = () => {
-      const storedData = sessionStorage.getItem('comparedUniversities');
-      const storedCache = sessionStorage.getItem('cachedUniversityData');
-      
-      if (storedData) {
-        try {
-          setComparedUniversities(JSON.parse(storedData));
-        } catch (e) {
-          console.error('Failed to parse compared universities from session storage:', e);
-        }
-      } else {
-        setComparedUniversities([]);
-      }
-      
-      if (storedCache) {
-        try {
-          setCachedUniversityData(JSON.parse(storedCache));
-        } catch (e) {
-          console.error('Failed to parse cached university data from session storage:', e);
-        }
-      }
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
   }, []);
 
   // Update sessionStorage when selections change
@@ -72,7 +42,13 @@ export const useComparison = () => {
       if (prev.includes(universityName)) {
         return prev.filter(name => name !== universityName);
       } else {
-        return [...prev, universityName];
+        // Limit to 2 universities
+        const newList = [...prev];
+        if (newList.length >= 2) {
+          newList.shift(); // Remove the oldest entry
+        }
+        newList.push(universityName);
+        return newList;
       }
     });
   };
