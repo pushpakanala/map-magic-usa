@@ -7,8 +7,8 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, School, AlertCircle } from 'lucide-react';
-import { UNIVERSITIES_COMPARE } from '../constants';
+import { ArrowLeft, School } from 'lucide-react';
+import { UNIVERSITIS_DATA_GPT, UNIVERSITIES_COMPARE } from '../constants';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import { useToast } from '@/hooks/use-toast';
 import { useComparison } from '@/hooks/use-comparison';
@@ -18,23 +18,19 @@ const ComparePage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { cacheUniversityData, getCachedUniversityData, cachedUniversityData } = useComparison();
+  const { cacheUniversityData, getCachedUniversityData } = useComparison();
   const [isSessionExpired, setIsSessionExpired] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const token = sessionStorage.getItem("token");
   
   const universities = searchParams.get('universities')?.split(',') || [];
 
-  // Check if we already have cached data for all universities
-  const allUniversitiesCached = universities.every(uni => !!getCachedUniversityData(uni));
-  const cachedData = universities.map(uni => getCachedUniversityData(uni)).filter(Boolean);
-
   // Redirect if no universities to compare
   useEffect(() => {
-    if (universities.length === 0) {
+    if (universities.length < 2) {
       toast({
-        title: "No universities selected",
-        description: "Please select at least one university to compare",
+        title: "Not enough universities",
+        description: "Please select at least two universities to compare",
         variant: "destructive",
       });
       navigate('/explore');
@@ -67,56 +63,43 @@ const ComparePage = () => {
         throw error;
       }
     },
-    // Skip fetching if we already have cached data for all universities
-    enabled: !allUniversitiesCached && universities.length > 0
+    enabled: universities.length >= 2
   });
 
-  // Use cached data if available, otherwise use fetched data
-  const universityData = allUniversitiesCached ? cachedData : data;
-
   const handleViewDetails = (universityName) => {
-    const universityData = getCachedUniversityData(universityName);
-    
-    if (universityData) {
-      navigate(`/college/${encodeURIComponent(universityName)}`);
-    } else {
-      toast({
-        title: "University data not found",
-        description: "Unable to view details for this university",
-        variant: "destructive",
-      });
-    }
+    navigate(`/college/${encodeURIComponent(universityName)}`);
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8">
+      <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto">
           <Button 
             variant="ghost" 
             onClick={() => navigate('/explore')} 
-            className="mb-8 text-white/80 hover:text-white hover:bg-white/10"
+            className="mb-8"
           >
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Explore
           </Button>
           
-          <div className="flex flex-col space-y-4 mb-8 items-center">
-            <Skeleton className="h-10 w-64 bg-white/10" />
-            <Skeleton className="h-5 w-96 bg-white/5" />
+          <div className="flex flex-col space-y-4 mb-8">
+            <Skeleton className="h-10 w-64" />
+            <Skeleton className="h-5 w-96" />
           </div>
           
-          <Skeleton className="h-12 w-96 mx-auto mb-8 rounded-full bg-white/10" />
+          <Skeleton className="h-12 w-96 mx-auto mb-8 rounded-md" />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-            {Array(2).fill(0).map((_, i) => (
-              <div key={i} className="flex flex-col space-y-2 bg-white/5 rounded-lg p-6 h-[400px]">
-                <Skeleton className="h-20 rounded-lg bg-white/10" />
-                <div className="space-y-4 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array(3).fill(0).map((_, i) => (
+              <div key={i} className="flex flex-col space-y-2">
+                <Skeleton className="h-40 rounded-lg" />
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <div className="space-y-1 pt-2">
                   {Array(5).fill(0).map((_, j) => (
-                    <Skeleton key={j} className="h-10 bg-white/5" />
+                    <Skeleton key={j} className="h-3" />
                   ))}
                 </div>
-                <Skeleton className="h-10 mt-auto bg-white/10" />
               </div>
             ))}
           </div>
@@ -126,22 +109,21 @@ const ComparePage = () => {
   }
 
   if (error) {
+    toast({
+      title: "Error loading comparison data",
+      description: "Please try again later",
+      variant: "destructive",
+    });
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8">
+      <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-8 max-w-2xl mx-auto">
-            <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-red-300 mb-3">
-              Error Loading Comparison Data
-            </h2>
-            <p className="text-white/70 mb-6">We encountered a problem retrieving university information. Please try again later.</p>
-            <Button 
-              onClick={() => navigate('/explore')}
-              className="bg-white/10 hover:bg-white/20 text-white"
-            >
-              Back to Explore
-            </Button>
-          </div>
+          <h2 className="text-2xl font-bold text-red-500">
+            Error loading comparison data
+          </h2>
+          <p className="mb-4">Please try again later</p>
+          <Button onClick={() => navigate('/explore')}>
+            Back to Explore
+          </Button>
         </div>
       </div>
     );
@@ -149,13 +131,13 @@ const ComparePage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-6 md:p-8">
+      <div className="min-h-screen bg-background p-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/explore')} 
-              className="text-white/80 hover:text-white hover:bg-white/10 backdrop-blur-sm group transition-all"
+              className="hover:bg-background/80 backdrop-blur-sm group transition-all"
             >
               <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" /> 
               Back to Explore
@@ -168,16 +150,14 @@ const ComparePage = () => {
             transition={{ duration: 0.5 }}
             className="mb-12"
           >
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="bg-gradient-to-br from-[#7B1FA2] to-[#1976D2] p-3 rounded-xl">
-                <School className="h-7 w-7 text-white" />
-              </div>
-              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#E1BEE7] to-[#BBDEFB]">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <School className="h-6 w-6 text-uniquestPurple" />
+              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-uniquestPurple to-uniquestPurple-light">
                 University Comparison
               </h1>
             </div>
-            <p className="text-white/60 text-center max-w-2xl mx-auto">
-              Compare universities side by side to make an informed decision about your academic future
+            <p className="text-muted-foreground text-center max-w-2xl mx-auto">
+              Compare {data?.length} universities side by side to make an informed decision about your academic future
             </p>
           </motion.div>
             
@@ -187,28 +167,28 @@ const ComparePage = () => {
             onValueChange={setActiveTab}
           >
             <div className="flex justify-center mb-8">
-              <TabsList className="grid grid-cols-4 rounded-full p-1 bg-white/5 backdrop-blur-sm shadow-inner border border-white/10">
+              <TabsList className="grid grid-cols-4 rounded-full p-1 bg-muted/50 backdrop-blur-sm shadow-inner">
                 <TabsTrigger 
                   value="overview" 
-                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#9C27B0]/80 data-[state=active]:to-[#2196F3]/80 data-[state=active]:text-white data-[state=active]:shadow-md text-white/70"
+                  className="rounded-full data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm"
                 >
                   Overview
                 </TabsTrigger>
                 <TabsTrigger 
                   value="academics" 
-                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#9C27B0]/80 data-[state=active]:to-[#2196F3]/80 data-[state=active]:text-white data-[state=active]:shadow-md text-white/70"
+                  className="rounded-full data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm"
                 >
                   Academics
                 </TabsTrigger>
                 <TabsTrigger 
                   value="admissions" 
-                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#9C27B0]/80 data-[state=active]:to-[#2196F3]/80 data-[state=active]:text-white data-[state=active]:shadow-md text-white/70"
+                  className="rounded-full data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm"
                 >
                   Admissions
                 </TabsTrigger>
                 <TabsTrigger 
                   value="student-life" 
-                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#9C27B0]/80 data-[state=active]:to-[#2196F3]/80 data-[state=active]:text-white data-[state=active]:shadow-md text-white/70"
+                  className="rounded-full data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm"
                 >
                   Student Life
                 </TabsTrigger>
@@ -217,7 +197,7 @@ const ComparePage = () => {
             
             <TabsContent value="overview">
               <ComparisonTabContent 
-                data={universityData} 
+                data={data} 
                 tabValue="overview" 
                 onViewDetails={handleViewDetails}
               />
@@ -225,7 +205,7 @@ const ComparePage = () => {
             
             <TabsContent value="academics">
               <ComparisonTabContent 
-                data={universityData} 
+                data={data} 
                 tabValue="academics"
                 onViewDetails={handleViewDetails}
               />
@@ -233,7 +213,7 @@ const ComparePage = () => {
             
             <TabsContent value="admissions">
               <ComparisonTabContent 
-                data={universityData} 
+                data={data} 
                 tabValue="admissions"
                 onViewDetails={handleViewDetails}
               />
@@ -241,7 +221,7 @@ const ComparePage = () => {
             
             <TabsContent value="student-life">
               <ComparisonTabContent 
-                data={universityData} 
+                data={data} 
                 tabValue="student-life"
                 onViewDetails={handleViewDetails}
               />
