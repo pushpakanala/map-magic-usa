@@ -17,21 +17,23 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
   // Animation values
   const delay = index * 0.15;
   
-  // Card accent colors
+  // Card accent colors - updated with more vibrant gradients
   const accentColors = [
-    'from-uniquestPurple/20 to-uniquestPurple-light/10',
-    'from-primary/20 to-primary/5',
-    'from-[#0ea5e9]/20 to-[#06b6d4]/10'
+    'from-uniquestPurple/30 to-uniquestPurple-light/20',
+    'from-[#0ea5e9]/30 to-[#06b6d4]/20',
+    'from-[#f97316]/30 to-[#fb923c]/20',
+    'from-[#8b5cf6]/30 to-[#a78bfa]/20'
   ];
   
-  // Icon colors
+  // Icon colors - updated with matching vibrant colors
   const iconColors = [
     'text-uniquestPurple',
-    'text-primary',
-    'text-[#0ea5e9]'
+    'text-[#0ea5e9]',
+    'text-[#f97316]',
+    'text-[#8b5cf6]'
   ];
   
-  const colorIndex = index % 3;
+  const colorIndex = index % 4;
   
   const handleViewDetails = () => {
     if (onViewDetails) {
@@ -47,8 +49,8 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
       className="h-full"
     >
       <Card className={cn(
-        "h-full overflow-hidden border shadow-md hover:shadow-lg transition-all duration-300",
-        "bg-gradient-to-br from-white to-slate-50/90 dark:from-slate-900/90 dark:to-slate-800/70 backdrop-blur-sm"
+        "h-full overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-300",
+        "bg-gradient-to-br from-white to-slate-50/90 dark:from-slate-900/95 dark:to-slate-800/90 backdrop-blur-md"
       )}>
         <CardHeader className={cn(
           "bg-gradient-to-br px-6 py-5", 
@@ -62,44 +64,44 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
         
         <CardContent className="p-6 space-y-4">
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <MapPin className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
+            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+              <MapPin className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
               <span className="text-sm">
                 {university.school.city}, {university.school.state}
               </span>
             </div>
             
-            <div className="flex items-center gap-2">
-              <School className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
+            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+              <School className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
               <span className="text-sm">Ranking: #{university.school.us_ranking || "N/A"}</span>
             </div>
             
-            <div className="flex items-center gap-2">
-              <GraduationCap className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
+            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+              <GraduationCap className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
               <span className="text-sm">Type: {university.school.type}</span>
             </div>
             
-            <div className="flex items-center gap-2">
-              <Users className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
+            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+              <Users className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
               <span className="text-sm">
                 Students: {university.school.students?.total_students || "N/A"}
               </span>
             </div>
             
-            <div className="flex items-center gap-2">
-              <Calendar className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
+            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+              <Calendar className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
               <span className="text-sm">Founded: {university.school.founded_in || "N/A"}</span>
             </div>
             
-            <div className="flex items-center gap-2">
-              <Award className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
+            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+              <Award className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
               <span className="text-sm">
                 Acceptance Rate: {university.school.acceptance_rate || "N/A"}
               </span>
             </div>
             
-            <div className="flex items-center gap-2 overflow-hidden">
-              <GlobeIcon className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
+            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors overflow-hidden">
+              <GlobeIcon className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
               <span className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">
                 {university.school.school_url && (
                   <a 
@@ -115,23 +117,31 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
             </div>
           </div>
           
-          <Separator />
+          <Separator className="!my-4" />
           
           <div className="pt-2">
             <Button 
               onClick={handleViewDetails} 
               variant="outline" 
               className={cn(
-                "w-full bg-transparent border border-slate-200 dark:border-slate-700",
-                "hover:bg-gradient-to-r", 
-                colorIndex === 0 
-                  ? "hover:from-uniquestPurple/10 hover:to-uniquestPurple-light/5 hover:text-uniquestPurple"
-                  : colorIndex === 1 
-                    ? "hover:from-primary/10 hover:to-primary/5 hover:text-primary" 
-                    : "hover:from-[#0ea5e9]/10 hover:to-[#06b6d4]/5 hover:text-[#0ea5e9]"
+                "w-full relative overflow-hidden group",
+                "border border-slate-200 dark:border-slate-700 bg-transparent",
+                "hover:bg-transparent hover:border-transparent"
               )}
             >
-              View Details
+              <span className={cn(
+                "absolute inset-0 w-0 bg-gradient-to-r transition-all duration-300 group-hover:w-full -z-10",
+                colorIndex === 0 ? "from-uniquestPurple/20 to-uniquestPurple-light/10" :
+                colorIndex === 1 ? "from-[#0ea5e9]/20 to-[#06b6d4]/10" :
+                colorIndex === 2 ? "from-[#f97316]/20 to-[#fb923c]/10" :
+                "from-[#8b5cf6]/20 to-[#a78bfa]/10"
+              )}></span>
+              <span className={cn(
+                "group-hover:text-white dark:group-hover:text-white transition-colors duration-300",
+                iconColors[colorIndex]
+              )}>
+                View Details
+              </span>
             </Button>
           </div>
         </CardContent>

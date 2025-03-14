@@ -67,6 +67,14 @@ const ComparePage = () => {
   });
 
   const handleViewDetails = (universityName) => {
+    // Check if we have cached data for this university
+    const cachedData = getCachedUniversityData(universityName);
+    
+    if (cachedData) {
+      console.log('Using cached data to navigate to university details');
+    }
+    
+    // Navigate to the college details page
     navigate(`/college/${encodeURIComponent(universityName)}`);
   };
 
