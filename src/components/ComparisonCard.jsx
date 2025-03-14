@@ -17,20 +17,20 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
   // Animation values
   const delay = index * 0.15;
   
-  // Card accent colors - updated with more vibrant gradients
+  // Card accent colors - updated with dark theme gradients
   const accentColors = [
-    'from-uniquestPurple/30 to-uniquestPurple-light/20',
-    'from-[#0ea5e9]/30 to-[#06b6d4]/20',
-    'from-[#f97316]/30 to-[#fb923c]/20',
-    'from-[#8b5cf6]/30 to-[#a78bfa]/20'
+    'from-uniquestPurple/20 to-uniquestPurple-light/10',
+    'from-[#0ea5e9]/20 to-[#06b6d4]/10',
+    'from-[#f97316]/20 to-[#fb923c]/10',
+    'from-[#8b5cf6]/20 to-[#a78bfa]/10'
   ];
   
-  // Icon colors - updated with matching vibrant colors
+  // Icon colors - vibrant colors that work on dark backgrounds
   const iconColors = [
-    'text-uniquestPurple',
-    'text-[#0ea5e9]',
-    'text-[#f97316]',
-    'text-[#8b5cf6]'
+    'text-uniquestPurple-light',
+    'text-[#38bdf8]',
+    'text-[#fb923c]',
+    'text-[#a78bfa]'
   ];
   
   const colorIndex = index % 4;
@@ -49,66 +49,68 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
       className="h-full"
     >
       <Card className={cn(
-        "h-full overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-300",
-        "bg-gradient-to-br from-white to-slate-50/90 dark:from-slate-900/95 dark:to-slate-800/90 backdrop-blur-md"
+        "h-full overflow-hidden border shadow-xl transition-all duration-300 group",
+        "bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-lg border-slate-700/30",
+        "hover:shadow-2xl hover:shadow-uniquestPurple/10 hover:border-uniquestPurple/20"
       )}>
         <CardHeader className={cn(
-          "bg-gradient-to-br px-6 py-5", 
+          "bg-gradient-to-br px-6 py-5 border-b border-slate-700/30", 
           accentColors[colorIndex]
         )}>
           <CardTitle className="flex items-start gap-2.5 text-xl">
             <Building2 className={cn("h-5 w-5 mt-1", iconColors[colorIndex])} />
-            <span className="font-semibold">{university.school.name}</span>
+            <span className="font-semibold text-white/90 group-hover:text-white transition-colors">{university.school.name}</span>
           </CardTitle>
         </CardHeader>
         
         <CardContent className="p-6 space-y-4">
           <div className="space-y-3">
-            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+            <div className="flex items-center gap-2 group hover:bg-slate-700/30 p-1.5 rounded-md transition-colors">
               <MapPin className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
-              <span className="text-sm">
+              <span className="text-sm text-white/80 group-hover:text-white/100 transition-colors">
                 {university.school.city}, {university.school.state}
               </span>
             </div>
             
-            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+            <div className="flex items-center gap-2 group hover:bg-slate-700/30 p-1.5 rounded-md transition-colors">
               <School className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
-              <span className="text-sm">Ranking: #{university.school.us_ranking || "N/A"}</span>
+              <span className="text-sm text-white/80 group-hover:text-white/100 transition-colors">Ranking: #{university.school.us_ranking || "N/A"}</span>
             </div>
             
-            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+            <div className="flex items-center gap-2 group hover:bg-slate-700/30 p-1.5 rounded-md transition-colors">
               <GraduationCap className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
-              <span className="text-sm">Type: {university.school.type}</span>
+              <span className="text-sm text-white/80 group-hover:text-white/100 transition-colors">Type: {university.school.type}</span>
             </div>
             
-            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+            <div className="flex items-center gap-2 group hover:bg-slate-700/30 p-1.5 rounded-md transition-colors">
               <Users className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
-              <span className="text-sm">
+              <span className="text-sm text-white/80 group-hover:text-white/100 transition-colors">
                 Students: {university.school.students?.total_students || "N/A"}
               </span>
             </div>
             
-            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+            <div className="flex items-center gap-2 group hover:bg-slate-700/30 p-1.5 rounded-md transition-colors">
               <Calendar className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
-              <span className="text-sm">Founded: {university.school.founded_in || "N/A"}</span>
+              <span className="text-sm text-white/80 group-hover:text-white/100 transition-colors">Founded: {university.school.founded_in || "N/A"}</span>
             </div>
             
-            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors">
+            <div className="flex items-center gap-2 group hover:bg-slate-700/30 p-1.5 rounded-md transition-colors">
               <Award className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
-              <span className="text-sm">
+              <span className="text-sm text-white/80 group-hover:text-white/100 transition-colors">
                 Acceptance Rate: {university.school.acceptance_rate || "N/A"}
               </span>
             </div>
             
-            <div className="flex items-center gap-2 group hover:bg-slate-100/50 dark:hover:bg-slate-800/50 p-1.5 rounded-md transition-colors overflow-hidden">
+            <div className="flex items-center gap-2 group hover:bg-slate-700/30 p-1.5 rounded-md transition-colors overflow-hidden">
               <GlobeIcon className={cn("h-4 w-4 shrink-0 group-hover:scale-110 transition-transform", iconColors[colorIndex])} />
-              <span className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">
+              <span className="text-sm text-ellipsis overflow-hidden whitespace-nowrap text-white/80 group-hover:text-white/100 transition-colors">
                 {university.school.school_url && (
                   <a 
                     href={university.school.school_url} 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className={cn("hover:underline", iconColors[colorIndex])}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {university.school.school_url.replace(/^https?:\/\//, '')}
                   </a>
@@ -117,7 +119,7 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
             </div>
           </div>
           
-          <Separator className="!my-4" />
+          <Separator className="!my-4 bg-slate-700/30" />
           
           <div className="pt-2">
             <Button 
@@ -125,19 +127,19 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
               variant="outline" 
               className={cn(
                 "w-full relative overflow-hidden group",
-                "border border-slate-200 dark:border-slate-700 bg-transparent",
-                "hover:bg-transparent hover:border-transparent"
+                "border-slate-700 bg-transparent text-white/80",
+                "hover:bg-transparent hover:border-transparent hover:text-white"
               )}
             >
               <span className={cn(
-                "absolute inset-0 w-0 bg-gradient-to-r transition-all duration-300 group-hover:w-full -z-10",
-                colorIndex === 0 ? "from-uniquestPurple/20 to-uniquestPurple-light/10" :
-                colorIndex === 1 ? "from-[#0ea5e9]/20 to-[#06b6d4]/10" :
-                colorIndex === 2 ? "from-[#f97316]/20 to-[#fb923c]/10" :
-                "from-[#8b5cf6]/20 to-[#a78bfa]/10"
+                "absolute inset-0 w-0 transition-all duration-300 group-hover:w-full -z-10",
+                colorIndex === 0 ? "bg-gradient-to-r from-uniquestPurple/30 to-uniquestPurple-light/20" :
+                colorIndex === 1 ? "bg-gradient-to-r from-[#0ea5e9]/30 to-[#06b6d4]/20" :
+                colorIndex === 2 ? "bg-gradient-to-r from-[#f97316]/30 to-[#fb923c]/20" :
+                "bg-gradient-to-r from-[#8b5cf6]/30 to-[#a78bfa]/20"
               )}></span>
               <span className={cn(
-                "group-hover:text-white dark:group-hover:text-white transition-colors duration-300",
+                "group-hover:text-white transition-colors duration-300",
                 iconColors[colorIndex]
               )}>
                 View Details

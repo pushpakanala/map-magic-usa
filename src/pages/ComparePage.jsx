@@ -41,13 +41,27 @@ const ComparePage = () => {
     queryKey: ['compareUniversities', universities.join(',')],
     queryFn: async () => {
       try {
+        // Check if we have cached this comparison data already
+        const cachedKey = `comparison_${universities.join(',')}`;
+        const cachedData = sessionStorage.getItem(cachedKey);
+        
+        if (cachedData) {
+          console.log('Using cached comparison data');
+          return JSON.parse(cachedData);
+        }
+        
+        console.log('Fetching fresh comparison data from API');
         const response = await axios.get(
           `${UNIVERSITIES_COMPARE}?university_names=${encodeURIComponent(universities.join(','))}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         
-        // Cache each university's data
+        // Cache the comparison data
         if (response.data.data && Array.isArray(response.data.data)) {
+          // Cache the full comparison result
+          sessionStorage.setItem(cachedKey, JSON.stringify(response.data.data));
+          
+          // Also cache each individual university's data
           response.data.data.forEach(uni => {
             if (uni.school && uni.school.name) {
               cacheUniversityData(uni.school.name, uni);
@@ -63,7 +77,9 @@ const ComparePage = () => {
         throw error;
       }
     },
-    enabled: universities.length >= 2
+    enabled: universities.length >= 2,
+    staleTime: 5 * 60 * 1000, // Keep data fresh for 5 minutes
+    cacheTime: 30 * 60 * 1000, // Cache for 30 minutes
   });
 
   const handleViewDetails = (universityName) => {
@@ -72,6 +88,8 @@ const ComparePage = () => {
     
     if (cachedData) {
       console.log('Using cached data to navigate to university details');
+    } else {
+      console.log('No cached data found for this university');
     }
     
     // Navigate to the college details page
@@ -80,33 +98,33 @@ const ComparePage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900 dark:from-slate-950 dark:to-slate-900 p-8">
         <div className="max-w-7xl mx-auto">
           <Button 
             variant="ghost" 
             onClick={() => navigate('/explore')} 
-            className="mb-8"
+            className="mb-8 text-white/80 hover:text-white"
           >
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Explore
           </Button>
           
           <div className="flex flex-col space-y-4 mb-8">
-            <Skeleton className="h-10 w-64" />
-            <Skeleton className="h-5 w-96" />
+            <Skeleton className="h-10 w-64 bg-slate-800/50" />
+            <Skeleton className="h-5 w-96 bg-slate-800/50" />
           </div>
           
-          <Skeleton className="h-12 w-96 mx-auto mb-8 rounded-md" />
+          <Skeleton className="h-12 w-96 mx-auto mb-8 rounded-md bg-slate-800/50" />
           
           <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Skeleton className="h-[400px] rounded-lg" />
-              <Skeleton className="h-[400px] rounded-lg" />
+              <Skeleton className="h-[400px] rounded-lg bg-slate-800/50" />
+              <Skeleton className="h-[400px] rounded-lg bg-slate-800/50" />
             </div>
             
             {universities.length > 2 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Skeleton className="h-[400px] rounded-lg" />
-                {universities.length > 3 && <Skeleton className="h-[400px] rounded-lg" />}
+                <Skeleton className="h-[400px] rounded-lg bg-slate-800/50" />
+                {universities.length > 3 && <Skeleton className="h-[400px] rounded-lg bg-slate-800/50" />}
               </div>
             )}
           </div>
@@ -122,12 +140,12 @@ const ComparePage = () => {
       variant: "destructive",
     });
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900 dark:from-slate-950 dark:to-slate-900 p-8">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-red-500">
             Error loading comparison data
           </h2>
-          <p className="mb-4">Please try again later</p>
+          <p className="mb-4 text-white/80">Please try again later</p>
           <Button onClick={() => navigate('/explore')}>
             Back to Explore
           </Button>
@@ -138,13 +156,13 @@ const ComparePage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-8">
+      <div className="min-h-screen bg-gradient-to-br from-[#1A1F2C] to-[#0F141E] text-white p-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/explore')} 
-              className="hover:bg-white/20 backdrop-blur-sm group transition-all dark:text-white"
+              className="hover:bg-white/10 text-white/80 hover:text-white backdrop-blur-sm group transition-all"
             >
               <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" /> 
               Back to Explore
@@ -158,12 +176,12 @@ const ComparePage = () => {
             className="mb-12"
           >
             <div className="flex items-center justify-center gap-2 mb-3">
-              <School className="h-6 w-6 text-uniquestPurple" />
-              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-uniquestPurple to-uniquestPurple-light">
+              <School className="h-6 w-6 text-uniquestPurple-light" />
+              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-uniquestPurple-light to-[#D6BCFA]">
                 University Comparison
               </h1>
             </div>
-            <p className="text-muted-foreground text-center max-w-2xl mx-auto">
+            <p className="text-white/60 text-center max-w-2xl mx-auto">
               Compare {data?.length} universities side by side to make an informed decision about your academic future
             </p>
           </motion.div>
@@ -174,31 +192,31 @@ const ComparePage = () => {
             onValueChange={setActiveTab}
           >
             <div className="flex justify-center mb-8">
-              <TabsList className="grid grid-cols-4 rounded-full p-1 bg-white dark:bg-slate-800/50 backdrop-blur-sm shadow-md">
+              <TabsList className="grid grid-cols-4 rounded-full p-1 bg-slate-800/30 backdrop-blur-sm border border-white/5 shadow-lg shadow-black/20">
                 <TabsTrigger 
                   value="overview" 
-                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple/80 data-[state=active]:to-uniquestPurple-light/80 data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5"
+                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple data-[state=active]:to-uniquestPurple-light data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5 text-white/70"
                 >
                   <School className="h-4 w-4" />
                   <span>Overview</span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="academics" 
-                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple/80 data-[state=active]:to-uniquestPurple-light/80 data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5"
+                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple data-[state=active]:to-uniquestPurple-light data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5 text-white/70"
                 >
                   <BookOpenCheck className="h-4 w-4" />
                   <span>Academics</span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="admissions" 
-                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple/80 data-[state=active]:to-uniquestPurple-light/80 data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5"
+                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple data-[state=active]:to-uniquestPurple-light data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5 text-white/70"
                 >
                   <GraduationCap className="h-4 w-4" />
                   <span>Admissions</span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="student-life" 
-                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple/80 data-[state=active]:to-uniquestPurple-light/80 data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5"
+                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple data-[state=active]:to-uniquestPurple-light data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5 text-white/70"
                 >
                   <Users className="h-4 w-4" />
                   <span>Student Life</span>

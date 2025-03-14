@@ -59,19 +59,19 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {pair.map((item, index) => {
-            // Define colors based on index - updated with more vibrant colors
+            // Define colors based on index - updated with more vibrant colors for dark mode
             const colorIndex = (rowIndex * 2 + index) % 4;
             const bgGradient = [
-              'from-uniquestPurple/15 to-transparent',
-              'from-[#0ea5e9]/15 to-transparent',
-              'from-[#f97316]/15 to-transparent',
-              'from-[#8b5cf6]/15 to-transparent'
+              'from-uniquestPurple/20 to-transparent',
+              'from-[#0ea5e9]/20 to-transparent',
+              'from-[#f97316]/20 to-transparent',
+              'from-[#8b5cf6]/20 to-transparent'
             ];
             const textColor = [
-              'text-uniquestPurple',
-              'text-[#0ea5e9]',
-              'text-[#f97316]',
-              'text-[#8b5cf6]'
+              'text-uniquestPurple-light',
+              'text-[#38bdf8]',
+              'text-[#fb923c]',
+              'text-[#a78bfa]'
             ];
             
             return (
@@ -82,11 +82,11 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                 transition={{ duration: 0.5, delay: (rowIndex * 2 + index) * 0.15 }}
               >
                 <div className={cn(
-                  "rounded-lg border shadow-sm overflow-hidden h-full",
-                  "bg-card text-card-foreground backdrop-blur-sm"
+                  "rounded-lg border shadow-lg overflow-hidden h-full",
+                  "bg-slate-900/90 border-slate-700/30 text-white/90 backdrop-blur-lg"
                 )}>
                   <div className={cn(
-                    "bg-gradient-to-r p-6",
+                    "bg-gradient-to-r p-6 border-b border-slate-700/30",
                     bgGradient[colorIndex]
                   )}>
                     <h3 className="text-xl font-semibold">{item.school.name}</h3>
@@ -100,16 +100,16 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                         {item.school.school_programs?.slice(0, 5).map((program, idx) => (
                           <div key={idx} className={cn(
                             "text-sm py-1.5 px-3 rounded-full",
-                            colorIndex === 0 ? "bg-uniquestPurple/10 text-uniquestPurple" :
-                            colorIndex === 1 ? "bg-[#0ea5e9]/10 text-[#0ea5e9]" :
-                            colorIndex === 2 ? "bg-[#f97316]/10 text-[#f97316]" :
-                            "bg-[#8b5cf6]/10 text-[#8b5cf6]"
+                            colorIndex === 0 ? "bg-uniquestPurple/20 text-uniquestPurple-light" :
+                            colorIndex === 1 ? "bg-[#0ea5e9]/20 text-[#38bdf8]" :
+                            colorIndex === 2 ? "bg-[#f97316]/20 text-[#fb923c]" :
+                            "bg-[#8b5cf6]/20 text-[#a78bfa]"
                           )}>
                             {program}
                           </div>
                         ))}
                         {item.school.school_programs?.length > 5 && (
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-sm text-white/60">
                             +{item.school.school_programs.length - 5} more programs
                           </div>
                         )}
@@ -121,22 +121,22 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                         Program Duration
                       </h4>
                       <div className="space-y-3">
-                        <div className="flex justify-between items-center p-2 rounded-lg bg-slate-100/50 dark:bg-slate-800/50">
-                          <span className="text-sm">Undergraduate:</span>
+                        <div className="flex justify-between items-center p-2 rounded-lg bg-slate-800/50">
+                          <span className="text-sm text-white/80">Undergraduate:</span>
                           <span className={cn("text-sm font-medium px-2 py-1 rounded-md", 
-                            colorIndex === 0 ? "bg-uniquestPurple/10 text-uniquestPurple" :
-                            colorIndex === 1 ? "bg-[#0ea5e9]/10 text-[#0ea5e9]" :
-                            colorIndex === 2 ? "bg-[#f97316]/10 text-[#f97316]" :
-                            "bg-[#8b5cf6]/10 text-[#8b5cf6]"
+                            colorIndex === 0 ? "bg-uniquestPurple/20 text-uniquestPurple-light" :
+                            colorIndex === 1 ? "bg-[#0ea5e9]/20 text-[#38bdf8]" :
+                            colorIndex === 2 ? "bg-[#f97316]/20 text-[#fb923c]" :
+                            "bg-[#8b5cf6]/20 text-[#a78bfa]"
                           )}>4 years</span>
                         </div>
-                        <div className="flex justify-between items-center p-2 rounded-lg bg-slate-100/50 dark:bg-slate-800/50">
-                          <span className="text-sm">Graduate:</span>
+                        <div className="flex justify-between items-center p-2 rounded-lg bg-slate-800/50">
+                          <span className="text-sm text-white/80">Graduate:</span>
                           <span className={cn("text-sm font-medium px-2 py-1 rounded-md", 
-                            colorIndex === 0 ? "bg-uniquestPurple/10 text-uniquestPurple" :
-                            colorIndex === 1 ? "bg-[#0ea5e9]/10 text-[#0ea5e9]" :
-                            colorIndex === 2 ? "bg-[#f97316]/10 text-[#f97316]" :
-                            "bg-[#8b5cf6]/10 text-[#8b5cf6]"
+                            colorIndex === 0 ? "bg-uniquestPurple/20 text-uniquestPurple-light" :
+                            colorIndex === 1 ? "bg-[#0ea5e9]/20 text-[#38bdf8]" :
+                            colorIndex === 2 ? "bg-[#f97316]/20 text-[#fb923c]" :
+                            "bg-[#8b5cf6]/20 text-[#a78bfa]"
                           )}>2 years</span>
                         </div>
                       </div>
@@ -148,10 +148,10 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                       </h4>
                       <div className={cn(
                         "text-xl font-semibold text-center py-3 px-4 rounded-lg", 
-                        colorIndex === 0 ? "bg-uniquestPurple/10 text-uniquestPurple" :
-                        colorIndex === 1 ? "bg-[#0ea5e9]/10 text-[#0ea5e9]" :
-                        colorIndex === 2 ? "bg-[#f97316]/10 text-[#f97316]" :
-                        "bg-[#8b5cf6]/10 text-[#8b5cf6]"
+                        colorIndex === 0 ? "bg-uniquestPurple/20 text-uniquestPurple-light" :
+                        colorIndex === 1 ? "bg-[#0ea5e9]/20 text-[#38bdf8]" :
+                        colorIndex === 2 ? "bg-[#f97316]/20 text-[#fb923c]" :
+                        "bg-[#8b5cf6]/20 text-[#a78bfa]"
                       )}>
                         {item.school.graduation_rate || "N/A"}
                       </div>
@@ -174,17 +174,19 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {pair.map((item, index) => {
-            // Define colors based on index
-            const colorIndex = (rowIndex * 2 + index) % 3;
+            // Define colors based on index for dark theme
+            const colorIndex = (rowIndex * 2 + index) % 4;
             const bgGradient = [
-              'from-uniquestPurple/10 to-transparent',
-              'from-primary/10 to-transparent',
-              'from-[#0ea5e9]/10 to-transparent'
+              'from-uniquestPurple/20 to-transparent',
+              'from-[#0ea5e9]/20 to-transparent',
+              'from-[#f97316]/20 to-transparent',
+              'from-[#8b5cf6]/20 to-transparent'
             ];
             const textColor = [
-              'text-uniquestPurple',
-              'text-primary',
-              'text-[#0ea5e9]'
+              'text-uniquestPurple-light',
+              'text-[#38bdf8]',
+              'text-[#fb923c]',
+              'text-[#a78bfa]'
             ];
             
             return (
@@ -195,11 +197,11 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                 transition={{ duration: 0.5, delay: (rowIndex * 2 + index) * 0.15 }}
               >
                 <div className={cn(
-                  "rounded-lg border shadow-sm overflow-hidden h-full",
-                  "bg-card text-card-foreground"
+                  "rounded-lg border shadow-lg overflow-hidden h-full",
+                  "bg-slate-900/90 border-slate-700/30 text-white/90 backdrop-blur-lg"
                 )}>
                   <div className={cn(
-                    "bg-gradient-to-r p-6",
+                    "bg-gradient-to-r p-6 border-b border-slate-700/30",
                     bgGradient[colorIndex]
                   )}>
                     <h3 className="text-xl font-semibold">{item.school.name}</h3>
@@ -221,20 +223,20 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                       {item.school.application_fee ? (
                         <div className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-sm">Undergraduate (Local):</span>
-                            <span className="text-sm font-medium">
+                            <span className="text-sm text-white/80">Undergraduate (Local):</span>
+                            <span className="text-sm font-medium text-white">
                               ${item.school.application_fee.undergraduate?.local_students || "N/A"}
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-sm">Undergraduate (International):</span>
-                            <span className="text-sm font-medium">
+                            <span className="text-sm text-white/80">Undergraduate (International):</span>
+                            <span className="text-sm font-medium text-white">
                               ${item.school.application_fee.undergraduate?.international_students || "N/A"}
                             </span>
                           </div>
                         </div>
                       ) : (
-                        <div className="text-sm text-muted-foreground text-center">Information not available</div>
+                        <div className="text-sm text-white/60 text-center">Information not available</div>
                       )}
                     </div>
                     
@@ -245,23 +247,23 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                       {item.school.admission_deadlines ? (
                         <div className="space-y-3">
                           <div>
-                            <div className="text-sm font-medium">Fall Semester</div>
+                            <div className="text-sm font-medium text-white">Fall Semester</div>
                             <div className="flex justify-between">
-                              <span className="text-xs text-muted-foreground">Local:</span>
-                              <span className="text-xs">
+                              <span className="text-xs text-white/60">Local:</span>
+                              <span className="text-xs text-white">
                                 {item.school.admission_deadlines.fall?.local_students || "N/A"}
                               </span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-xs text-muted-foreground">International:</span>
-                              <span className="text-xs">
+                              <span className="text-xs text-white/60">International:</span>
+                              <span className="text-xs text-white">
                                 {item.school.admission_deadlines.fall?.international_students || "N/A"}
                               </span>
                             </div>
                           </div>
                         </div>
                       ) : (
-                        <div className="text-sm text-muted-foreground text-center">Information not available</div>
+                        <div className="text-sm text-white/60 text-center">Information not available</div>
                       )}
                     </div>
                   </div>
@@ -282,17 +284,19 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {pair.map((item, index) => {
-            // Define colors based on index
-            const colorIndex = (rowIndex * 2 + index) % 3;
+            // Define colors based on index for dark theme
+            const colorIndex = (rowIndex * 2 + index) % 4;
             const bgGradient = [
-              'from-uniquestPurple/10 to-transparent',
-              'from-primary/10 to-transparent',
-              'from-[#0ea5e9]/10 to-transparent'
+              'from-uniquestPurple/20 to-transparent',
+              'from-[#0ea5e9]/20 to-transparent',
+              'from-[#f97316]/20 to-transparent',
+              'from-[#8b5cf6]/20 to-transparent'
             ];
             const textColor = [
-              'text-uniquestPurple',
-              'text-primary',
-              'text-[#0ea5e9]'
+              'text-uniquestPurple-light',
+              'text-[#38bdf8]',
+              'text-[#fb923c]',
+              'text-[#a78bfa]'
             ];
             
             return (
@@ -303,11 +307,11 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                 transition={{ duration: 0.5, delay: (rowIndex * 2 + index) * 0.15 }}
               >
                 <div className={cn(
-                  "rounded-lg border shadow-sm overflow-hidden h-full",
-                  "bg-card text-card-foreground"
+                  "rounded-lg border shadow-lg overflow-hidden h-full",
+                  "bg-slate-900/90 border-slate-700/30 text-white/90 backdrop-blur-lg"
                 )}>
                   <div className={cn(
-                    "bg-gradient-to-r p-6",
+                    "bg-gradient-to-r p-6 border-b border-slate-700/30",
                     bgGradient[colorIndex]
                   )}>
                     <h3 className="text-xl font-semibold">{item.school.name}</h3>
@@ -320,22 +324,22 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                       {item.school.students ? (
                         <div className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-sm">Total Students:</span>
-                            <span className="text-sm font-medium">{item.school.students.total_students || "N/A"}</span>
+                            <span className="text-sm text-white/80">Total Students:</span>
+                            <span className="text-sm font-medium text-white">{item.school.students.total_students || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-sm">Graduate Students:</span>
-                            <span className="text-sm font-medium">{item.school.students.grad_students || "N/A"}</span>
+                            <span className="text-sm text-white/80">Graduate Students:</span>
+                            <span className="text-sm font-medium text-white">{item.school.students.grad_students || "N/A"}</span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-sm">Gender Ratio:</span>
-                            <span className="text-sm font-medium">
+                            <span className="text-sm text-white/80">Gender Ratio:</span>
+                            <span className="text-sm font-medium text-white">
                               {item.school.students.men || "N/A"} men / {item.school.students.women || "N/A"} women
                             </span>
                           </div>
                         </div>
                       ) : (
-                        <div className="text-sm text-muted-foreground text-center">Information not available</div>
+                        <div className="text-sm text-white/60 text-center">Information not available</div>
                       )}
                     </div>
                     
@@ -346,36 +350,42 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                       {item.school.part_time_opportunities ? (
                         <div className="space-y-3">
                           <div>
-                            <div className="text-sm font-medium">On-campus Jobs</div>
+                            <div className="text-sm font-medium text-white">On-campus Jobs</div>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {item.school.part_time_opportunities.on_campus_jobs?.slice(0, 2).map((job, idx) => (
                                 <span key={idx} className={cn(
                                   "text-xs py-1 px-2 rounded",
-                                  `bg-${colorIndex === 0 ? 'uniquestPurple' : colorIndex === 1 ? 'primary' : '[#0ea5e9]'}/5`
+                                  colorIndex === 0 ? "bg-uniquestPurple/20 text-uniquestPurple-light" :
+                                  colorIndex === 1 ? "bg-[#0ea5e9]/20 text-[#38bdf8]" :
+                                  colorIndex === 2 ? "bg-[#f97316]/20 text-[#fb923c]" :
+                                  "bg-[#8b5cf6]/20 text-[#a78bfa]"
                                 )}>
                                   {job}
                                 </span>
                               ))}
                               {item.school.part_time_opportunities.on_campus_jobs?.length > 2 && (
-                                <span className="text-xs text-muted-foreground">
+                                <span className="text-xs text-white/60">
                                   +{item.school.part_time_opportunities.on_campus_jobs.length - 2} more
                                 </span>
                               )}
                             </div>
                           </div>
                           <div>
-                            <div className="text-sm font-medium">Internships</div>
+                            <div className="text-sm font-medium text-white">Internships</div>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {item.school.part_time_opportunities.internships?.slice(0, 2).map((job, idx) => (
                                 <span key={idx} className={cn(
                                   "text-xs py-1 px-2 rounded",
-                                  `bg-${colorIndex === 0 ? 'uniquestPurple' : colorIndex === 1 ? 'primary' : '[#0ea5e9]'}/5`
+                                  colorIndex === 0 ? "bg-uniquestPurple/20 text-uniquestPurple-light" :
+                                  colorIndex === 1 ? "bg-[#0ea5e9]/20 text-[#38bdf8]" :
+                                  colorIndex === 2 ? "bg-[#f97316]/20 text-[#fb923c]" :
+                                  "bg-[#8b5cf6]/20 text-[#a78bfa]"
                                 )}>
                                   {job}
                                 </span>
                               ))}
                               {item.school.part_time_opportunities.internships?.length > 2 && (
-                                <span className="text-xs text-muted-foreground">
+                                <span className="text-xs text-white/60">
                                   +{item.school.part_time_opportunities.internships.length - 2} more
                                 </span>
                               )}
@@ -383,7 +393,7 @@ const ComparisonTabContent = ({ data, tabValue, onViewDetails }) => {
                           </div>
                         </div>
                       ) : (
-                        <div className="text-sm text-muted-foreground text-center">Information not available</div>
+                        <div className="text-sm text-white/60 text-center">Information not available</div>
                       )}
                     </div>
                   </div>

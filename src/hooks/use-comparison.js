@@ -26,27 +26,25 @@ export const useComparison = () => {
       }
     }
     
-    // Listen for storage events to update state when sessionStorage changes
-    const handleStorageChange = () => {
-      const storedData = sessionStorage.getItem('comparedUniversities');
-      const storedCache = sessionStorage.getItem('cachedUniversityData');
-      
-      if (storedData) {
+    // Listen for storage events to update state when sessionStorage changes in other tabs
+    const handleStorageChange = (e) => {
+      if (e.key === 'comparedUniversities') {
         try {
-          setComparedUniversities(JSON.parse(storedData));
-        } catch (e) {
-          console.error('Failed to parse compared universities from session storage:', e);
+          const newValue = e.newValue ? JSON.parse(e.newValue) : [];
+          setComparedUniversities(newValue);
+        } catch (error) {
+          console.error('Error parsing comparedUniversities from storage event:', error);
         }
-      } else {
-        setComparedUniversities([]);
-      }
-      
-      if (storedCache) {
+      } else if (e.key === 'cachedUniversityData') {
         try {
-          setCachedUniversityData(JSON.parse(storedCache));
-        } catch (e) {
-          console.error('Failed to parse cached university data from session storage:', e);
+          const newValue = e.newValue ? JSON.parse(e.newValue) : {};
+          setCachedUniversityData(newValue);
+        } catch (error) {
+          console.error('Error parsing cachedUniversityData from storage event:', error);
         }
+      } else if (e.key && e.key.startsWith('comparison_')) {
+        // Handle newly cached comparison data if needed
+        console.log('New comparison data cached in another tab:', e.key);
       }
     };
     
@@ -80,22 +78,62 @@ export const useComparison = () => {
   const clearComparedUniversities = () => {
     setComparedUniversities([]);
     sessionStorage.removeItem('comparedUniversities');
+    
+    // Also clear comparison cache keys
+    Object.keys(sessionStorage).forEach(key => {
+      if (key.startsWith('comparison_')) {
+        sessionStorage.removeItem(key);
+      }
+    });
   };
   
   const cacheUniversityData = (universityName, data) => {
     if (universityName && data) {
       console.log('Caching university data for:', universityName);
-      setCachedUniversityData(prev => ({
-        ...prev,
-        [universityName]: data
-      }));
+      
+      // Update the React state
+      setCachedUniversityData(prev => {
+        const newCache = {
+          ...prev,
+          [universityName]: data
+        };
+        
+        // Also update sessionStorage directly
+        sessionStorage.setItem('cachedUniversityData', JSON.stringify(newCache));
+        
+        return newCache;
+      });
     }
   };
   
   const getCachedUniversityData = (universityName) => {
     if (!universityName) return null;
     
-    const data = cachedUniversityData[universityName];
+    // Try to get from React state first
+    let data = cachedUniversityData[universityName];
+    
+    // If not in React state, try to get from sessionStorage directly
+    // This is useful if the data was cached in another tab/window
+    if (!data) {
+      const cachedDataStr = sessionStorage.getItem('cachedUniversityData');
+      if (cachedDataStr) {
+        try {
+          const allCachedData = JSON.parse(cachedDataStr);
+          data = allCachedData[universityName];
+          
+          // Update our state if we found data in sessionStorage but not in our state
+          if (data && !cachedUniversityData[universityName]) {
+            setCachedUniversityData(prev => ({
+              ...prev,
+              [universityName]: data
+            }));
+          }
+        } catch (e) {
+          console.error('Failed to parse cached university data:', e);
+        }
+      }
+    }
+    
     if (data) {
       console.log('Retrieved cached data for:', universityName);
     } else {
