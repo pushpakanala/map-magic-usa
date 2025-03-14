@@ -19,9 +19,9 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
   
   // Card accent colors
   const accentColors = [
-    'from-uniquestPurple-light/20 to-uniquestPurple/10',
+    'from-uniquestPurple/20 to-uniquestPurple-light/10',
     'from-primary/20 to-primary/5',
-    'from-[#0ea5e9]/20 to-[#0ea5e9]/5'
+    'from-[#0ea5e9]/20 to-[#06b6d4]/10'
   ];
   
   // Icon colors
@@ -48,13 +48,13 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
     >
       <Card className={cn(
         "h-full overflow-hidden border shadow-md hover:shadow-lg transition-all duration-300",
-        "bg-gradient-to-br from-card/90 to-card/70 backdrop-blur-sm"
+        "bg-gradient-to-br from-white to-slate-50/90 dark:from-slate-900/90 dark:to-slate-800/70 backdrop-blur-sm"
       )}>
         <CardHeader className={cn(
           "bg-gradient-to-br px-6 py-5", 
           accentColors[colorIndex]
         )}>
-          <CardTitle className="flex items-start gap-2.5">
+          <CardTitle className="flex items-start gap-2.5 text-xl">
             <Building2 className={cn("h-5 w-5 mt-1", iconColors[colorIndex])} />
             <span className="font-semibold">{university.school.name}</span>
           </CardTitle>
@@ -63,36 +63,36 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
         <CardContent className="p-6 space-y-4">
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <MapPin className={cn("h-4 w-4", iconColors[colorIndex])} />
+              <MapPin className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
               <span className="text-sm">
                 {university.school.city}, {university.school.state}
               </span>
             </div>
             
             <div className="flex items-center gap-2">
-              <School className={cn("h-4 w-4", iconColors[colorIndex])} />
-              <span className="text-sm">Ranking: #{university.school.us_ranking}</span>
+              <School className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
+              <span className="text-sm">Ranking: #{university.school.us_ranking || "N/A"}</span>
             </div>
             
             <div className="flex items-center gap-2">
-              <GraduationCap className={cn("h-4 w-4", iconColors[colorIndex])} />
+              <GraduationCap className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
               <span className="text-sm">Type: {university.school.type}</span>
             </div>
             
             <div className="flex items-center gap-2">
-              <Users className={cn("h-4 w-4", iconColors[colorIndex])} />
+              <Users className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
               <span className="text-sm">
                 Students: {university.school.students?.total_students || "N/A"}
               </span>
             </div>
             
             <div className="flex items-center gap-2">
-              <Calendar className={cn("h-4 w-4", iconColors[colorIndex])} />
+              <Calendar className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
               <span className="text-sm">Founded: {university.school.founded_in || "N/A"}</span>
             </div>
             
             <div className="flex items-center gap-2">
-              <Award className={cn("h-4 w-4", iconColors[colorIndex])} />
+              <Award className={cn("h-4 w-4 shrink-0", iconColors[colorIndex])} />
               <span className="text-sm">
                 Acceptance Rate: {university.school.acceptance_rate || "N/A"}
               </span>
@@ -121,7 +121,15 @@ const ComparisonCard = ({ university, index, onViewDetails }) => {
             <Button 
               onClick={handleViewDetails} 
               variant="outline" 
-              className="w-full hover:bg-slate-100 dark:hover:bg-slate-800"
+              className={cn(
+                "w-full bg-transparent border border-slate-200 dark:border-slate-700",
+                "hover:bg-gradient-to-r", 
+                colorIndex === 0 
+                  ? "hover:from-uniquestPurple/10 hover:to-uniquestPurple-light/5 hover:text-uniquestPurple"
+                  : colorIndex === 1 
+                    ? "hover:from-primary/10 hover:to-primary/5 hover:text-primary" 
+                    : "hover:from-[#0ea5e9]/10 hover:to-[#06b6d4]/5 hover:text-[#0ea5e9]"
+              )}
             >
               View Details
             </Button>

@@ -83,14 +83,26 @@ export const useComparison = () => {
   };
   
   const cacheUniversityData = (universityName, data) => {
-    setCachedUniversityData(prev => ({
-      ...prev,
-      [universityName]: data
-    }));
+    if (universityName && data) {
+      console.log('Caching university data for:', universityName);
+      setCachedUniversityData(prev => ({
+        ...prev,
+        [universityName]: data
+      }));
+    }
   };
   
   const getCachedUniversityData = (universityName) => {
-    return cachedUniversityData[universityName] || null;
+    if (!universityName) return null;
+    
+    const data = cachedUniversityData[universityName];
+    if (data) {
+      console.log('Retrieved cached data for:', universityName);
+    } else {
+      console.log('No cached data found for:', universityName);
+    }
+    
+    return data || null;
   };
 
   return {

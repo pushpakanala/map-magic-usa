@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, School } from 'lucide-react';
+import { ArrowLeft, School, BookOpenCheck, GraduationCap, Users } from 'lucide-react';
 import { UNIVERSITIS_DATA_GPT, UNIVERSITIES_COMPARE } from '../constants';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import { useToast } from '@/hooks/use-toast';
@@ -72,7 +72,7 @@ const ComparePage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-8">
         <div className="max-w-7xl mx-auto">
           <Button 
             variant="ghost" 
@@ -89,19 +89,18 @@ const ComparePage = () => {
           
           <Skeleton className="h-12 w-96 mx-auto mb-8 rounded-md" />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array(3).fill(0).map((_, i) => (
-              <div key={i} className="flex flex-col space-y-2">
-                <Skeleton className="h-40 rounded-lg" />
-                <Skeleton className="h-5 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-                <div className="space-y-1 pt-2">
-                  {Array(5).fill(0).map((_, j) => (
-                    <Skeleton key={j} className="h-3" />
-                  ))}
-                </div>
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Skeleton className="h-[400px] rounded-lg" />
+              <Skeleton className="h-[400px] rounded-lg" />
+            </div>
+            
+            {universities.length > 2 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Skeleton className="h-[400px] rounded-lg" />
+                {universities.length > 3 && <Skeleton className="h-[400px] rounded-lg" />}
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
@@ -115,7 +114,7 @@ const ComparePage = () => {
       variant: "destructive",
     });
     return (
-      <div className="min-h-screen bg-background p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-8">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-red-500">
             Error loading comparison data
@@ -131,13 +130,13 @@ const ComparePage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-background p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/explore')} 
-              className="hover:bg-background/80 backdrop-blur-sm group transition-all"
+              className="hover:bg-white/20 backdrop-blur-sm group transition-all dark:text-white"
             >
               <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" /> 
               Back to Explore
@@ -167,30 +166,34 @@ const ComparePage = () => {
             onValueChange={setActiveTab}
           >
             <div className="flex justify-center mb-8">
-              <TabsList className="grid grid-cols-4 rounded-full p-1 bg-muted/50 backdrop-blur-sm shadow-inner">
+              <TabsList className="grid grid-cols-4 rounded-full p-1 bg-white dark:bg-slate-800/50 backdrop-blur-sm shadow-md">
                 <TabsTrigger 
                   value="overview" 
-                  className="rounded-full data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple/80 data-[state=active]:to-uniquestPurple-light/80 data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5"
                 >
-                  Overview
+                  <School className="h-4 w-4" />
+                  <span>Overview</span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="academics" 
-                  className="rounded-full data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple/80 data-[state=active]:to-uniquestPurple-light/80 data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5"
                 >
-                  Academics
+                  <BookOpenCheck className="h-4 w-4" />
+                  <span>Academics</span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="admissions" 
-                  className="rounded-full data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple/80 data-[state=active]:to-uniquestPurple-light/80 data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5"
                 >
-                  Admissions
+                  <GraduationCap className="h-4 w-4" />
+                  <span>Admissions</span>
                 </TabsTrigger>
                 <TabsTrigger 
                   value="student-life" 
-                  className="rounded-full data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                  className="rounded-full data-[state=active]:bg-gradient-to-r data-[state=active]:from-uniquestPurple/80 data-[state=active]:to-uniquestPurple-light/80 data-[state=active]:text-white data-[state=active]:shadow-sm gap-1.5"
                 >
-                  Student Life
+                  <Users className="h-4 w-4" />
+                  <span>Student Life</span>
                 </TabsTrigger>
               </TabsList>
             </div>
