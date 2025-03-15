@@ -38,10 +38,9 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
 
   const handleRemoveUniversity = (university) => {
     console.log("Removing university from comparison in ComparisonBanner:", university);
+    
     // Call the removeFromComparison function with the university to remove
     removeFromComparison(university);
-    // Also update local state to ensure UI updates immediately
-    setLocalUniversities(prev => prev.filter(name => name !== university));
   };
 
   return (
@@ -97,7 +96,7 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
       <ComparisonConfirmModal
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
-        comparedUniversities={localUniversities}
+        comparedUniversities={comparedUniversities}
         onRemoveUniversity={handleRemoveUniversity}
       />
     </>

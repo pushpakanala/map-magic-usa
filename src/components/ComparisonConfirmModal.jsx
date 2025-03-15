@@ -39,7 +39,8 @@ const ComparisonConfirmModal = ({
     console.log("Removing university from ComparisonConfirmModal:", universityName);
     
     // Update local state immediately for UI
-    setLocalUniversities(prev => prev.filter(name => name !== universityName));
+    const updatedList = localUniversities.filter(name => name !== universityName);
+    setLocalUniversities(updatedList);
     
     // Call the hook function to update global state
     removeFromComparison(universityName);
@@ -50,14 +51,22 @@ const ComparisonConfirmModal = ({
     }
     
     // If after removal there's less than 2 universities, close the modal
-    if (localUniversities.length <= 2) {
-      onOpenChange(false);
+    if (updatedList.length < 2) {
+      setTimeout(() => onOpenChange(false), 300); // Small delay to allow animation
     }
+  };
+
+  // Prevent modal events from closing modal when clicking inside
+  const handleDialogContentClick = (e) => {
+    e.stopPropagation();
   };
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-w-lg bg-gradient-to-br from-[#1a1f3c] to-[#101329] backdrop-blur-md border border-indigo-500/20 text-white rounded-xl shadow-[0_0_20px_rgba(79,70,229,0.15)]">
+      <AlertDialogContent 
+        className="max-w-lg bg-gradient-to-br from-[#1a1f3c] to-[#101329] backdrop-blur-md border border-indigo-500/20 text-white rounded-xl shadow-[0_0_20px_rgba(79,70,229,0.15)]"
+        onClick={handleDialogContentClick}
+      >
         <AlertDialogHeader>
           <AlertDialogTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
             <Building2 className="h-6 w-6 text-indigo-400" />
@@ -96,7 +105,10 @@ const ComparisonConfirmModal = ({
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 rounded-full hover:bg-red-500/20 hover:text-red-400 transition-colors"
-                    onClick={() => handleRemoveUniversity(university)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveUniversity(university);
+                    }}
                   >
                     <X className="h-4 w-4" />
                   </Button>
