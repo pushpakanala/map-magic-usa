@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { BarChart3, X } from 'lucide-react';
@@ -21,11 +21,6 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
     
     // Show banner when we have at least one university selected
     setIsVisible(comparedUniversities.length > 0);
-    
-    // Close modal if we have less than 2 universities
-    if (comparedUniversities.length < 2) {
-      setIsModalOpen(false);
-    }
   }, [comparedUniversities]);
 
   const handleCompareClick = () => {
@@ -36,12 +31,13 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
     }
   };
 
-  const handleRemoveUniversity = (university) => {
+  // Use useCallback to prevent recreating this function on every render
+  const handleRemoveUniversity = useCallback((university) => {
     console.log("Removing university from comparison in ComparisonBanner:", university);
     
     // Call the removeFromComparison function with the university to remove
     removeFromComparison(university);
-  };
+  }, [removeFromComparison]);
 
   return (
     <>
@@ -96,7 +92,7 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
       <ComparisonConfirmModal
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
-        comparedUniversities={comparedUniversities}
+        comparedUniversities={localUniversities}
         onRemoveUniversity={handleRemoveUniversity}
       />
     </>

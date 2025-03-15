@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Check, X, School, Building2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,16 +27,19 @@ const ComparisonConfirmModal = ({
   
   // Update local state when comparedUniversities prop changes
   useEffect(() => {
-    setLocalUniversities([...comparedUniversities]);
-  }, [comparedUniversities]);
+    if (open) {
+      setLocalUniversities([...comparedUniversities]);
+    }
+  }, [comparedUniversities, open]);
   
   const handleConfirmComparison = () => {
     onOpenChange(false);
     navigate(`/compare?universities=${localUniversities.join(',')}`);
   };
 
-  const handleRemoveUniversity = (universityName, event) => {
-    // Make sure to stop the event from propagating up to parent elements
+  // Use useCallback to prevent recreating this function on every render
+  const handleRemoveUniversity = useCallback((universityName, event) => {
+    // Prevent event bubbling which could trigger dialog close
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -45,22 +48,28 @@ const ComparisonConfirmModal = ({
     console.log("Removing university from ComparisonConfirmModal:", universityName);
     
     // Update local state immediately for UI
-    const updatedList = localUniversities.filter(name => name !== universityName);
-    setLocalUniversities(updatedList);
+    setLocalUniversities(prev => {
+      const updatedList = prev.filter(name => name !== universityName);
+      
+      // If after removal there's less than 2 universities, close the modal with a delay
+      if (updatedList.length < 2) {
+        setTimeout(() => onOpenChange(false), 300); // Small delay to allow animation
+      }
+      
+      return updatedList;
+    });
     
-    // Call the hook function to update global state
-    removeFromComparison(universityName);
-    
-    // Then call the callback from parent component if it exists
-    if (onRemoveUniversity) {
-      onRemoveUniversity(universityName);
-    }
-    
-    // If after removal there's less than 2 universities, close the modal with a delay
-    if (updatedList.length < 2) {
-      setTimeout(() => onOpenChange(false), 300); // Small delay to allow animation
-    }
-  };
+    // Call the parent's callback after state update to avoid render during render issues
+    setTimeout(() => {
+      // Call the hook function to update global state
+      removeFromComparison(universityName);
+      
+      // Then call the callback from parent component if it exists
+      if (onRemoveUniversity) {
+        onRemoveUniversity(universityName);
+      }
+    }, 0);
+  }, [onOpenChange, onRemoveUniversity, removeFromComparison]);
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>

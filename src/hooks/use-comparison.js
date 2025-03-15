@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+
+import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 
 export const useComparison = () => {
@@ -65,7 +66,7 @@ export const useComparison = () => {
     sessionStorage.setItem('cachedUniversityData', JSON.stringify(cachedUniversityData));
   }, [cachedUniversityData]);
 
-  const handleCompareClick = (universityName) => {
+  const handleCompareClick = useCallback((universityName) => {
     setComparedUniversities(prev => {
       if (prev.includes(universityName)) {
         const newList = prev.filter(name => name !== universityName);
@@ -77,10 +78,10 @@ export const useComparison = () => {
         return newList;
       }
     });
-  };
+  }, []);
 
-  // Function to remove a university from the comparison list
-  const removeFromComparison = (universityName) => {
+  // Function to remove a university from the comparison list - using useCallback to memoize
+  const removeFromComparison = useCallback((universityName) => {
     if (!universityName) return;
     
     console.log(`Removing ${universityName} from comparison list`);
@@ -90,16 +91,19 @@ export const useComparison = () => {
       
       sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
       
-      window.dispatchEvent(new StorageEvent('storage', {
-        key: 'comparedUniversities',
-        newValue: JSON.stringify(newList)
-      }));
+      // Dispatch storage event after state update to avoid render issues
+      setTimeout(() => {
+        window.dispatchEvent(new StorageEvent('storage', {
+          key: 'comparedUniversities',
+          newValue: JSON.stringify(newList)
+        }));
+      }, 0);
       
       return newList;
     });
-  };
+  }, []);
 
-  const clearComparedUniversities = () => {
+  const clearComparedUniversities = useCallback(() => {
     setComparedUniversities([]);
     sessionStorage.removeItem('comparedUniversities');
     
@@ -113,9 +117,9 @@ export const useComparison = () => {
       key: 'comparedUniversities',
       newValue: JSON.stringify([])
     }));
-  };
+  }, []);
   
-  const cacheUniversityData = (universityName, data) => {
+  const cacheUniversityData = useCallback((universityName, data) => {
     if (universityName && data) {
       console.log('Caching university data for:', universityName);
       
@@ -130,9 +134,9 @@ export const useComparison = () => {
         return newCache;
       });
     }
-  };
+  }, []);
   
-  const getCachedUniversityData = (universityName) => {
+  const getCachedUniversityData = useCallback((universityName) => {
     if (!universityName) return null;
     
     let data = cachedUniversityData[universityName];
@@ -157,7 +161,7 @@ export const useComparison = () => {
     }
     
     return data || null;
-  };
+  }, [cachedUniversityData]);
 
   return {
     comparedUniversities,
