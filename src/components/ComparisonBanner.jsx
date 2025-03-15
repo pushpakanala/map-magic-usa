@@ -6,6 +6,7 @@ import { BarChart3, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ComparisonConfirmModal from './ComparisonConfirmModal';
 import { useComparison } from '@/hooks/use-comparison';
+import { toast } from 'sonner';
 
 const ComparisonBanner = ({ comparedUniversities, onClear }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -16,17 +17,24 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
   useEffect(() => {
     // Show banner when we have at least one university selected
     setIsVisible(comparedUniversities.length > 0);
+    
+    // Close modal if we have less than 2 universities
+    if (comparedUniversities.length < 2) {
+      setIsModalOpen(false);
+    }
   }, [comparedUniversities]);
 
   const handleCompareClick = () => {
     if (comparedUniversities.length >= 2) {
       setIsModalOpen(true);
+    } else {
+      toast.info("Please select at least 2 universities to compare");
     }
   };
 
   const handleRemoveUniversity = (university) => {
     console.log("Removing university from comparison in ComparisonBanner:", university);
-    // Call the removeFromComparison function
+    // Call the removeFromComparison function with the university to remove
     removeFromComparison(university);
   };
 

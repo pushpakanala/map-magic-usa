@@ -9,6 +9,7 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogDescription,
   AlertDialogFooter,
 } from '@/components/ui/alert-dialog';
 import { useComparison } from '@/hooks/use-comparison';
@@ -29,12 +30,18 @@ const ComparisonConfirmModal = ({
 
   const handleRemoveUniversity = (universityName) => {
     console.log("Removing university from ComparisonConfirmModal:", universityName);
-    // Call the removeFromComparison function from the hook directly
+    
+    // Call the hook function directly first
     removeFromComparison(universityName);
     
-    // Also call the provided callback if it exists
+    // Then call the callback from parent component if it exists
     if (onRemoveUniversity) {
       onRemoveUniversity(universityName);
+    }
+    
+    // If after removal there's less than 2 universities, close the modal
+    if (comparedUniversities.length <= 2) {
+      onOpenChange(false);
     }
   };
 
@@ -48,6 +55,9 @@ const ComparisonConfirmModal = ({
               Confirm University Comparison
             </span>
           </AlertDialogTitle>
+          <AlertDialogDescription className="sr-only">
+            Select universities to compare
+          </AlertDialogDescription>
         </AlertDialogHeader>
         
         <div className="py-4">
@@ -97,7 +107,12 @@ const ComparisonConfirmModal = ({
           <Button
             variant="default"
             onClick={handleConfirmComparison}
-            className="flex-1 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white shadow-lg shadow-indigo-500/25"
+            disabled={comparedUniversities.length < 2}
+            className={`flex-1 ${
+              comparedUniversities.length >= 2
+                ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white shadow-lg shadow-indigo-500/25'
+                : 'bg-slate-700 text-slate-300 cursor-not-allowed'
+            }`}
           >
             <Check className="mr-2 h-4 w-4" />
             Confirm Comparison

@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 
 export const useComparison = () => {
   const [comparedUniversities, setComparedUniversities] = useState([]);
@@ -68,16 +69,28 @@ export const useComparison = () => {
   const handleCompareClick = (universityName) => {
     setComparedUniversities(prev => {
       if (prev.includes(universityName)) {
-        return prev.filter(name => name !== universityName);
+        const newList = prev.filter(name => name !== universityName);
+        return newList;
       } else {
         return [...prev, universityName];
       }
     });
   };
 
-  // New function to remove a university from the comparison list
+  // Function to remove a university from the comparison list
   const removeFromComparison = (universityName) => {
-    setComparedUniversities(prev => prev.filter(name => name !== universityName));
+    if (!universityName) return;
+    
+    console.log(`Removing ${universityName} from comparison list`);
+    
+    setComparedUniversities(prev => {
+      const newList = prev.filter(name => name !== universityName);
+      
+      // Update sessionStorage immediately for better cross-tab sync
+      sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
+      
+      return newList;
+    });
   };
 
   const clearComparedUniversities = () => {
@@ -137,12 +150,6 @@ export const useComparison = () => {
           console.error('Failed to parse cached university data:', e);
         }
       }
-    }
-    
-    if (data) {
-      console.log('Retrieved cached data for:', universityName);
-    } else {
-      console.log('No cached data found for:', universityName);
     }
     
     return data || null;
