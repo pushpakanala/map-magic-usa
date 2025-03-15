@@ -75,6 +75,11 @@ export const useComparison = () => {
     });
   };
 
+  // New function to remove a university from the comparison list
+  const removeFromComparison = (universityName) => {
+    setComparedUniversities(prev => prev.filter(name => name !== universityName));
+  };
+
   const clearComparedUniversities = () => {
     setComparedUniversities([]);
     sessionStorage.removeItem('comparedUniversities');
@@ -146,6 +151,7 @@ export const useComparison = () => {
   return {
     comparedUniversities,
     handleCompareClick,
+    removeFromComparison,
     clearComparedUniversities,
     cacheUniversityData,
     getCachedUniversityData,

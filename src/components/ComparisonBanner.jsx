@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { BarChart3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ComparisonConfirmModal from './ComparisonConfirmModal';
+import { useComparison } from '@/hooks/use-comparison';
 
 const ComparisonBanner = ({ comparedUniversities, onClear }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { removeFromComparison } = useComparison();
 
   useEffect(() => {
     // Show banner when we have at least one university selected
@@ -23,17 +25,14 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
   };
 
   const handleRemoveUniversity = (university) => {
-    const updatedList = comparedUniversities.filter(name => name !== university);
+    // Call the removeFromComparison function
+    removeFromComparison(university);
     
     // If after removing, only 0 or 1 universities remain, close the modal
+    const updatedList = comparedUniversities.filter(name => name !== university);
     if (updatedList.length < 2) {
       setIsModalOpen(false);
     }
-    
-    // Update the comparison list through the parent component
-    const newList = comparedUniversities.filter(name => name !== university);
-    sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
-    window.dispatchEvent(new Event('storage'));
   };
 
   return (

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Check, X, School } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogFooter,
 } from '@/components/ui/alert-dialog';
+import { useComparison } from '@/hooks/use-comparison';
 
 const ComparisonConfirmModal = ({ 
   open, 
@@ -19,10 +19,19 @@ const ComparisonConfirmModal = ({
   onRemoveUniversity 
 }) => {
   const navigate = useNavigate();
+  const { removeFromComparison } = useComparison();
   
   const handleConfirmComparison = () => {
     onOpenChange(false);
     navigate(`/compare?universities=${comparedUniversities.join(',')}`);
+  };
+
+  const handleRemoveUniversity = (universityName) => {
+    if (onRemoveUniversity) {
+      onRemoveUniversity(universityName);
+    } else {
+      removeFromComparison(universityName);
+    }
   };
 
   return (
@@ -59,7 +68,7 @@ const ComparisonConfirmModal = ({
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 rounded-full hover:bg-slate-600/50 hover:text-red-400"
-                  onClick={() => onRemoveUniversity(university)}
+                  onClick={() => handleRemoveUniversity(university)}
                 >
                   <X className="h-4 w-4" />
                 </Button>
