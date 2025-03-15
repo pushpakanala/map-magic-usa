@@ -13,6 +13,7 @@ import {
   AlertDialogFooter,
 } from '@/components/ui/alert-dialog';
 import { useComparison } from '@/hooks/use-comparison';
+import { toast } from 'sonner';
 
 const ComparisonConfirmModal = ({ 
   open, 
@@ -37,7 +38,7 @@ const ComparisonConfirmModal = ({
     navigate(`/compare?universities=${localUniversities.join(',')}`);
   };
 
-  // Use useCallback to prevent recreating this function on every render
+  // Handle removing a university from the comparison list
   const handleRemoveUniversity = useCallback((universityName, event) => {
     // Prevent event bubbling which could trigger dialog close
     if (event) {
@@ -47,32 +48,41 @@ const ComparisonConfirmModal = ({
     
     console.log("Removing university from ComparisonConfirmModal:", universityName);
     
-    // Create a new array that excludes only the university we want to remove
-    const updatedUniversities = localUniversities.filter(name => name !== universityName);
+    // Log the current state before removal for debugging
+    console.log("Current localUniversities before removal:", [...localUniversities]);
     
-    // Update local state immediately for UI
-    setLocalUniversities(updatedUniversities);
-    
-    // If after removal there's less than 2 universities, close the modal with a delay
-    if (updatedUniversities.length < 2) {
-      setTimeout(() => {
-        if (onOpenChange) {
-          onOpenChange(false);
-        }
-      }, 300); // Small delay to allow animation
-    }
+    // Create a new array excluding only the university we want to remove
+    setLocalUniversities(prevUniversities => {
+      // Make sure we create a new array and don't modify the existing one
+      const updatedUniversities = prevUniversities.filter(name => name !== universityName);
+      console.log("Updated localUniversities after removal:", updatedUniversities);
+      
+      // Check if after removal there's less than 2 universities
+      if (updatedUniversities.length < 2) {
+        setTimeout(() => {
+          if (onOpenChange) {
+            onOpenChange(false);
+          }
+        }, 300); // Small delay to allow animation
+      }
+      
+      return updatedUniversities;
+    });
     
     // Call the function to update global state after a small delay
+    // Use setTimeout to ensure state update has completed
     setTimeout(() => {
       if (removeFromComparison) {
         removeFromComparison(universityName);
+        console.log("Called removeFromComparison for:", universityName);
       }
       
       // Call the parent callback if provided
       if (onRemoveUniversity) {
         onRemoveUniversity(universityName);
+        console.log("Called onRemoveUniversity for:", universityName);
       }
-    }, 0);
+    }, 100);
   }, [localUniversities, onOpenChange, onRemoveUniversity, removeFromComparison]);
 
   return (

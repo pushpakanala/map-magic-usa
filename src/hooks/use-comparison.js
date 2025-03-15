@@ -68,13 +68,14 @@ export const useComparison = () => {
 
   const handleCompareClick = useCallback((universityName) => {
     setComparedUniversities(prev => {
+      // Check if university is already in list
       if (prev.includes(universityName)) {
+        // Remove it
         const newList = prev.filter(name => name !== universityName);
-        sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
         return newList;
       } else {
+        // Add it
         const newList = [...prev, universityName];
-        sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
         return newList;
       }
     });
@@ -84,24 +85,31 @@ export const useComparison = () => {
   const removeFromComparison = useCallback((universityName) => {
     if (!universityName) return;
     
-    console.log(`Removing ${universityName} from comparison list`);
+    console.log(`Removing ${universityName} from comparison list in useComparison hook`);
+    
+    // Log the current state before removal for debugging
+    console.log("Current comparedUniversities before removal:", [...comparedUniversities]);
     
     setComparedUniversities(prev => {
-      // Only filter out the specific university
+      // Create a copy of the array without modifying the original
       const newList = prev.filter(name => name !== universityName);
+      console.log("Updated comparedUniversities after removal:", newList);
       
       // Update session storage
       sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
       
-      // Notify other tabs about the change
+      // Notify other tabs about the change - but only for the specific removal
       window.dispatchEvent(new StorageEvent('storage', {
         key: 'comparedUniversities',
         newValue: JSON.stringify(newList)
       }));
       
+      // Toast notification confirming removal
+      toast.success(`${universityName} has been removed from comparison`);
+      
       return newList;
     });
-  }, []);
+  }, [comparedUniversities]);
 
   const clearComparedUniversities = useCallback(() => {
     setComparedUniversities([]);
@@ -117,6 +125,8 @@ export const useComparison = () => {
       key: 'comparedUniversities',
       newValue: JSON.stringify([])
     }));
+    
+    toast.success("Comparison list has been cleared");
   }, []);
   
   const cacheUniversityData = useCallback((universityName, data) => {
