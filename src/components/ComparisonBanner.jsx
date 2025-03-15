@@ -25,15 +25,9 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
   };
 
   const handleRemoveUniversity = (university) => {
-    console.log("Removing university from comparison:", university);
+    console.log("Removing university from comparison in ComparisonBanner:", university);
     // Call the removeFromComparison function
     removeFromComparison(university);
-    
-    // If after removing, only 0 or 1 universities remain, close the modal
-    const updatedList = comparedUniversities.filter(name => name !== university);
-    if (updatedList.length < 2) {
-      setIsModalOpen(false);
-    }
   };
 
   return (

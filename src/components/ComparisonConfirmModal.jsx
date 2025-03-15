@@ -28,11 +28,13 @@ const ComparisonConfirmModal = ({
   };
 
   const handleRemoveUniversity = (universityName) => {
-    console.log("Removing university:", universityName);
+    console.log("Removing university from ComparisonConfirmModal:", universityName);
+    // Call the removeFromComparison function from the hook directly
+    removeFromComparison(universityName);
+    
+    // Also call the provided callback if it exists
     if (onRemoveUniversity) {
       onRemoveUniversity(universityName);
-    } else {
-      removeFromComparison(universityName);
     }
   };
 

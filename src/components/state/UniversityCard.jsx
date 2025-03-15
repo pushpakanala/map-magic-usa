@@ -46,7 +46,7 @@ const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCo
                   size="icon"
                   className={`w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border-primary/20 shadow-sm ${
                     isCompared 
-                      ? 'bg-[#0ea5e9]/90 hover:bg-[#0ea5e9]/80 border-[#0ea5e9]/30' 
+                      ? 'bg-indigo-600/90 hover:bg-indigo-700/80 border-indigo-500/30' 
                       : 'hover:bg-background/90 hover:border-primary/30'
                   }`}
                   type="button"
