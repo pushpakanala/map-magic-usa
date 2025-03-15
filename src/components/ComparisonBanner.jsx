@@ -35,10 +35,8 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
   const handleRemoveUniversity = useCallback((university) => {
     console.log("Removing university from comparison in ComparisonBanner:", university);
     
-    if (removeFromComparison && university) {
-      // Call the removeFromComparison function with the university to remove
-      removeFromComparison(university);
-    }
+    // Call the removeFromComparison function with the university to remove
+    removeFromComparison(university);
   }, [removeFromComparison]);
 
   return (
