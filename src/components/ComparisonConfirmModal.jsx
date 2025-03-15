@@ -47,7 +47,7 @@ const ComparisonConfirmModal = ({
     
     console.log("Removing university from ComparisonConfirmModal:", universityName);
     
-    // Make a copy of the current state to avoid direct mutation
+    // Create a new array that excludes only the university we want to remove
     const updatedList = localUniversities.filter(name => name !== universityName);
     
     // Update local state immediately for UI
@@ -62,9 +62,8 @@ const ComparisonConfirmModal = ({
       }, 300); // Small delay to allow animation
     }
     
-    // Call the hook function to update global state after a small delay to avoid state updates during render
+    // Call the function to update global state after a small delay
     setTimeout(() => {
-      // Update the global comparison state
       if (removeFromComparison) {
         removeFromComparison(universityName);
       }
