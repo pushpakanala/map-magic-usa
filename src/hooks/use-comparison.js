@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -70,9 +69,12 @@ export const useComparison = () => {
     setComparedUniversities(prev => {
       if (prev.includes(universityName)) {
         const newList = prev.filter(name => name !== universityName);
+        sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
         return newList;
       } else {
-        return [...prev, universityName];
+        const newList = [...prev, universityName];
+        sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
+        return newList;
       }
     });
   };
@@ -86,8 +88,12 @@ export const useComparison = () => {
     setComparedUniversities(prev => {
       const newList = prev.filter(name => name !== universityName);
       
-      // Update sessionStorage immediately for better cross-tab sync
       sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
+      
+      window.dispatchEvent(new StorageEvent('storage', {
+        key: 'comparedUniversities',
+        newValue: JSON.stringify(newList)
+      }));
       
       return newList;
     });
@@ -97,26 +103,28 @@ export const useComparison = () => {
     setComparedUniversities([]);
     sessionStorage.removeItem('comparedUniversities');
     
-    // Also clear comparison cache keys
     Object.keys(sessionStorage).forEach(key => {
       if (key.startsWith('comparison_')) {
         sessionStorage.removeItem(key);
       }
     });
+    
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: 'comparedUniversities',
+      newValue: JSON.stringify([])
+    }));
   };
   
   const cacheUniversityData = (universityName, data) => {
     if (universityName && data) {
       console.log('Caching university data for:', universityName);
       
-      // Update the React state
       setCachedUniversityData(prev => {
         const newCache = {
           ...prev,
           [universityName]: data
         };
         
-        // Also update sessionStorage directly
         sessionStorage.setItem('cachedUniversityData', JSON.stringify(newCache));
         
         return newCache;
@@ -127,11 +135,8 @@ export const useComparison = () => {
   const getCachedUniversityData = (universityName) => {
     if (!universityName) return null;
     
-    // Try to get from React state first
     let data = cachedUniversityData[universityName];
     
-    // If not in React state, try to get from sessionStorage directly
-    // This is useful if the data was cached in another tab/window
     if (!data) {
       const cachedDataStr = sessionStorage.getItem('cachedUniversityData');
       if (cachedDataStr) {
@@ -139,7 +144,6 @@ export const useComparison = () => {
           const allCachedData = JSON.parse(cachedDataStr);
           data = allCachedData[universityName];
           
-          // Update our state if we found data in sessionStorage but not in our state
           if (data && !cachedUniversityData[universityName]) {
             setCachedUniversityData(prev => ({
               ...prev,

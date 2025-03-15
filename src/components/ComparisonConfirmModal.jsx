@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Check, X, School, Building2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,18 +20,28 @@ const ComparisonConfirmModal = ({
   comparedUniversities, 
   onRemoveUniversity 
 }) => {
+  // Local state to manage universities within the modal
+  const [localUniversities, setLocalUniversities] = useState([]);
   const navigate = useNavigate();
   const { removeFromComparison } = useComparison();
   
+  // Update local state when comparedUniversities prop changes
+  useEffect(() => {
+    setLocalUniversities([...comparedUniversities]);
+  }, [comparedUniversities]);
+  
   const handleConfirmComparison = () => {
     onOpenChange(false);
-    navigate(`/compare?universities=${comparedUniversities.join(',')}`);
+    navigate(`/compare?universities=${localUniversities.join(',')}`);
   };
 
   const handleRemoveUniversity = (universityName) => {
     console.log("Removing university from ComparisonConfirmModal:", universityName);
     
-    // Call the hook function directly first
+    // Update local state immediately for UI
+    setLocalUniversities(prev => prev.filter(name => name !== universityName));
+    
+    // Call the hook function to update global state
     removeFromComparison(universityName);
     
     // Then call the callback from parent component if it exists
@@ -40,7 +50,7 @@ const ComparisonConfirmModal = ({
     }
     
     // If after removal there's less than 2 universities, close the modal
-    if (comparedUniversities.length <= 2) {
+    if (localUniversities.length <= 2) {
       onOpenChange(false);
     }
   };
@@ -67,7 +77,7 @@ const ComparisonConfirmModal = ({
           
           <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
             <AnimatePresence>
-              {comparedUniversities.map((university, index) => (
+              {localUniversities.map((university, index) => (
                 <motion.div
                   key={university}
                   initial={{ opacity: 0, y: 10 }}
@@ -107,9 +117,9 @@ const ComparisonConfirmModal = ({
           <Button
             variant="default"
             onClick={handleConfirmComparison}
-            disabled={comparedUniversities.length < 2}
+            disabled={localUniversities.length < 2}
             className={`flex-1 ${
-              comparedUniversities.length >= 2
+              localUniversities.length >= 2
                 ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white shadow-lg shadow-indigo-500/25'
                 : 'bg-slate-700 text-slate-300 cursor-not-allowed'
             }`}

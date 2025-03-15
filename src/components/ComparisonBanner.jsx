@@ -11,10 +11,14 @@ import { toast } from 'sonner';
 const ComparisonBanner = ({ comparedUniversities, onClear }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [localUniversities, setLocalUniversities] = useState([]);
   const navigate = useNavigate();
   const { removeFromComparison } = useComparison();
 
   useEffect(() => {
+    // Update local state when prop changes
+    setLocalUniversities([...comparedUniversities]);
+    
     // Show banner when we have at least one university selected
     setIsVisible(comparedUniversities.length > 0);
     
@@ -25,7 +29,7 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
   }, [comparedUniversities]);
 
   const handleCompareClick = () => {
-    if (comparedUniversities.length >= 2) {
+    if (localUniversities.length >= 2) {
       setIsModalOpen(true);
     } else {
       toast.info("Please select at least 2 universities to compare");
@@ -36,6 +40,8 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
     console.log("Removing university from comparison in ComparisonBanner:", university);
     // Call the removeFromComparison function with the university to remove
     removeFromComparison(university);
+    // Also update local state to ensure UI updates immediately
+    setLocalUniversities(prev => prev.filter(name => name !== university));
   };
 
   return (
@@ -56,17 +62,17 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
               <div className="flex-1">
                 <p className="font-semibold text-lg tracking-tight text-white">Compare Universities</p>
                 <p className="text-sm text-indigo-200">
-                  {comparedUniversities.length === 1 
+                  {localUniversities.length === 1 
                     ? "Select at least one more university to compare" 
-                    : `${comparedUniversities.length} universities selected`}
+                    : `${localUniversities.length} universities selected`}
                 </p>
               </div>
               <div className="flex items-center gap-3">
                 <Button
                   onClick={handleCompareClick}
-                  disabled={comparedUniversities.length < 2}
+                  disabled={localUniversities.length < 2}
                   className={`${
-                    comparedUniversities.length >= 2
+                    localUniversities.length >= 2
                       ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white shadow-md shadow-indigo-500/20'
                       : 'bg-slate-700 text-slate-300 cursor-not-allowed'
                   } px-5 py-2 h-auto font-medium rounded-xl transition-all`}
@@ -91,7 +97,7 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
       <ComparisonConfirmModal
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
-        comparedUniversities={comparedUniversities}
+        comparedUniversities={localUniversities}
         onRemoveUniversity={handleRemoveUniversity}
       />
     </>
