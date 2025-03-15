@@ -25,7 +25,7 @@ const ComparisonConfirmModal = ({
   const navigate = useNavigate();
   const { removeFromComparison } = useComparison();
   
-  // Update local state when comparedUniversities prop changes
+  // Update local state when comparedUniversities prop changes or modal opens
   useEffect(() => {
     if (open) {
       setLocalUniversities([...comparedUniversities]);
@@ -47,29 +47,34 @@ const ComparisonConfirmModal = ({
     
     console.log("Removing university from ComparisonConfirmModal:", universityName);
     
+    // Make a copy of the current state to avoid direct mutation
+    const updatedList = localUniversities.filter(name => name !== universityName);
+    
     // Update local state immediately for UI
-    setLocalUniversities(prev => {
-      const updatedList = prev.filter(name => name !== universityName);
-      
-      // If after removal there's less than 2 universities, close the modal with a delay
-      if (updatedList.length < 2) {
-        setTimeout(() => onOpenChange(false), 300); // Small delay to allow animation
+    setLocalUniversities(updatedList);
+    
+    // If after removal there's less than 2 universities, close the modal with a delay
+    if (updatedList.length < 2) {
+      setTimeout(() => {
+        if (onOpenChange) {
+          onOpenChange(false);
+        }
+      }, 300); // Small delay to allow animation
+    }
+    
+    // Call the hook function to update global state after a small delay to avoid state updates during render
+    setTimeout(() => {
+      // Update the global comparison state
+      if (removeFromComparison) {
+        removeFromComparison(universityName);
       }
       
-      return updatedList;
-    });
-    
-    // Call the parent's callback after state update to avoid render during render issues
-    setTimeout(() => {
-      // Call the hook function to update global state
-      removeFromComparison(universityName);
-      
-      // Then call the callback from parent component if it exists
+      // Call the parent callback if provided
       if (onRemoveUniversity) {
         onRemoveUniversity(universityName);
       }
     }, 0);
-  }, [onOpenChange, onRemoveUniversity, removeFromComparison]);
+  }, [localUniversities, onOpenChange, onRemoveUniversity, removeFromComparison]);
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>

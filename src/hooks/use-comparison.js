@@ -86,12 +86,15 @@ export const useComparison = () => {
     
     console.log(`Removing ${universityName} from comparison list`);
     
+    // Use function form of setState to ensure we're working with the most recent state
     setComparedUniversities(prev => {
+      // Only remove the specified university, not all universities
       const newList = prev.filter(name => name !== universityName);
       
+      // Update session storage right away
       sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
       
-      // Dispatch storage event after state update to avoid render issues
+      // Notify other tabs about the change
       setTimeout(() => {
         window.dispatchEvent(new StorageEvent('storage', {
           key: 'comparedUniversities',
