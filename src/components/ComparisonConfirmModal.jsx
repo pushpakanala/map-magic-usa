@@ -48,13 +48,13 @@ const ComparisonConfirmModal = ({
     console.log("Removing university from ComparisonConfirmModal:", universityName);
     
     // Create a new array that excludes only the university we want to remove
-    const updatedList = localUniversities.filter(name => name !== universityName);
+    const updatedUniversities = localUniversities.filter(name => name !== universityName);
     
     // Update local state immediately for UI
-    setLocalUniversities(updatedList);
+    setLocalUniversities(updatedUniversities);
     
     // If after removal there's less than 2 universities, close the modal with a delay
-    if (updatedList.length < 2) {
+    if (updatedUniversities.length < 2) {
       setTimeout(() => {
         if (onOpenChange) {
           onOpenChange(false);

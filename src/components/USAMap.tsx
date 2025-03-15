@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -18,6 +19,61 @@ interface HoverPosition {
   x: number;
   y: number;
 }
+
+// State abbreviations mapping
+const stateAbbreviations: Record<string, string> = {
+  "Alabama": "AL",
+  "Alaska": "AK",
+  "Arizona": "AZ",
+  "Arkansas": "AR",
+  "California": "CA",
+  "Colorado": "CO",
+  "Connecticut": "CT",
+  "Delaware": "DE",
+  "Florida": "FL",
+  "Georgia": "GA",
+  "Hawaii": "HI",
+  "Idaho": "ID",
+  "Illinois": "IL",
+  "Indiana": "IN",
+  "Iowa": "IA",
+  "Kansas": "KS",
+  "Kentucky": "KY",
+  "Louisiana": "LA",
+  "Maine": "ME",
+  "Maryland": "MD",
+  "Massachusetts": "MA",
+  "Michigan": "MI",
+  "Minnesota": "MN",
+  "Mississippi": "MS",
+  "Missouri": "MO",
+  "Montana": "MT",
+  "Nebraska": "NE",
+  "Nevada": "NV",
+  "New Hampshire": "NH",
+  "New Jersey": "NJ",
+  "New Mexico": "NM",
+  "New York": "NY",
+  "North Carolina": "NC",
+  "North Dakota": "ND",
+  "Ohio": "OH",
+  "Oklahoma": "OK",
+  "Oregon": "OR",
+  "Pennsylvania": "PA",
+  "Rhode Island": "RI",
+  "South Carolina": "SC",
+  "South Dakota": "SD",
+  "Tennessee": "TN",
+  "Texas": "TX",
+  "Utah": "UT",
+  "Vermont": "VT",
+  "Virginia": "VA",
+  "Washington": "WA",
+  "West Virginia": "WV",
+  "Wisconsin": "WI",
+  "Wyoming": "WY",
+  "District of Columbia": "DC"
+};
 
 const USAMap: React.FC = () => {
   const [hoveredState, setHoveredState] = useState<string | null>(null);
@@ -57,6 +113,33 @@ const USAMap: React.FC = () => {
   const getStateName = (stateId: string) => {
     const state = statesData.find(state => state.id === stateId);
     return state ? state.name : stateId;
+  };
+
+  const getStateAbbreviation = (stateName: string) => {
+    return stateAbbreviations[stateName] || stateName;
+  };
+
+  // Calculate centroid for each state path to position the state abbreviation
+  const getStateCentroid = (path: string) => {
+    try {
+      if (!mapRef.current) return { x: 0, y: 0 };
+      
+      // Create a temporary path element to calculate centroid
+      const tempPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      tempPath.setAttribute('d', path);
+      
+      // Get bounding box
+      const bbox = tempPath.getBBox();
+      
+      // Return the center coordinates
+      return {
+        x: bbox.x + bbox.width / 2,
+        y: bbox.y + bbox.height / 2
+      };
+    } catch (e) {
+      console.error('Error calculating centroid:', e);
+      return { x: 0, y: 0 };
+    }
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -248,25 +331,40 @@ const USAMap: React.FC = () => {
                       </feMerge>
                     </filter>
                   </defs>
-                  {statesData.map((state, index) => (
-                    <motion.path
-                      key={state.id}
-                      d={state.path}
-                      className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
-                        hover:brightness-110 hover:saturate-150`}
-                      style={{
-                        filter: hoveredState === state.id ? 'url(#glow)' : 'none',
-                        opacity: 0.85,
-                      }}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 0.85, scale: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.01 }}
-                      whileHover={{ scale: 1.02, opacity: 1 }}
-                      onMouseEnter={() => setHoveredState(state.name)}
-                      onMouseLeave={() => setHoveredState(null)}
-                      onClick={() => handleStateClick(state.name)}
-                    />
-                  ))}
+                  {statesData.map((state, index) => {
+                    const centroid = getStateCentroid(state.path);
+                    return (
+                      <g key={state.id}>
+                        <motion.path
+                          d={state.path}
+                          className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
+                            hover:brightness-110 hover:saturate-150`}
+                          style={{
+                            filter: hoveredState === state.id ? 'url(#glow)' : 'none',
+                            opacity: 0.85,
+                          }}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 0.85, scale: 1 }}
+                          transition={{ duration: 0.5, delay: index * 0.01 }}
+                          whileHover={{ scale: 1.02, opacity: 1 }}
+                          onMouseEnter={() => setHoveredState(state.name)}
+                          onMouseLeave={() => setHoveredState(null)}
+                          onClick={() => handleStateClick(state.name)}
+                        />
+                        {/* State abbreviation label */}
+                        <text
+                          x={centroid.x}
+                          y={centroid.y}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          className="text-xs font-bold fill-white pointer-events-none"
+                          style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
+                        >
+                          {getStateAbbreviation(state.name)}
+                        </text>
+                      </g>
+                    );
+                  })}
                 </svg>
 
                 <AnimatePresence>
