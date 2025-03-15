@@ -1,7 +1,8 @@
+
 import { useState } from 'react';
-import { Check, X, School } from 'lucide-react';
+import { Check, X, School, Building2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -27,6 +28,7 @@ const ComparisonConfirmModal = ({
   };
 
   const handleRemoveUniversity = (universityName) => {
+    console.log("Removing university:", universityName);
     if (onRemoveUniversity) {
       onRemoveUniversity(universityName);
     } else {
@@ -36,60 +38,66 @@ const ComparisonConfirmModal = ({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-w-lg bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-md border border-slate-700/50 text-white">
+      <AlertDialogContent className="max-w-lg bg-gradient-to-br from-[#1a1f3c] to-[#101329] backdrop-blur-md border border-indigo-500/20 text-white rounded-xl shadow-[0_0_20px_rgba(79,70,229,0.15)]">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-2xl font-bold text-center flex items-center justify-center gap-2">
-            <School className="h-6 w-6 text-[#0ea5e9]" />
-            <span>Confirm University Comparison</span>
+            <Building2 className="h-6 w-6 text-indigo-400" />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-indigo-100">
+              Confirm University Comparison
+            </span>
           </AlertDialogTitle>
         </AlertDialogHeader>
         
         <div className="py-4">
-          <p className="text-slate-300 text-center mb-6">
+          <p className="text-indigo-200 text-center mb-6">
             You've selected the following universities to compare:
           </p>
           
           <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
-            {comparedUniversities.map((university, index) => (
-              <motion.div
-                key={university}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="flex items-center justify-between p-3 bg-slate-800/80 rounded-lg border border-slate-700/50 hover:bg-slate-700/60 transition-colors"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="bg-[#0ea5e9]/20 p-1.5 rounded-full">
-                    <School className="h-4 w-4 text-[#0ea5e9]" />
-                  </div>
-                  <span className="text-white font-medium">{university}</span>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 rounded-full hover:bg-slate-600/50 hover:text-red-400"
-                  onClick={() => handleRemoveUniversity(university)}
+            <AnimatePresence>
+              {comparedUniversities.map((university, index) => (
+                <motion.div
+                  key={university}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center justify-between p-3 bg-indigo-900/30 rounded-lg border border-indigo-500/30 hover:bg-indigo-800/40 transition-colors"
                 >
-                  <X className="h-4 w-4" />
-                </Button>
-              </motion.div>
-            ))}
+                  <div className="flex items-center gap-2">
+                    <div className="bg-indigo-500/20 p-1.5 rounded-full">
+                      <School className="h-4 w-4 text-indigo-300" />
+                    </div>
+                    <span className="text-white font-medium">{university}</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 rounded-full hover:bg-red-500/20 hover:text-red-400 transition-colors"
+                    onClick={() => handleRemoveUniversity(university)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         </div>
         
-        <AlertDialogFooter className="flex gap-3 border-t border-slate-700/50 pt-4">
+        <AlertDialogFooter className="flex gap-3 border-t border-indigo-500/20 pt-4">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="flex-1 bg-transparent text-white border-slate-600 hover:bg-slate-800 hover:text-white hover:border-slate-500"
+            className="flex-1 bg-transparent text-indigo-200 border-indigo-500/30 hover:bg-indigo-800/30 hover:text-white hover:border-indigo-400"
           >
             Cancel
           </Button>
           <Button
             variant="default"
             onClick={handleConfirmComparison}
-            className="flex-1 bg-gradient-to-r from-[#0ea5e9] to-[#06b6d4] hover:from-[#0284c7] hover:to-[#0891b2] text-white"
+            className="flex-1 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white shadow-lg shadow-indigo-500/25"
           >
+            <Check className="mr-2 h-4 w-4" />
             Confirm Comparison
           </Button>
         </AlertDialogFooter>
