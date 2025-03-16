@@ -41,8 +41,8 @@ export default {
         },
         modernIndigo: {
           light: "#a5b4fc",
-          DEFAULT: "#000000", // Changed to black
-          dark: "#000000"    // Changed to black
+          DEFAULT: "#6366f1",
+          dark: "#4338ca"
         },
         modernRose: {
           light: "#fda4af", 

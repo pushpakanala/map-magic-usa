@@ -125,12 +125,13 @@ const USAMap: React.FC = () => {
   };
 
   const getStateColor = (index: number) => {
+    // Using different shades of blue-gray as seen in the image
     const colors = [
-      'fill-slate-400',
-      'fill-slate-500',
-      'fill-zinc-400',
-      'fill-zinc-500',
-      'fill-slate-600'
+      '#A4B7C6', // Light blue-gray
+      '#7D8FA3', // Medium blue-gray
+      '#5C6F84', // Darker blue-gray
+      '#485A71', // Deep blue-gray
+      '#364459', // Very dark blue-gray
     ];
     return colors[index % colors.length];
   };
@@ -164,7 +165,7 @@ const USAMap: React.FC = () => {
               ref={mapRef}
               viewBox="-0 -0 1000 700"
               preserveAspectRatio="xMidYMid meet"
-              className="w-full h-full max-h-[450px]"
+              className="w-full h-full max-h-[350px]" 
               onMouseMove={handleMouseMove}
               style={{ 
                 filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
@@ -178,10 +179,6 @@ const USAMap: React.FC = () => {
                     <feMergeNode in="SourceGraphic"/>
                   </feMerge>
                 </filter>
-                <linearGradient id="mapGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#8E9196" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#403E43" stopOpacity="0.8" />
-                </linearGradient>
               </defs>
               {statesData.map((state, index) => (
                 <motion.path
@@ -189,12 +186,14 @@ const USAMap: React.FC = () => {
                   d={state.path}
                   className="transition-all duration-300 cursor-pointer hover:brightness-110 hover:saturate-150"
                   style={{
-                    fill: 'url(#mapGradient)',
+                    fill: getStateColor(index),
                     filter: hoveredState === state.id ? 'url(#glow)' : 'none',
-                    opacity: 0.85,
+                    opacity: 0.9,
+                    stroke: '#FFFFFF',
+                    strokeWidth: 0.5,
                   }}
                   initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 0.85, scale: 1 }}
+                  animate={{ opacity: 0.9, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.01 }}
                   whileHover={{ scale: 1.02, opacity: 1 }}
                   onMouseEnter={() => setHoveredState(state.name)}
@@ -205,6 +204,9 @@ const USAMap: React.FC = () => {
               
               {/* State abbreviations */}
               {Object.entries(stateAbbreviations).map(([stateName, stateInfo]) => {
+                const stateData = statesData.find(s => s.name === stateName);
+                if (!stateData) return null;
+                
                 return (
                   <text
                     key={`text-${stateName}`}
@@ -212,6 +214,7 @@ const USAMap: React.FC = () => {
                     y={stateInfo.position[1]}
                     className="text-[10px] font-bold fill-black pointer-events-none"
                     textAnchor="middle"
+                    dominantBaseline="middle"
                   >
                     {stateInfo.abbr}
                   </text>

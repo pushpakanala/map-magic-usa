@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
@@ -363,12 +364,12 @@ const Index = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
-                      className="bg-gradient-to-br from-gray-200/10 to-black/5 p-8 rounded-xl backdrop-blur-sm border border-black/20 shadow-xl shadow-black/5"
+                      className="bg-gradient-to-br from-gray-200/10 to-uniquestPurple/5 p-8 rounded-xl backdrop-blur-sm border border-uniquestPurple/20 shadow-xl shadow-uniquestPurple/5"
                     >
-                      <div className="bg-black/20 p-3 w-fit rounded-full mb-4">
-                        <Rocket className="h-6 w-6 text-black" />
+                      <div className="bg-uniquestPurple/20 p-3 w-fit rounded-full mb-4">
+                        <Rocket className="h-6 w-6 text-uniquestPurple" />
                       </div>
-                      <h2 className="text-2xl font-bold text-black mb-4">Our Mission</h2>
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">Our Mission</h2>
                       <p className="text-muted-foreground leading-relaxed">
                         UniQuest is dedicated to simplifying the university search process, empowering students to make informed decisions about their educational future. We believe in providing accurate, comprehensive information in an accessible and interactive format, making the complex journey of choosing a university both enjoyable and insightful.
                       </p>
@@ -378,12 +379,12 @@ const Index = () => {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.3 }}
-                      className="bg-gradient-to-br from-gray-300/10 to-black/5 p-8 rounded-xl backdrop-blur-sm border border-black/20 shadow-xl shadow-black/5"
+                      className="bg-gradient-to-br from-gray-300/10 to-uniquestPurple/5 p-8 rounded-xl backdrop-blur-sm border border-uniquestPurple/20 shadow-xl shadow-uniquestPurple/5"
                     >
-                      <div className="bg-black/20 p-3 w-fit rounded-full mb-4">
-                        <Lightbulb className="h-6 w-6 text-black" />
+                      <div className="bg-uniquestPurple/20 p-3 w-fit rounded-full mb-4">
+                        <Lightbulb className="h-6 w-6 text-uniquestPurple" />
                       </div>
-                      <h2 className="text-2xl font-bold text-black mb-4">Our Vision</h2>
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">Our Vision</h2>
                       <p className="text-muted-foreground leading-relaxed">
                         We envision a future where every student has equal access to comprehensive university information, enabling them to find institutions that best match their academic goals, personal preferences, and career aspirations. UniQuest strives to be the leading platform that bridges the information gap between students and educational institutions.
                       </p>
@@ -394,7 +395,7 @@ const Index = () => {
                     <motion.h2 
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-black to-gray-700"
+                      className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-uniquestPurple to-uniquestPurple-dark"
                     >
                       Discover Our Features
                     </motion.h2>
@@ -405,37 +406,37 @@ const Index = () => {
                           icon: Map, 
                           title: "Interactive Map", 
                           description: "Explore universities state by state with our interactive US map interface.",
-                          color: "bg-black/10 text-black border-black/20"
+                          color: "bg-uniquestPurple/10 text-uniquestPurple border-uniquestPurple/20"
                         },
                         { 
                           icon: BookOpen, 
                           title: "Comprehensive Profiles", 
                           description: "Access detailed information about each university's programs, campus, and more.",
-                          color: "bg-black/10 text-black border-black/20"
+                          color: "bg-uniquestPurple/10 text-uniquestPurple border-uniquestPurple/20"
                         },
                         { 
                           icon: BarChart3, 
                           title: "Side-by-Side Comparison", 
                           description: "Compare multiple universities to find your perfect academic match.",
-                          color: "bg-black/10 text-black border-black/20"
+                          color: "bg-uniquestPurple/10 text-uniquestPurple border-uniquestPurple/20"
                         },
                         { 
                           icon: Sparkles, 
                           title: "Personalized Recommendations", 
                           description: "Receive tailored university suggestions based on your preferences.",
-                          color: "bg-black/10 text-black border-black/20"
+                          color: "bg-uniquestPurple/10 text-uniquestPurple border-uniquestPurple/20"
                         },
                         { 
                           icon: BrainCircuit, 
                           title: "AI Assistant", 
                           description: "Get instant answers to your university questions with our intelligent chatbot.",
-                          color: "bg-black/10 text-black border-black/20"
+                          color: "bg-uniquestPurple/10 text-uniquestPurple border-uniquestPurple/20"
                         },
                         { 
                           icon: Search, 
                           title: "Advanced Search", 
                           description: "Find specific universities with our powerful search functionality.",
-                          color: "bg-black/10 text-black border-black/20"
+                          color: "bg-uniquestPurple/10 text-uniquestPurple border-uniquestPurple/20"
                         }
                       ].map((feature, index) => (
                         <motion.div
@@ -458,9 +459,9 @@ const Index = () => {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-br from-gray-500/5 to-gray-800/5 p-10 rounded-2xl border border-black/10 shadow-lg"
+                    className="bg-gradient-to-br from-gray-500/5 to-uniquestPurple/5 p-10 rounded-2xl border border-uniquestPurple/10 shadow-lg"
                   >
-                    <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-black to-gray-700">
+                    <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-uniquestPurple to-uniquestPurple-dark">
                       Why Choose UniQuest?
                     </h2>
                   
@@ -480,7 +481,7 @@ const Index = () => {
                           transition={{ duration: 0.5, delay: index * 0.1 }}
                           className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900/10 transition-colors"
                         >
-                          <div className="bg-gradient-to-br from-black to-gray-700 p-2 rounded-full text-white">
+                          <div className="bg-gradient-to-br from-uniquestPurple to-uniquestPurple-dark p-2 rounded-full text-white">
                             <item.icon className="h-5 w-5" />
                           </div>
                           <p className="text-muted-foreground font-medium">{item.text}</p>
