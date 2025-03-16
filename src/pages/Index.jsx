@@ -267,20 +267,6 @@ const Index = () => {
                   >
                     Your comprehensive platform for exploring and comparing universities across the United States
                   </motion.p>
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6 }}
-                  >
-                    <Button 
-                      size="lg" 
-                      className="bg-white text-indigo-700 hover:bg-indigo-100 font-semibold rounded-full px-8"
-                      onClick={() => document.querySelector('[data-value="map"]').click()}
-                    >
-                      <Map className="mr-2 h-4 w-4" />
-                      Explore Universities
-                    </Button>
-                  </motion.div>
                 </div>
               </div>
 
@@ -414,25 +400,6 @@ const Index = () => {
                   ))}
                 </div>
               </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-8"
-              >
-                <h2 className="text-2xl font-bold mb-4">Ready to Start Your University Journey?</h2>
-                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                  Begin exploring universities across the United States and find the perfect match for your academic future.
-                </p>
-                <Button 
-                  size="lg" 
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-full px-8 shadow-lg shadow-indigo-500/20"
-                  onClick={() => document.querySelector('[data-value="map"]').click()}
-                >
-                  <Compass className="mr-2 h-4 w-4" />
-                  Explore Now
-                </Button>
-              </motion.div>
             </motion.div>
           </TabsContent>
 
@@ -546,3 +513,4 @@ const Index = () => {
 };
 
 export default Index;
+

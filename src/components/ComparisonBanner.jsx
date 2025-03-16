@@ -23,6 +23,27 @@ const ComparisonBanner = ({ comparedUniversities, onClear }) => {
     setIsVisible(comparedUniversities.length > 0);
   }, [comparedUniversities]);
 
+  // Also listen for storage events to update the banner in real-time
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'comparedUniversities') {
+        try {
+          const newValue = e.newValue ? JSON.parse(e.newValue) : [];
+          setLocalUniversities(newValue);
+          setIsVisible(newValue.length > 0);
+        } catch (error) {
+          console.error('Error parsing comparedUniversities in banner:', error);
+        }
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   const handleCompareClick = () => {
     if (localUniversities.length >= 2) {
       setIsModalOpen(true);

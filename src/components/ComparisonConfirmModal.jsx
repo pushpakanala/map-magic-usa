@@ -59,7 +59,7 @@ const ComparisonConfirmModal = ({
       return updatedList;
     });
     
-    // Only remove the specific university from the comparison
+    // Call removeFromComparison to update the global state
     removeFromComparison(universityName);
     
     // Call the callback from parent component if it exists

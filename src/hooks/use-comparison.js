@@ -59,6 +59,14 @@ export const useComparison = () => {
   // Update sessionStorage when selections change
   useEffect(() => {
     sessionStorage.setItem('comparedUniversities', JSON.stringify(comparedUniversities));
+    
+    // Dispatch storage event to notify other components about the change
+    window.dispatchEvent(
+      new StorageEvent('storage', {
+        key: 'comparedUniversities',
+        newValue: JSON.stringify(comparedUniversities),
+      })
+    );
   }, [comparedUniversities]);
   
   // Update sessionStorage when cached data changes
@@ -70,11 +78,13 @@ export const useComparison = () => {
     setComparedUniversities(prev => {
       if (prev.includes(universityName)) {
         const newList = prev.filter(name => name !== universityName);
-        sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
         return newList;
       } else {
         const newList = [...prev, universityName];
-        sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
+        // Show toast notification when adding university to comparison
+        toast.success(`Added ${universityName} to comparison`, {
+          duration: 2000,
+        });
         return newList;
       }
     });
@@ -89,11 +99,12 @@ export const useComparison = () => {
     setComparedUniversities(prev => {
       // Create a new array without the specified university
       const newList = prev.filter(name => name !== universityName);
-      
-      // Update session storage with the new list
-      sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
-      
       return newList;
+    });
+    
+    // Optional: Show toast notification when removing university from comparison
+    toast.info(`Removed ${universityName} from comparison`, {
+      duration: 2000,
     });
   }, []);
 
@@ -111,6 +122,10 @@ export const useComparison = () => {
       key: 'comparedUniversities',
       newValue: JSON.stringify([])
     }));
+    
+    toast.info("Comparison list cleared", {
+      duration: 2000,
+    });
   }, []);
   
   const cacheUniversityData = useCallback((universityName, data) => {
