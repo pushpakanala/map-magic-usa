@@ -165,7 +165,7 @@ const USAMap: React.FC = () => {
               <div className="relative">
                 <svg
                   ref={mapRef}
-                  viewBox="160 0 800 600"
+                  viewBox="80 20 900 500" 
                   preserveAspectRatio="xMidYMid meet"
                   className="w-full h-full"
                   onMouseMove={handleMouseMove}
