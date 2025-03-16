@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -97,6 +98,9 @@
 
   body {
     @apply bg-background text-foreground;
+    background-image: 
+      radial-gradient(at 25% 25%, rgba(155, 135, 245, 0.05) 0px, transparent 50%),
+      radial-gradient(at 75% 75%, rgba(214, 188, 250, 0.05) 0px, transparent 50%);
   }
 }
 
@@ -133,4 +137,31 @@
 .try-now-button:hover .underline-effect {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* Modern glass cards */
+.glass-card {
+  @apply relative backdrop-blur-md rounded-xl border border-white/20 bg-white/10 shadow-xl transition-all duration-300;
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+}
+
+.glass-card:hover {
+  @apply shadow-lg border-uniquestPurple/30 transform -translate-y-1;
+  box-shadow: 0 10px 25px -5px rgba(155, 135, 245, 0.15);
+}
+
+/* Gradient headings */
+.gradient-heading {
+  @apply font-bold text-transparent bg-clip-text;
+  background-image: linear-gradient(to right, #9b87f5, #7E69AB);
+}
+
+/* Floating animation */
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulsing animation */
+.pulsing {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

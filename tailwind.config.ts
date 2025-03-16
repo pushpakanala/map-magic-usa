@@ -34,6 +34,26 @@ export default {
           DEFAULT: "#9b87f5",
           dark: "#7E69AB"
         },
+        modernTeal: {
+          light: "#5eead4",
+          DEFAULT: "#14b8a6",
+          dark: "#0f766e"
+        },
+        modernIndigo: {
+          light: "#a5b4fc",
+          DEFAULT: "#6366f1",
+          dark: "#4338ca"
+        },
+        modernRose: {
+          light: "#fda4af", 
+          DEFAULT: "#f43f5e",
+          dark: "#be123c"
+        },
+        modernAmber: {
+          light: "#fcd34d",
+          DEFAULT: "#f59e0b",
+          dark: "#b45309"
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -85,15 +105,23 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.8" },
         },
+        "glow": {
+          "0%, 100%": { boxShadow: "0 0 5px rgba(155, 135, 245, 0.5)" },
+          "50%": { boxShadow: "0 0 20px rgba(155, 135, 245, 0.8)" },
+        },
       },
       animation: {
         "map-hover": "map-hover 0.2s ease-in-out forwards",
         "text-shimmer": "text-shimmer 2s ease-in-out infinite",
         "float": "float 3s ease-in-out infinite",
         "pulse-soft": "pulse-soft 2s ease-in-out infinite",
+        "glow": "glow 2s ease-in-out infinite",
       },
       backgroundSize: {
         "300%": "300%",
+      },
+      backdropBlur: {
+        xs: "2px",
       },
     },
   },
