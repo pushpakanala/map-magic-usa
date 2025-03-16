@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LogOut, User, Bot, X, Send, KeyRound } from 'lucide-react';
+import { LogOut, User, Bot, X, Send, KeyRound, Info, MapPin, Heart, BarChart3, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
@@ -18,7 +18,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
 import { BOT_GEMINI } from '../constants';
-import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, BarChart3, Compass, School, BookOpen, Lightbulb, Sparkles, Rocket } from 'lucide-react';
+import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, Compass, School, BookOpen, Lightbulb, Sparkles, Rocket } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -132,306 +132,375 @@ const Index = () => {
 
   return (
     <>
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="space-y-6 p-4 md:p-6"
-      >
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex items-center gap-3"
-          >
-            <motion.img 
-              src="/lovable-uploads/17d6db8d-3627-4ac9-90a6-5c27912246ed.png" 
-              alt="Uniquest Logo" 
-              className="w-16 h-16 md:w-24 md:h-24"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
-            />
-            <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-uniquestPurple to-uniquestPurple-dark">
-              UniQuest
-            </h1>
-          </motion.div>
-          
-          <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-            <motion.div 
-              className="flex gap-2 w-full md:w-auto"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className="relative w-full md:w-auto">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search for a university..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className="w-full md:w-80 pl-10 bg-background/50 backdrop-blur-sm border-primary/20 focus:border-primary/50"
-                />
-              </div>
-              <Button onClick={handleSearch} className="bg-uniquestPurple hover:bg-uniquestPurple-dark">
-                Search
-              </Button>
-            </motion.div>
-
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  className="rounded-full hover:bg-uniquestPurple/10 transition-colors"
-                >
-                  <User className="h-5 w-5" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 p-4">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="rounded-full bg-uniquestPurple/10 p-2">
-                    <User className="h-6 w-6 text-uniquestPurple" />
-                  </div>
-                  <div className="flex-1 space-y-1 overflow-hidden">
-                    <p className="font-medium truncate">{userData?.name}</p>
-                    <p className="text-sm text-muted-foreground truncate">{userData?.email}</p>
-                    <p className="text-xs text-muted-foreground capitalize">Role: {userData?.role}</p>
-                  </div>
-                </div>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start mb-2"
-                  onClick={() => navigate('/forgot-password')}
-                >
-                  <KeyRound className="mr-2 h-4 w-4" />
-                  Change Password
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </Button>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
+      <div className="relative min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+        <div className="absolute inset-0 bg-grid-slate-200/50 dark:bg-grid-slate-700/20 bg-[linear-gradient(to_right,transparent_0%,transparent_49.5%,#e2e8f0_49.5%,#e2e8f0_50.5%,transparent_50.5%,transparent_100%),linear-gradient(to_bottom,transparent_0%,transparent_49.5%,#e2e8f0_49.5%,#e2e8f0_50.5%,transparent_50.5%,transparent_100%)] dark:bg-[linear-gradient(to_right,transparent_0%,transparent_49.5%,#1e293b_49.5%,#1e293b_50.5%,transparent_50.5%,transparent_100%),linear-gradient(to_bottom,transparent_0%,transparent_49.5%,#1e293b_49.5%,#1e293b_50.5%,transparent_50.5%,transparent_100%)] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] [background-size:4%_4%] -z-10" />
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="container mx-auto px-4 py-6 space-y-8"
         >
-          <Tabs defaultValue="map" className="w-full">
-            <TabsList className={`grid w-full max-w-[600px] mx-auto bg-background/50 backdrop-blur-sm border border-uniquestPurple/20 ${userData?.role === 'admin' ? 'grid-cols-4' : 'grid-cols-3'}`}>
-              <TabsTrigger value="map" className="data-[state=active]:bg-uniquestPurple data-[state=active]:text-white">Map View</TabsTrigger>
-              <TabsTrigger value="favorites" className="data-[state=active]:bg-uniquestPurple data-[state=active]:text-white">Favorites ({favorites.length})</TabsTrigger>
-              <TabsTrigger value="about" className="data-[state=active]:bg-uniquestPurple data-[state=active]:text-white">About</TabsTrigger>
-              {userData?.role === 'admin' && (
-                <TabsTrigger value="admin" className="data-[state=active]:bg-uniquestPurple data-[state=active]:text-white">Admin</TabsTrigger>
-              )}
-            </TabsList>
-            
-            <TabsContent value="map" className="min-h-[600px]">
-              <motion.p 
-                className="text-center text-muted-foreground mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                Click on a state to learn more about its Universities, or hover to see its population
-              </motion.p>
-              <div className="w-full mx-auto px-2 md:px-4">
-                <USAMap />
+          <header className="flex flex-col md:flex-row justify-between items-center gap-6 py-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex items-center gap-3"
+            >
+              <div className="relative">
+                <motion.img 
+                  src="/lovable-uploads/17d6db8d-3627-4ac9-90a6-5c27912246ed.png" 
+                  alt="Uniquest Logo" 
+                  className="w-16 h-16 md:w-20 md:h-20 rounded-xl shadow-md"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                />
+                <div className="absolute -bottom-2 -right-2 bg-modernIndigo text-white text-xs font-bold px-2 py-1 rounded-full">EDU</div>
               </div>
-            </TabsContent>
-
-            <TabsContent value="favorites">
-              <UniversitiesList
-                universities={favorites.map(name => ({ name }))}
-                favorites={favorites}
-                comparedUniversities={comparedUniversities}
-                onFavoriteClick={handleFavoriteClick}
-                onCompareClick={handleCompareClick}
-                onUniversityClick={(college) => navigate(`/college/${encodeURIComponent(college.name)}`)}
-              />
-            </TabsContent>
-
-            <TabsContent value="about">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-modernIndigo to-modernIndigo-dark">
+                  UniQuest
+                </h1>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Discover Your Academic Future</p>
+              </div>
+            </motion.div>
+            
+            <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="max-w-6xl mx-auto p-6 space-y-12"
+                className="flex gap-2 w-full md:w-auto"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <div className="relative rounded-2xl overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/90 to-purple-700/90 z-0"></div>
-                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1470&auto=format&fit=crop')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
-                  <div className="relative z-10 px-8 py-16 text-center">
-                    <motion.h1 
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                      className="text-4xl md:text-5xl font-bold mb-4 text-white"
+                <div className="relative w-full md:w-auto">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search for a university..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    className="w-full md:w-80 pl-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 focus-visible:ring-modernIndigo"
+                  />
+                </div>
+                <Button onClick={handleSearch} className="bg-modernIndigo hover:bg-modernIndigo-dark text-white">
+                  Search
+                </Button>
+              </motion.div>
+
+              <div className="flex items-center gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      className="rounded-full bg-white dark:bg-slate-800 hover:bg-modernIndigo/10 transition-colors"
                     >
-                      Welcome to <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-200 to-purple-100">UniQuest</span>
-                    </motion.h1>
-                    <motion.p 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                      className="text-xl text-indigo-100 max-w-2xl mx-auto mb-8"
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80 p-4">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="rounded-full bg-modernIndigo/10 p-2">
+                        <User className="h-6 w-6 text-modernIndigo" />
+                      </div>
+                      <div className="flex-1 space-y-1 overflow-hidden">
+                        <p className="font-medium truncate">{userData?.name}</p>
+                        <p className="text-sm text-muted-foreground truncate">{userData?.email}</p>
+                        <p className="text-xs text-muted-foreground capitalize">Role: {userData?.role}</p>
+                      </div>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start mb-2"
+                      onClick={() => navigate('/forgot-password')}
                     >
-                      Your comprehensive platform for exploring and comparing universities across the United States
-                    </motion.p>
-                  </div>
-                </div>
+                      <KeyRound className="mr-2 h-4 w-4" />
+                      Change Password
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Logout
+                    </Button>
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
+          </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-gradient-to-br from-indigo-500/10 to-purple-600/5 p-8 rounded-xl backdrop-blur-sm border border-indigo-500/20 shadow-xl shadow-indigo-500/5"
-                  >
-                    <div className="bg-indigo-600/20 p-3 w-fit rounded-full mb-4">
-                      <Rocket className="h-6 w-6 text-indigo-500" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-indigo-600 mb-4">Our Mission</h2>
-                    <p className="text-muted-foreground leading-relaxed">
-                      UniQuest is dedicated to simplifying the university search process, empowering students to make informed decisions about their educational future. We believe in providing accurate, comprehensive information in an accessible and interactive format, making the complex journey of choosing a university both enjoyable and insightful.
-                    </p>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="bg-gradient-to-br from-purple-500/10 to-indigo-600/5 p-8 rounded-xl backdrop-blur-sm border border-purple-500/20 shadow-xl shadow-purple-500/5"
-                  >
-                    <div className="bg-purple-600/20 p-3 w-fit rounded-full mb-4">
-                      <Lightbulb className="h-6 w-6 text-purple-500" />
-                    </div>
-                    <h2 className="text-2xl font-bold text-purple-600 mb-4">Our Vision</h2>
-                    <p className="text-muted-foreground leading-relaxed">
-                      We envision a future where every student has equal access to comprehensive university information, enabling them to find institutions that best match their academic goals, personal preferences, and career aspirations. UniQuest strives to be the leading platform that bridges the information gap between students and educational institutions.
-                    </p>
-                  </motion.div>
-                </div>
-
-                <div>
-                  <motion.h2 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600"
-                  >
-                    Discover Our Features
-                  </motion.h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {[
-                      { 
-                        icon: Map, 
-                        title: "Interactive Map", 
-                        description: "Explore universities state by state with our interactive US map interface.",
-                        color: "indigo"
-                      },
-                      { 
-                        icon: BookOpen, 
-                        title: "Comprehensive Profiles", 
-                        description: "Access detailed information about each university's programs, campus, and more.",
-                        color: "purple"
-                      },
-                      { 
-                        icon: BarChart3, 
-                        title: "Side-by-Side Comparison", 
-                        description: "Compare multiple universities to find your perfect academic match.",
-                        color: "blue"
-                      },
-                      { 
-                        icon: Sparkles, 
-                        title: "Personalized Recommendations", 
-                        description: "Receive tailored university suggestions based on your preferences.",
-                        color: "violet"
-                      },
-                      { 
-                        icon: BrainCircuit, 
-                        title: "AI Assistant", 
-                        description: "Get instant answers to your university questions with our intelligent chatbot.",
-                        color: "pink"
-                      },
-                      { 
-                        icon: Search, 
-                        title: "Advanced Search", 
-                        description: "Find specific universities with our powerful search functionality.",
-                        color: "indigo"
-                      }
-                    ].map((feature, index) => (
-                      <motion.div
-                        key={feature.title}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
-                        className={`bg-gradient-to-br from-${feature.color}-500/10 to-${feature.color}-600/5 p-6 rounded-xl backdrop-blur-sm border border-${feature.color}-500/20 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] group`}
-                      >
-                        <div className={`bg-${feature.color}-500/20 p-3 w-fit rounded-full mb-4 group-hover:bg-${feature.color}-500/30 transition-colors`}>
-                          <feature.icon className={`h-6 w-6 text-${feature.color}-500`} />
-                        </div>
-                        <h3 className={`text-xl font-semibold text-${feature.color}-600 mb-2`}>{feature.title}</h3>
-                        <p className="text-muted-foreground">{feature.description}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-                
-                <motion.div
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50"
+          >
+            <Tabs defaultValue="map" className="w-full">
+              <TabsList className={`grid w-full max-w-[600px] mx-auto mb-6 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 ${userData?.role === 'admin' ? 'grid-cols-4' : 'grid-cols-3'}`}>
+                <TabsTrigger value="map" className="flex items-center gap-2 data-[state=active]:bg-modernIndigo data-[state=active]:text-white">
+                  <MapPin className="h-4 w-4" />
+                  <span className="hidden sm:inline">Map View</span>
+                </TabsTrigger>
+                <TabsTrigger value="favorites" className="flex items-center gap-2 data-[state=active]:bg-modernIndigo data-[state=active]:text-white">
+                  <Heart className="h-4 w-4" />
+                  <span className="hidden sm:inline">Favorites</span> <span className="text-xs">({favorites.length})</span>
+                </TabsTrigger>
+                <TabsTrigger value="about" className="flex items-center gap-2 data-[state=active]:bg-modernIndigo data-[state=active]:text-white">
+                  <Info className="h-4 w-4" />
+                  <span className="hidden sm:inline">About</span>
+                </TabsTrigger>
+                {userData?.role === 'admin' && (
+                  <TabsTrigger value="admin" className="flex items-center gap-2 data-[state=active]:bg-modernIndigo data-[state=active]:text-white">
+                    <Shield className="h-4 w-4" />
+                    <span className="hidden sm:inline">Admin</span>
+                  </TabsTrigger>
+                )}
+              </TabsList>
+              
+              <TabsContent value="map" className="focus-visible:outline-none focus-visible:ring-0">
+                <motion.p 
+                  className="text-center text-muted-foreground mb-6 italic"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-gradient-to-br from-indigo-500/5 to-purple-500/5 p-10 rounded-2xl border border-indigo-500/10 shadow-lg"
+                  transition={{ duration: 0.5, delay: 0.4 }}
                 >
-                  <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-                    Why Choose UniQuest?
-                  </h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {[
-                      { icon: Award, text: "Comprehensive university database covering all US states" },
-                      { icon: BarChart3, text: "Real-time statistics and insights about each institution" },
-                      { icon: Users, text: "Community-driven reviews and experiences from real students" },
-                      { icon: Compass, text: "Personalized university recommendations based on your profile" },
-                      { icon: GraduationCap, text: "Detailed information about programs, majors, and specializations" },
-                      { icon: Globe2, text: "Regular updates about university rankings and achievements" }
-                    ].map((item, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className="flex items-start gap-4 p-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-950/10 transition-colors"
-                      >
-                        <div className="bg-gradient-to-br from-indigo-500 to-purple-500 p-2 rounded-full text-white">
-                          <item.icon className="h-5 w-5" />
-                        </div>
-                        <p className="text-muted-foreground font-medium">{item.text}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              </motion.div>
-            </TabsContent>
-
-            {userData?.role === 'admin' && (
-              <TabsContent value="admin">
-                <div className="p-6 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg">
-                  <h2 className="text-2xl font-bold text-primary mb-4">Admin Dashboard</h2>
-                  <p className="text-muted-foreground">Welcome to the admin dashboard. Here you can manage universities and user data.</p>
+                  Click on a state to explore universities, or hover to view population data
+                </motion.p>
+                <div className="w-full mx-auto">
+                  <USAMap />
+                </div>
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-modernIndigo-light/10 rounded-lg p-4 border border-modernIndigo/20 flex items-center gap-3"
+                  >
+                    <div className="bg-modernIndigo/10 p-2 rounded-full">
+                      <GraduationCap className="h-6 w-6 text-modernIndigo" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-slate-800 dark:text-slate-200">4,000+</h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Universities</p>
+                    </div>
+                  </motion.div>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="bg-modernTeal-light/10 rounded-lg p-4 border border-modernTeal/20 flex items-center gap-3"
+                  >
+                    <div className="bg-modernTeal/10 p-2 rounded-full">
+                      <Map className="h-6 w-6 text-modernTeal" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-slate-800 dark:text-slate-200">50</h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">States Covered</p>
+                    </div>
+                  </motion.div>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="bg-modernAmber-light/10 rounded-lg p-4 border border-modernAmber/20 flex items-center gap-3"
+                  >
+                    <div className="bg-modernAmber/10 p-2 rounded-full">
+                      <BarChart3 className="h-6 w-6 text-modernAmber" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-slate-800 dark:text-slate-200">Detailed</h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Rankings & Data</p>
+                    </div>
+                  </motion.div>
                 </div>
               </TabsContent>
-            )}
-          </Tabs>
+
+              <TabsContent value="favorites" className="focus-visible:outline-none focus-visible:ring-0">
+                <UniversitiesList
+                  universities={favorites.map(name => ({ name }))}
+                  favorites={favorites}
+                  comparedUniversities={comparedUniversities}
+                  onFavoriteClick={handleFavoriteClick}
+                  onCompareClick={handleCompareClick}
+                  onUniversityClick={(college) => navigate(`/college/${encodeURIComponent(college.name)}`)}
+                />
+              </TabsContent>
+
+              <TabsContent value="about" className="focus-visible:outline-none focus-visible:ring-0">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="max-w-6xl mx-auto space-y-12"
+                >
+                  <div className="relative rounded-2xl overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-modernIndigo/90 to-indigo-700/90 z-0"></div>
+                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1470&auto=format&fit=crop')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
+                    <div className="relative z-10 px-6 md:px-8 py-12 md:py-16 text-center">
+                      <motion.h1 
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-3xl md:text-5xl font-bold mb-4 text-white"
+                      >
+                        Welcome to <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-200 to-blue-100">UniQuest</span>
+                      </motion.h1>
+                      <motion.p 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4 }}
+                        className="text-lg md:text-xl text-indigo-100 max-w-2xl mx-auto mb-8"
+                      >
+                        Your comprehensive platform for exploring and comparing universities across the United States
+                      </motion.p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      className="bg-gradient-to-br from-modernIndigo-light/10 to-modernIndigo/5 p-8 rounded-xl backdrop-blur-sm border border-modernIndigo/20 shadow-xl shadow-modernIndigo/5"
+                    >
+                      <div className="bg-modernIndigo/20 p-3 w-fit rounded-full mb-4">
+                        <Rocket className="h-6 w-6 text-modernIndigo" />
+                      </div>
+                      <h2 className="text-2xl font-bold text-modernIndigo mb-4">Our Mission</h2>
+                      <p className="text-muted-foreground leading-relaxed">
+                        UniQuest is dedicated to simplifying the university search process, empowering students to make informed decisions about their educational future. We believe in providing accurate, comprehensive information in an accessible and interactive format, making the complex journey of choosing a university both enjoyable and insightful.
+                      </p>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
+                      className="bg-gradient-to-br from-modernTeal-light/10 to-modernTeal/5 p-8 rounded-xl backdrop-blur-sm border border-modernTeal/20 shadow-xl shadow-modernTeal/5"
+                    >
+                      <div className="bg-modernTeal/20 p-3 w-fit rounded-full mb-4">
+                        <Lightbulb className="h-6 w-6 text-modernTeal" />
+                      </div>
+                      <h2 className="text-2xl font-bold text-modernTeal mb-4">Our Vision</h2>
+                      <p className="text-muted-foreground leading-relaxed">
+                        We envision a future where every student has equal access to comprehensive university information, enabling them to find institutions that best match their academic goals, personal preferences, and career aspirations. UniQuest strives to be the leading platform that bridges the information gap between students and educational institutions.
+                      </p>
+                    </motion.div>
+                  </div>
+
+                  <div>
+                    <motion.h2 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-modernIndigo to-modernTeal"
+                    >
+                      Discover Our Features
+                    </motion.h2>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                      {[
+                        { 
+                          icon: Map, 
+                          title: "Interactive Map", 
+                          description: "Explore universities state by state with our interactive US map interface.",
+                          color: "bg-modernIndigo/10 text-modernIndigo border-modernIndigo/20"
+                        },
+                        { 
+                          icon: BookOpen, 
+                          title: "Comprehensive Profiles", 
+                          description: "Access detailed information about each university's programs, campus, and more.",
+                          color: "bg-modernTeal/10 text-modernTeal border-modernTeal/20"
+                        },
+                        { 
+                          icon: BarChart3, 
+                          title: "Side-by-Side Comparison", 
+                          description: "Compare multiple universities to find your perfect academic match.",
+                          color: "bg-modernAmber/10 text-modernAmber border-modernAmber/20"
+                        },
+                        { 
+                          icon: Sparkles, 
+                          title: "Personalized Recommendations", 
+                          description: "Receive tailored university suggestions based on your preferences.",
+                          color: "bg-modernRose/10 text-modernRose border-modernRose/20"
+                        },
+                        { 
+                          icon: BrainCircuit, 
+                          title: "AI Assistant", 
+                          description: "Get instant answers to your university questions with our intelligent chatbot.",
+                          color: "bg-sky-500/10 text-sky-500 border-sky-500/20"
+                        },
+                        { 
+                          icon: Search, 
+                          title: "Advanced Search", 
+                          description: "Find specific universities with our powerful search functionality.",
+                          color: "bg-violet-500/10 text-violet-500 border-violet-500/20"
+                        }
+                      ].map((feature, index) => (
+                        <motion.div
+                          key={feature.title}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
+                          className={`p-6 rounded-xl backdrop-blur-sm border shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] group ${feature.color}`}
+                        >
+                          <div className="p-3 w-fit rounded-full mb-4 bg-white/20 dark:bg-slate-800/20">
+                            <feature.icon className="h-6 w-6" />
+                          </div>
+                          <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                          <p className="text-muted-foreground">{feature.description}</p>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-br from-indigo-500/5 to-purple-500/5 p-10 rounded-2xl border border-indigo-500/10 shadow-lg"
+                  >
+                    <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                      Why Choose UniQuest?
+                    </h2>
+                  
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {[
+                        { icon: Award, text: "Comprehensive university database covering all US states" },
+                        { icon: BarChart3, text: "Real-time statistics and insights about each institution" },
+                        { icon: Users, text: "Community-driven reviews and experiences from real students" },
+                        { icon: Compass, text: "Personalized university recommendations based on your profile" },
+                        { icon: GraduationCap, text: "Detailed information about programs, majors, and specializations" },
+                        { icon: Globe2, text: "Regular updates about university rankings and achievements" }
+                      ].map((item, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                          className="flex items-start gap-4 p-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-950/10 transition-colors"
+                        >
+                          <div className="bg-gradient-to-br from-indigo-500 to-purple-500 p-2 rounded-full text-white">
+                            <item.icon className="h-5 w-5" />
+                          </div>
+                          <p className="text-muted-foreground font-medium">{item.text}</p>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </TabsContent>
+
+              {userData?.role === 'admin' && (
+                <TabsContent value="admin" className="focus-visible:outline-none focus-visible:ring-0">
+                  <div className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg shadow-lg border border-slate-200 dark:border-slate-700">
+                    <h2 className="text-2xl font-bold text-primary mb-4">Admin Dashboard</h2>
+                    <p className="text-muted-foreground">Welcome to the admin dashboard. Here you can manage universities and user data.</p>
+                  </div>
+                </TabsContent>
+              )}
+            </Tabs>
+          </motion.div>
         </motion.div>
 
         <motion.div
@@ -441,7 +510,7 @@ const Index = () => {
           className="fixed bottom-4 right-4 z-50"
         >
           <Button
-            className="rounded-full h-12 w-12 shadow-lg bg-uniquestPurple hover:bg-uniquestPurple-dark transition-colors"
+            className="rounded-full h-12 w-12 shadow-lg bg-modernIndigo hover:bg-modernIndigo-dark transition-colors"
             onClick={handleBotClick}
             type="button"
           >
@@ -455,10 +524,10 @@ const Index = () => {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="fixed bottom-20 right-4 w-full max-w-96 h-[600px] bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-uniquestPurple/20 z-40 flex flex-col"
+              className="fixed bottom-20 right-4 w-full max-w-96 h-[600px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 z-40 flex flex-col"
             >
-              <div className="p-4 border-b border-uniquestPurple/10 bg-gradient-to-r from-uniquestPurple/10 to-uniquestPurple-light/10">
-                <h3 className="text-lg font-semibold text-uniquestPurple">Chat with Bot</h3>
+              <div className="p-4 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-modernIndigo/5 to-modernIndigo-light/5">
+                <h3 className="text-lg font-semibold text-modernIndigo">Chat with Bot</h3>
               </div>
               
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -472,8 +541,8 @@ const Index = () => {
                     <div
                       className={`max-w-[80%] p-3 rounded-lg ${
                         message.sender === 'user'
-                          ? 'bg-uniquestPurple text-white ml-auto'
-                          : 'bg-gray-100 dark:bg-slate-800'
+                          ? 'bg-modernIndigo text-white ml-auto'
+                          : 'bg-slate-100 dark:bg-slate-800'
                       }`}
                     >
                       {message.text}
@@ -482,14 +551,14 @@ const Index = () => {
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-100 dark:bg-slate-800 p-3 rounded-lg">
+                    <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
                       <span className="animate-pulse">Thinking...</span>
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="p-4 border-t border-uniquestPurple/10">
+              <div className="p-4 border-t border-slate-200 dark:border-slate-700">
                 <div className="flex gap-2">
                   <Textarea
                     value={currentMessage}
@@ -501,13 +570,13 @@ const Index = () => {
                       }
                     }}
                     placeholder="Type your message..."
-                    className="resize-none border-uniquestPurple/20 focus-visible:ring-uniquestPurple/30"
+                    className="resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-modernIndigo/30"
                     rows={2}
                   />
                   <Button
                     onClick={handleSendMessage}
                     size="icon"
-                    className="h-auto bg-uniquestPurple hover:bg-uniquestPurple-dark"
+                    className="h-auto bg-modernIndigo hover:bg-modernIndigo-dark"
                     disabled={!currentMessage.trim() || isLoading}
                   >
                     <Send className="h-4 w-4" />
@@ -520,7 +589,7 @@ const Index = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
       
       <ComparisonBanner 
         comparedUniversities={comparedUniversities} 

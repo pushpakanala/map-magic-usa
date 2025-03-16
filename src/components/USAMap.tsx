@@ -20,7 +20,7 @@ interface HoverPosition {
   y: number;
 }
 
-// Add state abbreviations
+// State abbreviations with refined positions
 const stateAbbreviations: { [key: string]: { abbr: string, position: [number, number] } } = {
   "Alabama": { abbr: "AL", position: [622, 445] },
   "Alaska": { abbr: "AK", position: [170, 590] },
@@ -136,7 +136,7 @@ const USAMap: React.FC = () => {
   };
 
   if (isLoading) return (
-    <div className="w-full h-[600px] relative">
+    <div className="w-full h-[400px] relative">
       <Skeleton className="absolute inset-0" />
     </div>
   );
@@ -151,21 +151,20 @@ const USAMap: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-background to-background/80">
-      <div className="max-w-[1800px] mx-auto p-4">
+    <div className="w-full bg-gradient-to-b from-background to-background/80">
+      <div className="max-w-[1200px] mx-auto p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="relative mb-6"
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent rounded-3xl -z-10" />
           <div className="relative">
             <svg
               ref={mapRef}
               viewBox="-0 -0 1000 700"
               preserveAspectRatio="xMidYMid meet"
-              className="w-full h-full"
+              className="w-full h-full max-h-[500px]"
               onMouseMove={handleMouseMove}
               style={{ 
                 filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
@@ -180,16 +179,16 @@ const USAMap: React.FC = () => {
                   </feMerge>
                 </filter>
                 <linearGradient id="mapGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#9b87f5" stopOpacity="0.7" />
-                  <stop offset="100%" stopColor="#7E69AB" stopOpacity="0.7" />
+                  <stop offset="0%" stopColor="#6366f1" stopOpacity="0.7" />
+                  <stop offset="100%" stopColor="#4338ca" stopOpacity="0.7" />
                 </linearGradient>
               </defs>
               {statesData.map((state, index) => (
                 <motion.path
                   key={state.id}
                   d={state.path}
-                  className={`${getStateColor(index)} transition-all duration-300 cursor-pointer
-                    hover:brightness-110 hover:saturate-150`}
+                  className={`transition-all duration-300 cursor-pointer
+                    hover:brightness-110 hover:saturate-150 fill-modernIndigo/80`}
                   style={{
                     filter: hoveredState === state.id ? 'url(#glow)' : 'none',
                     opacity: 0.85,
@@ -204,7 +203,7 @@ const USAMap: React.FC = () => {
                 />
               ))}
               
-              {/* Add state abbreviations */}
+              {/* State abbreviations */}
               {statesData.map((state) => {
                 const stateInfo = stateAbbreviations[state.name];
                 if (!stateInfo) return null;
@@ -214,7 +213,7 @@ const USAMap: React.FC = () => {
                     key={`text-${state.id}`}
                     x={stateInfo.position[0]}
                     y={stateInfo.position[1]}
-                    className="text-xs font-bold fill-white pointer-events-none"
+                    className="text-[10px] font-bold fill-white pointer-events-none"
                     textAnchor="middle"
                   >
                     {stateInfo.abbr}
