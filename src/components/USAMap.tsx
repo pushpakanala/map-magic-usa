@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -154,7 +153,6 @@ const USAMap: React.FC = () => {
     <div className="min-h-screen w-full bg-gradient-to-b from-background to-background/80">
       <div className="max-w-[1800px] mx-auto p-4 md:p-6">
         <div className={`grid grid-cols-1 ${isMobile ? '' : 'lg:grid-cols-12'} gap-8`}>
-          {/* Map comes first on mobile */}
           <div className={`${isMobile ? 'order-first' : 'lg:col-span-9 lg:order-last'}`}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -201,17 +199,18 @@ const USAMap: React.FC = () => {
                         onMouseLeave={() => setHoveredState(null)}
                         onClick={() => handleStateClick(state.name)}
                       />
-                      {/* State Abbreviations */}
-                      <text
-                        x={state.textPosition[0]}
-                        y={state.textPosition[1]}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        className="fill-white text-[12px] font-semibold pointer-events-none select-none"
-                        style={{ textShadow: "0px 1px 2px rgba(0,0,0,0.5)" }}
-                      >
-                        {getStateAbbreviation(state.id)}
-                      </text>
+                      {state.textPosition && (
+                        <text
+                          x={state.textPosition[0]}
+                          y={state.textPosition[1]}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          className="fill-white text-[12px] font-semibold pointer-events-none select-none"
+                          style={{ textShadow: "0px 1px 2px rgba(0,0,0,0.5)" }}
+                        >
+                          {getStateAbbreviation(state.id)}
+                        </text>
+                      )}
                     </g>
                   ))}
                 </svg>
@@ -241,7 +240,6 @@ const USAMap: React.FC = () => {
             </motion.div>
           </div>
 
-          {/* Stats cards come second on mobile */}
           <div className={`${isMobile ? 'order-last' : 'lg:col-span-3 lg:order-first'} space-y-6`}>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
