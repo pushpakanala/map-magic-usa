@@ -77,10 +77,25 @@ export default {
           "0%": { backgroundPosition: "0% 50%" },
           "100%": { backgroundPosition: "100% 50%" },
         },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        shine: {
+          from: { transform: "translateX(-100%) translateY(-25%) rotate(25deg)" },
+          to: { transform: "translateX(100%) translateY(-25%) rotate(25deg)" },
+        },
       },
       animation: {
         "map-hover": "map-hover 0.2s ease-in-out forwards",
         "text-shimmer": "text-shimmer 2s ease-in-out infinite",
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "shine": "shine 2s linear infinite",
       },
       backgroundSize: {
         "300%": "300%",

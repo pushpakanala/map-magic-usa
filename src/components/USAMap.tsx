@@ -84,23 +84,23 @@ const USAMap: React.FC = () => {
   const statHighlights = [
     { 
       icon: School, 
-      title: "Top Universities", 
+      title: "Leading Universities", 
       value: "50+",
-      description: "Highest-ranked institutions per state",
+      description: "Top-ranked institutions driving innovation in education",
       theme: "bg-gradient-to-br from-indigo-500/10 to-indigo-600/5 hover:from-indigo-500/20 hover:to-indigo-600/10"
     },
     { 
       icon: Users, 
       title: "Student Population", 
       value: "4.5M+",
-      description: "Students currently enrolled in higher education",
+      description: "Diverse students pursuing higher education opportunities",
       theme: "bg-gradient-to-br from-purple-500/10 to-purple-600/5 hover:from-purple-500/20 hover:to-purple-600/10"
     },
     { 
       icon: BookOpen, 
       title: "Academic Programs", 
       value: "10K+",
-      description: "Diverse degree programs nationwide",
+      description: "Specialized degree programs across all disciplines",
       theme: "bg-gradient-to-br from-blue-500/10 to-blue-600/5 hover:from-blue-500/20 hover:to-blue-600/10"
     }
   ];
@@ -108,26 +108,26 @@ const USAMap: React.FC = () => {
   const insightCards = [
     { 
       icon: GraduationCap, 
-      title: "Explore By Major", 
-      description: "Find universities offering your desired field of study",
+      title: "Academic Excellence", 
+      description: "Explore institutions renowned for research and teaching quality",
       theme: "bg-gradient-to-br from-violet-500/10 to-violet-600/5 hover:from-violet-500/20 hover:to-violet-600/10 border-violet-500/20"
     },
     { 
       icon: MapPin, 
-      title: "Campus Locations", 
-      description: "Urban, suburban or rural - find your perfect setting",
+      title: "Strategic Locations", 
+      description: "Find campuses in urban centers, tech hubs, or scenic settings",
       theme: "bg-gradient-to-br from-teal-500/10 to-teal-600/5 hover:from-teal-500/20 hover:to-teal-600/10 border-teal-500/20"
     },
     { 
       icon: ChartBar, 
-      title: "Admissions Stats", 
-      description: "Acceptance rates and application requirements",
+      title: "Admission Statistics", 
+      description: "Review acceptance rates and competitive requirements",
       theme: "bg-gradient-to-br from-amber-500/10 to-amber-600/5 hover:from-amber-500/20 hover:to-amber-600/10 border-amber-500/20"
     },
     { 
       icon: TrendingUp, 
       title: "Career Outcomes", 
-      description: "Employment rates & average starting salaries",
+      description: "Discover graduate success rates and industry connections",
       theme: "bg-gradient-to-br from-rose-500/10 to-rose-600/5 hover:from-rose-500/20 hover:to-rose-600/10 border-rose-500/20"
     }
   ];
@@ -159,7 +159,7 @@ const USAMap: React.FC = () => {
                 transition={{ duration: 0.5 }}
                 className="relative rounded-2xl overflow-hidden shadow-xl"
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent rounded-3xl -z-10" />
+                <div className="absolute inset-0 bg-gradient-to-b from-uniquestPurple/20 to-transparent rounded-3xl -z-10" />
                 <svg
                   ref={mapRef}
                   viewBox="-0 -0 1300 1000"
@@ -195,7 +195,7 @@ const USAMap: React.FC = () => {
                       whileHover={{ scale: 1.02, opacity: 1 }}
                       onMouseEnter={() => setHoveredState(state.name)}
                       onMouseLeave={() => setHoveredState(null)}
-                      onClick={() => handleStateClick(state.name)}
+                      onClick={() => navigate(`/state/${state.name.toLowerCase()}`)}
                     />
                   ))}
                 </svg>
@@ -231,15 +231,15 @@ const USAMap: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: index * 0.1 }}
-                      className={`${highlight.theme} backdrop-blur-sm border border-primary/10 p-3 rounded-xl shadow-md`}
+                      className={`${highlight.theme} backdrop-blur-sm border border-uniquestPurple/20 p-3 rounded-xl shadow-md card-hover-effect`}
                     >
                       <div className="flex items-center gap-2 mb-1">
                         <div className="p-1.5 rounded-full bg-white/30">
-                          <highlight.icon className="h-3 w-3 text-primary" />
+                          <highlight.icon className="h-3 w-3 text-uniquestPurple" />
                         </div>
                         <p className="text-primary font-medium text-xs">{highlight.title}</p>
                       </div>
-                      <p className="text-2xl font-bold text-primary">{highlight.value}</p>
+                      <p className="text-2xl font-bold gradient-text">{highlight.value}</p>
                       <p className="text-xs text-muted-foreground line-clamp-1">{highlight.description}</p>
                     </motion.div>
                   ))}
@@ -252,11 +252,11 @@ const USAMap: React.FC = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: 0.2 + (index * 0.1) }}
-                      className={`${card.theme} backdrop-blur-sm border rounded-xl p-3 shadow-md hover:shadow-lg transition-all`}
+                      className={`${card.theme} backdrop-blur-sm border rounded-xl p-3 shadow-md hover:shadow-lg transition-all card-hover-effect`}
                     >
                       <div className="flex items-start gap-2">
                         <div className="p-1.5 rounded-full bg-white/20 mt-0.5">
-                          <card.icon className="h-3 w-3 text-primary" />
+                          <card.icon className="h-3 w-3 text-uniquestPurple" />
                         </div>
                         <div>
                           <h3 className="text-xs font-medium text-primary">{card.title}</h3>
@@ -276,7 +276,7 @@ const USAMap: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h2 className="text-2xl font-semibold text-primary mb-4">University Statistics</h2>
+                  <h2 className="text-2xl font-semibold gradient-text mb-4">Education Statistics</h2>
                   <div className="grid grid-cols-1 gap-5">
                     {statHighlights.map((highlight, index) => (
                       <motion.div
@@ -285,14 +285,14 @@ const USAMap: React.FC = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                       >
-                        <Card className={`${highlight.theme} backdrop-blur-sm border-primary/10 overflow-hidden group`}>
+                        <Card className={`${highlight.theme} backdrop-blur-sm border-uniquestPurple/20 overflow-hidden group card-hover-effect gradient-border`}>
                           <CardContent className="p-5">
                             <div className="flex items-center gap-4">
                               <div className="p-3 rounded-xl bg-white/20 group-hover:bg-white/30 transition-colors">
-                                <highlight.icon className="h-6 w-6 text-primary" />
+                                <highlight.icon className="h-6 w-6 text-uniquestPurple" />
                               </div>
                               <div>
-                                <p className="text-3xl font-bold text-primary mb-1">{highlight.value}</p>
+                                <p className="text-3xl font-bold gradient-text mb-1">{highlight.value}</p>
                                 <p className="text-sm font-medium text-primary/90">{highlight.title}</p>
                                 <p className="text-xs text-muted-foreground mt-1">{highlight.description}</p>
                               </div>
@@ -309,7 +309,7 @@ const USAMap: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  <h2 className="text-2xl font-semibold text-primary mb-4">Educational Insights</h2>
+                  <h2 className="text-2xl font-semibold gradient-text mb-4">Educational Insights</h2>
                   <div className="grid grid-cols-1 gap-4">
                     {insightCards.map((card, index) => (
                       <motion.div
@@ -318,11 +318,11 @@ const USAMap: React.FC = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
                       >
-                        <Card className={`${card.theme} backdrop-blur-sm border hover:shadow-md transition-all duration-300 group`}>
+                        <Card className={`${card.theme} backdrop-blur-sm border hover:shadow-md transition-all duration-300 group card-hover-effect`}>
                           <CardContent className="p-4">
                             <div className="flex items-center gap-4">
                               <div className="p-2.5 rounded-lg bg-white/20 group-hover:bg-white/30 transition-colors">
-                                <card.icon className="h-5 w-5 text-primary" />
+                                <card.icon className="h-5 w-5 text-uniquestPurple" />
                               </div>
                               <div className="flex-1">
                                 <h3 className="text-sm font-semibold text-primary">{card.title}</h3>
@@ -344,7 +344,7 @@ const USAMap: React.FC = () => {
                   transition={{ duration: 0.5 }}
                   className="relative rounded-2xl overflow-hidden shadow-xl"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent rounded-3xl -z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-uniquestPurple/10 to-transparent rounded-3xl -z-10" />
                   <svg
                     ref={mapRef}
                     viewBox="-0 -0 1300 1000"
@@ -380,7 +380,7 @@ const USAMap: React.FC = () => {
                         whileHover={{ scale: 1.02, opacity: 1 }}
                         onMouseEnter={() => setHoveredState(state.name)}
                         onMouseLeave={() => setHoveredState(null)}
-                        onClick={() => handleStateClick(state.name)}
+                        onClick={() => navigate(`/state/${state.name.toLowerCase()}`)}
                       />
                     ))}
                   </svg>
@@ -417,3 +417,4 @@ const USAMap: React.FC = () => {
 };
 
 export default USAMap;
+

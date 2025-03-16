@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -133,4 +134,18 @@
 .try-now-button:hover .underline-effect {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-white/20 dark:border-slate-700/20;
+  }
+  
+  .shimmer {
+    @apply before:absolute before:inset-0 before:-translate-x-full before:animate-shine before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent overflow-hidden;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 inline-block text-transparent bg-clip-text;
+  }
 }
