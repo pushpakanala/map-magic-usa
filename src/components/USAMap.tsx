@@ -24,54 +24,54 @@ interface HoverPosition {
 const stateAbbreviations: { [key: string]: { abbr: string, position: [number, number] } } = {
   "Alabama": { abbr: "AL", position: [622, 445] },
   "Alaska": { abbr: "AK", position: [170, 590] },
-  "Arizona": { abbr: "AZ", position: [270, 370] },
-  "Arkansas": { abbr: "AR", position: [570, 400] },
-  "California": { abbr: "CA", position: [140, 300] },
-  "Colorado": { abbr: "CO", position: [370, 320] },
-  "Connecticut": { abbr: "CT", position: [860, 220] },
-  "Delaware": { abbr: "DE", position: [840, 260] },
-  "Florida": { abbr: "FL", position: [710, 510] },
+  "Arizona": { abbr: "AZ", position: [245, 370] },
+  "Arkansas": { abbr: "AR", position: [545, 400] },
+  "California": { abbr: "CA", position: [135, 305] },
+  "Colorado": { abbr: "CO", position: [360, 322] },
+  "Connecticut": { abbr: "CT", position: [860, 240] },
+  "Delaware": { abbr: "DE", position: [825, 282] },
+  "Florida": { abbr: "FL", position: [735, 510] },
   "Georgia": { abbr: "GA", position: [700, 420] },
   "Hawaii": { abbr: "HI", position: [230, 520] },
-  "Idaho": { abbr: "ID", position: [220, 210] },
-  "Illinois": { abbr: "IL", position: [600, 300] },
-  "Indiana": { abbr: "IN", position: [650, 280] },
-  "Iowa": { abbr: "IA", position: [550, 260] },
+  "Idaho": { abbr: "ID", position: [220, 230] },
+  "Illinois": { abbr: "IL", position: [595, 320] },
+  "Indiana": { abbr: "IN", position: [652, 300] },
+  "Iowa": { abbr: "IA", position: [550, 275] },
   "Kansas": { abbr: "KS", position: [480, 340] },
-  "Kentucky": { abbr: "KY", position: [670, 330] },
+  "Kentucky": { abbr: "KY", position: [665, 350] },
   "Louisiana": { abbr: "LA", position: [550, 470] },
-  "Maine": { abbr: "ME", position: [890, 150] },
-  "Maryland": { abbr: "MD", position: [810, 275] },
-  "Massachusetts": { abbr: "MA", position: [865, 200] },
-  "Michigan": { abbr: "MI", position: [650, 225] },
-  "Minnesota": { abbr: "MN", position: [530, 180] },
-  "Mississippi": { abbr: "MS", position: [600, 450] },
-  "Missouri": { abbr: "MO", position: [550, 340] },
-  "Montana": { abbr: "MT", position: [300, 170] },
-  "Nebraska": { abbr: "NE", position: [460, 280] },
-  "Nevada": { abbr: "NV", position: [180, 270] },
-  "New Hampshire": { abbr: "NH", position: [870, 180] },
-  "New Jersey": { abbr: "NJ", position: [840, 245] },
+  "Maine": { abbr: "ME", position: [875, 170] },
+  "Maryland": { abbr: "MD", position: [800, 290] },
+  "Massachusetts": { abbr: "MA", position: [860, 225] },
+  "Michigan": { abbr: "MI", position: [640, 235] },
+  "Minnesota": { abbr: "MN", position: [530, 195] },
+  "Mississippi": { abbr: "MS", position: [590, 450] },
+  "Missouri": { abbr: "MO", position: [550, 350] },
+  "Montana": { abbr: "MT", position: [300, 180] },
+  "Nebraska": { abbr: "NE", position: [465, 285] },
+  "Nevada": { abbr: "NV", position: [180, 280] },
+  "New Hampshire": { abbr: "NH", position: [870, 200] },
+  "New Jersey": { abbr: "NJ", position: [840, 265] },
   "New Mexico": { abbr: "NM", position: [340, 390] },
-  "New York": { abbr: "NY", position: [820, 200] },
-  "North Carolina": { abbr: "NC", position: [760, 360] },
-  "North Dakota": { abbr: "ND", position: [470, 170] },
-  "Ohio": { abbr: "OH", position: [700, 270] },
+  "New York": { abbr: "NY", position: [820, 220] },
+  "North Carolina": { abbr: "NC", position: [760, 370] },
+  "North Dakota": { abbr: "ND", position: [470, 180] },
+  "Ohio": { abbr: "OH", position: [700, 295] },
   "Oklahoma": { abbr: "OK", position: [480, 380] },
-  "Oregon": { abbr: "OR", position: [150, 180] },
-  "Pennsylvania": { abbr: "PA", position: [780, 240] },
-  "Rhode Island": { abbr: "RI", position: [872, 217] },
+  "Oregon": { abbr: "OR", position: [150, 200] },
+  "Pennsylvania": { abbr: "PA", position: [780, 265] },
+  "Rhode Island": { abbr: "RI", position: [872, 232] },
   "South Carolina": { abbr: "SC", position: [740, 400] },
-  "South Dakota": { abbr: "SD", position: [460, 220] },
-  "Tennessee": { abbr: "TN", position: [650, 370] },
+  "South Dakota": { abbr: "SD", position: [460, 230] },
+  "Tennessee": { abbr: "TN", position: [650, 375] },
   "Texas": { abbr: "TX", position: [450, 450] },
-  "Utah": { abbr: "UT", position: [270, 300] },
-  "Vermont": { abbr: "VT", position: [850, 170] },
-  "Virginia": { abbr: "VA", position: [780, 310] },
-  "Washington": { abbr: "WA", position: [170, 130] },
-  "West Virginia": { abbr: "WV", position: [745, 300] },
-  "Wisconsin": { abbr: "WI", position: [590, 210] },
-  "Wyoming": { abbr: "WY", position: [350, 240] },
+  "Utah": { abbr: "UT", position: [265, 300] },
+  "Vermont": { abbr: "VT", position: [845, 195] },
+  "Virginia": { abbr: "VA", position: [780, 330] },
+  "Washington": { abbr: "WA", position: [170, 150] },
+  "West Virginia": { abbr: "WV", position: [745, 315] },
+  "Wisconsin": { abbr: "WI", position: [590, 230] },
+  "Wyoming": { abbr: "WY", position: [350, 255] },
 };
 
 const USAMap: React.FC = () => {
@@ -125,7 +125,7 @@ const USAMap: React.FC = () => {
   };
 
   const getStateColor = (index: number) => {
-    // Using different shades of blue-gray as seen in the image
+    // Blue-gray colors based on the image
     const colors = [
       '#A4B7C6', // Light blue-gray
       '#7D8FA3', // Medium blue-gray
@@ -137,7 +137,7 @@ const USAMap: React.FC = () => {
   };
 
   if (isLoading) return (
-    <div className="w-full h-[400px] relative">
+    <div className="w-full h-[500px] relative">
       <Skeleton className="absolute inset-0" />
     </div>
   );
@@ -153,7 +153,7 @@ const USAMap: React.FC = () => {
 
   return (
     <div className="w-full bg-gradient-to-b from-background to-background/80">
-      <div className="max-w-[1000px] mx-auto p-4">
+      <div className="max-w-[1200px] mx-auto p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -165,7 +165,7 @@ const USAMap: React.FC = () => {
               ref={mapRef}
               viewBox="-0 -0 1000 700"
               preserveAspectRatio="xMidYMid meet"
-              className="w-full h-full max-h-[350px]" 
+              className="w-full h-full max-h-[500px]" 
               onMouseMove={handleMouseMove}
               style={{ 
                 filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
@@ -212,9 +212,10 @@ const USAMap: React.FC = () => {
                     key={`text-${stateName}`}
                     x={stateInfo.position[0]}
                     y={stateInfo.position[1]}
-                    className="text-[10px] font-bold fill-black pointer-events-none"
+                    className="text-[10px] font-bold pointer-events-none"
                     textAnchor="middle"
                     dominantBaseline="middle"
+                    style={{ fill: '#000000' }}
                   >
                     {stateInfo.abbr}
                   </text>
