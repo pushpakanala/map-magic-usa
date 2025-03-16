@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -164,7 +165,7 @@ const USAMap: React.FC = () => {
               <div className="relative">
                 <svg
                   ref={mapRef}
-                  viewBox="-0 -0 1300 1000"
+                  viewBox="160 0 800 600"
                   preserveAspectRatio="xMidYMid meet"
                   className="w-full h-full"
                   onMouseMove={handleMouseMove}
