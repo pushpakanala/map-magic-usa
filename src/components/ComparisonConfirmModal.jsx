@@ -59,16 +59,13 @@ const ComparisonConfirmModal = ({
       return updatedList;
     });
     
-    // Call the parent's callback after state update to avoid render during render issues
-    setTimeout(() => {
-      // Call the hook function to update global state
-      removeFromComparison(universityName);
-      
-      // Then call the callback from parent component if it exists
-      if (onRemoveUniversity) {
-        onRemoveUniversity(universityName);
-      }
-    }, 0);
+    // Only remove the specific university from the comparison
+    removeFromComparison(universityName);
+    
+    // Call the callback from parent component if it exists
+    if (onRemoveUniversity) {
+      onRemoveUniversity(universityName);
+    }
   }, [onOpenChange, onRemoveUniversity, removeFromComparison]);
 
   return (

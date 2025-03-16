@@ -87,17 +87,11 @@ export const useComparison = () => {
     console.log(`Removing ${universityName} from comparison list`);
     
     setComparedUniversities(prev => {
+      // Create a new array without the specified university
       const newList = prev.filter(name => name !== universityName);
       
+      // Update session storage with the new list
       sessionStorage.setItem('comparedUniversities', JSON.stringify(newList));
-      
-      // Dispatch storage event after state update to avoid render issues
-      setTimeout(() => {
-        window.dispatchEvent(new StorageEvent('storage', {
-          key: 'comparedUniversities',
-          newValue: JSON.stringify(newList)
-        }));
-      }, 0);
       
       return newList;
     });

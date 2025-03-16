@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
@@ -19,7 +18,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
 import { BOT_GEMINI } from '../constants';
-import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, BarChart3, Compass, School } from 'lucide-react';
+import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, BarChart3, Compass, School, BookOpen, Lightbulb, Sparkles, Rocket } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
 
@@ -116,7 +115,6 @@ const Index = () => {
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('token');
-    // Clear compared universities on logout
     clearComparedUniversities();
     toast({
       title: "Logged out",
@@ -247,94 +245,194 @@ const Index = () => {
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="max-w-6xl mx-auto p-6 space-y-8"
+              className="max-w-6xl mx-auto p-6 space-y-12"
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-6">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="bg-gradient-to-br from-blue-500/10 to-purple-600/5 p-6 rounded-lg backdrop-blur-sm border border-primary/10"
+              <div className="relative rounded-2xl overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/90 to-purple-700/90 z-0"></div>
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1470&auto=format&fit=crop')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
+                <div className="relative z-10 px-8 py-16 text-center">
+                  <motion.h1 
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-4xl md:text-5xl font-bold mb-4 text-white"
                   >
-                    <h2 className="text-3xl font-bold text-primary mb-4">About UniQuest</h2>
-                    <p className="text-lg text-muted-foreground">
-                      Welcome to UniQuest, your comprehensive platform for exploring universities across the United States. Our interactive map allows you to discover educational institutions state by state, while our powerful search features help you find specific universities that match your interests.
-                    </p>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-gradient-to-br from-green-500/10 to-teal-600/5 p-6 rounded-lg backdrop-blur-sm border border-primary/10"
+                    Welcome to <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-200 to-purple-100">UniQuest</span>
+                  </motion.h1>
+                  <motion.p 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-xl text-indigo-100 max-w-2xl mx-auto mb-8"
                   >
-                    <h3 className="text-xl font-semibold text-primary mb-3">Our Mission</h3>
-                    <p className="text-muted-foreground">
-                      Our mission is to simplify the university search process and help students make informed decisions about their educational future. We believe in providing accurate, up-to-date information in an accessible and user-friendly format.
-                    </p>
-                  </motion.div>
-                </div>
-
-                <div className="space-y-4">
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="bg-gradient-to-br from-orange-500/10 to-pink-600/5 p-6 rounded-lg backdrop-blur-sm border border-primary/10"
+                    Your comprehensive platform for exploring and comparing universities across the United States
+                  </motion.p>
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6 }}
                   >
-                    <h3 className="text-xl font-semibold text-primary mb-4">Key Features</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      {[
-                        { icon: Map, text: "Interactive Maps" },
-                        { icon: Search, text: "Advanced Search" },
-                        { icon: GraduationCap, text: "University Profiles" },
-                        { icon: Users, text: "Student Community" },
-                        { icon: Globe2, text: "Global Perspective" },
-                        { icon: BrainCircuit, text: "Smart Recommendations" }
-                      ].map((feature, index) => (
-                        <motion.div
-                          key={feature.text}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: index * 0.1 }}
-                          className="flex items-center gap-2 text-muted-foreground"
-                        >
-                          <feature.icon className="h-4 w-4 text-primary" />
-                          <span>{feature.text}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-gradient-to-br from-indigo-500/10 to-violet-600/5 p-6 rounded-lg backdrop-blur-sm border border-primary/10"
-                  >
-                    <h3 className="text-xl font-semibold text-primary mb-3">Why Choose UniQuest?</h3>
-                    <ul className="space-y-2 text-muted-foreground">
-                      <li className="flex items-center gap-2">
-                        <Award className="h-4 w-4 text-primary" />
-                        Comprehensive university database
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <BarChart3 className="h-4 w-4 text-primary" />
-                        Real-time statistics and insights
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Compass className="h-4 w-4 text-primary" />
-                        Personalized navigation experience
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <School className="h-4 w-4 text-primary" />
-                        Expert educational guidance
-                      </li>
-                    </ul>
+                    <Button 
+                      size="lg" 
+                      className="bg-white text-indigo-700 hover:bg-indigo-100 font-semibold rounded-full px-8"
+                      onClick={() => document.querySelector('[data-value="map"]').click()}
+                    >
+                      <Map className="mr-2 h-4 w-4" />
+                      Explore Universities
+                    </Button>
                   </motion.div>
                 </div>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="bg-gradient-to-br from-indigo-500/10 to-purple-600/5 p-8 rounded-xl backdrop-blur-sm border border-indigo-500/20 shadow-xl shadow-indigo-500/5"
+                >
+                  <div className="bg-indigo-600/20 p-3 w-fit rounded-full mb-4">
+                    <Rocket className="h-6 w-6 text-indigo-500" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-indigo-600 mb-4">Our Mission</h2>
+                  <p className="text-muted-foreground leading-relaxed">
+                    UniQuest is dedicated to simplifying the university search process, empowering students to make informed decisions about their educational future. We believe in providing accurate, comprehensive information in an accessible and interactive format, making the complex journey of choosing a university both enjoyable and insightful.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="bg-gradient-to-br from-purple-500/10 to-indigo-600/5 p-8 rounded-xl backdrop-blur-sm border border-purple-500/20 shadow-xl shadow-purple-500/5"
+                >
+                  <div className="bg-purple-600/20 p-3 w-fit rounded-full mb-4">
+                    <Lightbulb className="h-6 w-6 text-purple-500" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-purple-600 mb-4">Our Vision</h2>
+                  <p className="text-muted-foreground leading-relaxed">
+                    We envision a future where every student has equal access to comprehensive university information, enabling them to find institutions that best match their academic goals, personal preferences, and career aspirations. UniQuest strives to be the leading platform that bridges the information gap between students and educational institutions.
+                  </p>
+                </motion.div>
+              </div>
+
+              <div>
+                <motion.h2 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600"
+                >
+                  Discover Our Features
+                </motion.h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {[
+                    { 
+                      icon: Map, 
+                      title: "Interactive Map", 
+                      description: "Explore universities state by state with our interactive US map interface.",
+                      color: "indigo"
+                    },
+                    { 
+                      icon: BookOpen, 
+                      title: "Comprehensive Profiles", 
+                      description: "Access detailed information about each university's programs, campus, and more.",
+                      color: "purple"
+                    },
+                    { 
+                      icon: BarChart3, 
+                      title: "Side-by-Side Comparison", 
+                      description: "Compare multiple universities to find your perfect academic match.",
+                      color: "blue"
+                    },
+                    { 
+                      icon: Sparkles, 
+                      title: "Personalized Recommendations", 
+                      description: "Receive tailored university suggestions based on your preferences.",
+                      color: "violet"
+                    },
+                    { 
+                      icon: BrainCircuit, 
+                      title: "AI Assistant", 
+                      description: "Get instant answers to your university questions with our intelligent chatbot.",
+                      color: "pink"
+                    },
+                    { 
+                      icon: Search, 
+                      title: "Advanced Search", 
+                      description: "Find specific universities with our powerful search functionality.",
+                      color: "indigo"
+                    }
+                  ].map((feature, index) => (
+                    <motion.div
+                      key={feature.title}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                      className={`bg-gradient-to-br from-${feature.color}-500/10 to-${feature.color}-600/5 p-6 rounded-xl backdrop-blur-sm border border-${feature.color}-500/20 shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] group`}
+                    >
+                      <div className={`bg-${feature.color}-500/20 p-3 w-fit rounded-full mb-4 group-hover:bg-${feature.color}-500/30 transition-colors`}>
+                        <feature.icon className={`h-6 w-6 text-${feature.color}-500`} />
+                      </div>
+                      <h3 className={`text-xl font-semibold text-${feature.color}-600 mb-2`}>{feature.title}</h3>
+                      <p className="text-muted-foreground">{feature.description}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-gradient-to-br from-indigo-500/5 to-purple-500/5 p-10 rounded-2xl border border-indigo-500/10 shadow-lg"
+              >
+                <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                  Why Choose UniQuest?
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {[
+                    { icon: Award, text: "Comprehensive university database covering all US states" },
+                    { icon: BarChart3, text: "Real-time statistics and insights about each institution" },
+                    { icon: Users, text: "Community-driven reviews and experiences from real students" },
+                    { icon: Compass, text: "Personalized university recommendations based on your profile" },
+                    { icon: GraduationCap, text: "Detailed information about programs, majors, and specializations" },
+                    { icon: Globe2, text: "Regular updates about university rankings and achievements" }
+                  ].map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="flex items-start gap-4 p-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-950/10 transition-colors"
+                    >
+                      <div className="bg-gradient-to-br from-indigo-500 to-purple-500 p-2 rounded-full text-white">
+                        <item.icon className="h-5 w-5" />
+                      </div>
+                      <p className="text-muted-foreground font-medium">{item.text}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-8"
+              >
+                <h2 className="text-2xl font-bold mb-4">Ready to Start Your University Journey?</h2>
+                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                  Begin exploring universities across the United States and find the perfect match for your academic future.
+                </p>
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-full px-8 shadow-lg shadow-indigo-500/20"
+                  onClick={() => document.querySelector('[data-value="map"]').click()}
+                >
+                  <Compass className="mr-2 h-4 w-4" />
+                  Explore Now
+                </Button>
+              </motion.div>
             </motion.div>
           </TabsContent>
 
