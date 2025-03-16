@@ -152,7 +152,7 @@ const USAMap: React.FC = () => {
 
   return (
     <div className="w-full bg-gradient-to-b from-background to-background/80">
-      <div className="max-w-[1200px] mx-auto p-4">
+      <div className="max-w-[1000px] mx-auto p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -164,7 +164,7 @@ const USAMap: React.FC = () => {
               ref={mapRef}
               viewBox="-0 -0 1000 700"
               preserveAspectRatio="xMidYMid meet"
-              className="w-full h-full max-h-[500px]"
+              className="w-full h-full max-h-[450px]"
               onMouseMove={handleMouseMove}
               style={{ 
                 filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
@@ -179,17 +179,17 @@ const USAMap: React.FC = () => {
                   </feMerge>
                 </filter>
                 <linearGradient id="mapGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#6366f1" stopOpacity="0.7" />
-                  <stop offset="100%" stopColor="#4338ca" stopOpacity="0.7" />
+                  <stop offset="0%" stopColor="#8E9196" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#403E43" stopOpacity="0.8" />
                 </linearGradient>
               </defs>
               {statesData.map((state, index) => (
                 <motion.path
                   key={state.id}
                   d={state.path}
-                  className={`transition-all duration-300 cursor-pointer
-                    hover:brightness-110 hover:saturate-150 fill-modernIndigo/80`}
+                  className="transition-all duration-300 cursor-pointer hover:brightness-110 hover:saturate-150"
                   style={{
+                    fill: 'url(#mapGradient)',
                     filter: hoveredState === state.id ? 'url(#glow)' : 'none',
                     opacity: 0.85,
                   }}
@@ -204,16 +204,13 @@ const USAMap: React.FC = () => {
               ))}
               
               {/* State abbreviations */}
-              {statesData.map((state) => {
-                const stateInfo = stateAbbreviations[state.name];
-                if (!stateInfo) return null;
-                
+              {Object.entries(stateAbbreviations).map(([stateName, stateInfo]) => {
                 return (
                   <text
-                    key={`text-${state.id}`}
+                    key={`text-${stateName}`}
                     x={stateInfo.position[0]}
                     y={stateInfo.position[1]}
-                    className="text-[10px] font-bold fill-white pointer-events-none"
+                    className="text-[10px] font-bold fill-black pointer-events-none"
                     textAnchor="middle"
                   >
                     {stateInfo.abbr}

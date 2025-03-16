@@ -156,10 +156,10 @@ const Index = () => {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.2 }}
                 />
-                <div className="absolute -bottom-2 -right-2 bg-modernIndigo text-white text-xs font-bold px-2 py-1 rounded-full">EDU</div>
+                <div className="absolute -bottom-2 -right-2 bg-black text-white text-xs font-bold px-2 py-1 rounded-full">EDU</div>
               </div>
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-modernIndigo to-modernIndigo-dark">
+                <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-black to-gray-700">
                   UniQuest
                 </h1>
                 <p className="text-xs text-slate-500 dark:text-slate-400">Discover Your Academic Future</p>
@@ -180,10 +180,10 @@ const Index = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    className="w-full md:w-80 pl-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 focus-visible:ring-modernIndigo"
+                    className="w-full md:w-80 pl-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 focus-visible:ring-black"
                   />
                 </div>
-                <Button onClick={handleSearch} className="bg-modernIndigo hover:bg-modernIndigo-dark text-white">
+                <Button onClick={handleSearch} className="bg-black hover:bg-gray-800 text-white">
                   Search
                 </Button>
               </motion.div>
@@ -194,15 +194,15 @@ const Index = () => {
                     <Button 
                       variant="outline" 
                       size="icon" 
-                      className="rounded-full bg-white dark:bg-slate-800 hover:bg-modernIndigo/10 transition-colors"
+                      className="rounded-full bg-white dark:bg-slate-800 hover:bg-black/10 transition-colors"
                     >
                       <User className="h-5 w-5" />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-80 p-4">
                     <div className="flex items-center gap-4 mb-4">
-                      <div className="rounded-full bg-modernIndigo/10 p-2">
-                        <User className="h-6 w-6 text-modernIndigo" />
+                      <div className="rounded-full bg-black/10 p-2">
+                        <User className="h-6 w-6 text-black" />
                       </div>
                       <div className="flex-1 space-y-1 overflow-hidden">
                         <p className="font-medium truncate">{userData?.name}</p>
@@ -240,20 +240,20 @@ const Index = () => {
           >
             <Tabs defaultValue="map" className="w-full">
               <TabsList className={`grid w-full max-w-[600px] mx-auto mb-6 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 ${userData?.role === 'admin' ? 'grid-cols-4' : 'grid-cols-3'}`}>
-                <TabsTrigger value="map" className="flex items-center gap-2 data-[state=active]:bg-modernIndigo data-[state=active]:text-white">
+                <TabsTrigger value="map" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
                   <MapPin className="h-4 w-4" />
                   <span className="hidden sm:inline">Map View</span>
                 </TabsTrigger>
-                <TabsTrigger value="favorites" className="flex items-center gap-2 data-[state=active]:bg-modernIndigo data-[state=active]:text-white">
+                <TabsTrigger value="favorites" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
                   <Heart className="h-4 w-4" />
                   <span className="hidden sm:inline">Favorites</span> <span className="text-xs">({favorites.length})</span>
                 </TabsTrigger>
-                <TabsTrigger value="about" className="flex items-center gap-2 data-[state=active]:bg-modernIndigo data-[state=active]:text-white">
+                <TabsTrigger value="about" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
                   <Info className="h-4 w-4" />
                   <span className="hidden sm:inline">About</span>
                 </TabsTrigger>
                 {userData?.role === 'admin' && (
-                  <TabsTrigger value="admin" className="flex items-center gap-2 data-[state=active]:bg-modernIndigo data-[state=active]:text-white">
+                  <TabsTrigger value="admin" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
                     <Shield className="h-4 w-4" />
                     <span className="hidden sm:inline">Admin</span>
                   </TabsTrigger>
@@ -277,10 +277,10 @@ const Index = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-modernIndigo-light/10 rounded-lg p-4 border border-modernIndigo/20 flex items-center gap-3"
+                    className="bg-gray-200/10 rounded-lg p-4 border border-black/20 flex items-center gap-3"
                   >
-                    <div className="bg-modernIndigo/10 p-2 rounded-full">
-                      <GraduationCap className="h-6 w-6 text-modernIndigo" />
+                    <div className="bg-black/10 p-2 rounded-full">
+                      <GraduationCap className="h-6 w-6 text-black" />
                     </div>
                     <div>
                       <h3 className="font-medium text-slate-800 dark:text-slate-200">4,000+</h3>
@@ -291,10 +291,10 @@ const Index = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-modernTeal-light/10 rounded-lg p-4 border border-modernTeal/20 flex items-center gap-3"
+                    className="bg-gray-200/10 rounded-lg p-4 border border-black/20 flex items-center gap-3"
                   >
-                    <div className="bg-modernTeal/10 p-2 rounded-full">
-                      <Map className="h-6 w-6 text-modernTeal" />
+                    <div className="bg-black/10 p-2 rounded-full">
+                      <Map className="h-6 w-6 text-black" />
                     </div>
                     <div>
                       <h3 className="font-medium text-slate-800 dark:text-slate-200">50</h3>
@@ -305,10 +305,10 @@ const Index = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="bg-modernAmber-light/10 rounded-lg p-4 border border-modernAmber/20 flex items-center gap-3"
+                    className="bg-gray-200/10 rounded-lg p-4 border border-black/20 flex items-center gap-3"
                   >
-                    <div className="bg-modernAmber/10 p-2 rounded-full">
-                      <BarChart3 className="h-6 w-6 text-modernAmber" />
+                    <div className="bg-black/10 p-2 rounded-full">
+                      <BarChart3 className="h-6 w-6 text-black" />
                     </div>
                     <div>
                       <h3 className="font-medium text-slate-800 dark:text-slate-200">Detailed</h3>
@@ -336,7 +336,7 @@ const Index = () => {
                   className="max-w-6xl mx-auto space-y-12"
                 >
                   <div className="relative rounded-2xl overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-modernIndigo/90 to-indigo-700/90 z-0"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-gray-800/90 z-0"></div>
                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=1470&auto=format&fit=crop')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
                     <div className="relative z-10 px-6 md:px-8 py-12 md:py-16 text-center">
                       <motion.h1 
@@ -345,13 +345,13 @@ const Index = () => {
                         transition={{ delay: 0.2 }}
                         className="text-3xl md:text-5xl font-bold mb-4 text-white"
                       >
-                        Welcome to <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-200 to-blue-100">UniQuest</span>
+                        Welcome to <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-200 to-white">UniQuest</span>
                       </motion.h1>
                       <motion.p 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
-                        className="text-lg md:text-xl text-indigo-100 max-w-2xl mx-auto mb-8"
+                        className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto mb-8"
                       >
                         Your comprehensive platform for exploring and comparing universities across the United States
                       </motion.p>
@@ -363,12 +363,12 @@ const Index = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
-                      className="bg-gradient-to-br from-modernIndigo-light/10 to-modernIndigo/5 p-8 rounded-xl backdrop-blur-sm border border-modernIndigo/20 shadow-xl shadow-modernIndigo/5"
+                      className="bg-gradient-to-br from-gray-200/10 to-black/5 p-8 rounded-xl backdrop-blur-sm border border-black/20 shadow-xl shadow-black/5"
                     >
-                      <div className="bg-modernIndigo/20 p-3 w-fit rounded-full mb-4">
-                        <Rocket className="h-6 w-6 text-modernIndigo" />
+                      <div className="bg-black/20 p-3 w-fit rounded-full mb-4">
+                        <Rocket className="h-6 w-6 text-black" />
                       </div>
-                      <h2 className="text-2xl font-bold text-modernIndigo mb-4">Our Mission</h2>
+                      <h2 className="text-2xl font-bold text-black mb-4">Our Mission</h2>
                       <p className="text-muted-foreground leading-relaxed">
                         UniQuest is dedicated to simplifying the university search process, empowering students to make informed decisions about their educational future. We believe in providing accurate, comprehensive information in an accessible and interactive format, making the complex journey of choosing a university both enjoyable and insightful.
                       </p>
@@ -378,12 +378,12 @@ const Index = () => {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.3 }}
-                      className="bg-gradient-to-br from-modernTeal-light/10 to-modernTeal/5 p-8 rounded-xl backdrop-blur-sm border border-modernTeal/20 shadow-xl shadow-modernTeal/5"
+                      className="bg-gradient-to-br from-gray-300/10 to-black/5 p-8 rounded-xl backdrop-blur-sm border border-black/20 shadow-xl shadow-black/5"
                     >
-                      <div className="bg-modernTeal/20 p-3 w-fit rounded-full mb-4">
-                        <Lightbulb className="h-6 w-6 text-modernTeal" />
+                      <div className="bg-black/20 p-3 w-fit rounded-full mb-4">
+                        <Lightbulb className="h-6 w-6 text-black" />
                       </div>
-                      <h2 className="text-2xl font-bold text-modernTeal mb-4">Our Vision</h2>
+                      <h2 className="text-2xl font-bold text-black mb-4">Our Vision</h2>
                       <p className="text-muted-foreground leading-relaxed">
                         We envision a future where every student has equal access to comprehensive university information, enabling them to find institutions that best match their academic goals, personal preferences, and career aspirations. UniQuest strives to be the leading platform that bridges the information gap between students and educational institutions.
                       </p>
@@ -394,7 +394,7 @@ const Index = () => {
                     <motion.h2 
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-modernIndigo to-modernTeal"
+                      className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-black to-gray-700"
                     >
                       Discover Our Features
                     </motion.h2>
@@ -405,37 +405,37 @@ const Index = () => {
                           icon: Map, 
                           title: "Interactive Map", 
                           description: "Explore universities state by state with our interactive US map interface.",
-                          color: "bg-modernIndigo/10 text-modernIndigo border-modernIndigo/20"
+                          color: "bg-black/10 text-black border-black/20"
                         },
                         { 
                           icon: BookOpen, 
                           title: "Comprehensive Profiles", 
                           description: "Access detailed information about each university's programs, campus, and more.",
-                          color: "bg-modernTeal/10 text-modernTeal border-modernTeal/20"
+                          color: "bg-black/10 text-black border-black/20"
                         },
                         { 
                           icon: BarChart3, 
                           title: "Side-by-Side Comparison", 
                           description: "Compare multiple universities to find your perfect academic match.",
-                          color: "bg-modernAmber/10 text-modernAmber border-modernAmber/20"
+                          color: "bg-black/10 text-black border-black/20"
                         },
                         { 
                           icon: Sparkles, 
                           title: "Personalized Recommendations", 
                           description: "Receive tailored university suggestions based on your preferences.",
-                          color: "bg-modernRose/10 text-modernRose border-modernRose/20"
+                          color: "bg-black/10 text-black border-black/20"
                         },
                         { 
                           icon: BrainCircuit, 
                           title: "AI Assistant", 
                           description: "Get instant answers to your university questions with our intelligent chatbot.",
-                          color: "bg-sky-500/10 text-sky-500 border-sky-500/20"
+                          color: "bg-black/10 text-black border-black/20"
                         },
                         { 
                           icon: Search, 
                           title: "Advanced Search", 
                           description: "Find specific universities with our powerful search functionality.",
-                          color: "bg-violet-500/10 text-violet-500 border-violet-500/20"
+                          color: "bg-black/10 text-black border-black/20"
                         }
                       ].map((feature, index) => (
                         <motion.div
@@ -458,9 +458,9 @@ const Index = () => {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-br from-indigo-500/5 to-purple-500/5 p-10 rounded-2xl border border-indigo-500/10 shadow-lg"
+                    className="bg-gradient-to-br from-gray-500/5 to-gray-800/5 p-10 rounded-2xl border border-black/10 shadow-lg"
                   >
-                    <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                    <h2 className="text-3xl font-bold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-black to-gray-700">
                       Why Choose UniQuest?
                     </h2>
                   
@@ -478,9 +478,9 @@ const Index = () => {
                           initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.5, delay: index * 0.1 }}
-                          className="flex items-start gap-4 p-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-950/10 transition-colors"
+                          className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900/10 transition-colors"
                         >
-                          <div className="bg-gradient-to-br from-indigo-500 to-purple-500 p-2 rounded-full text-white">
+                          <div className="bg-gradient-to-br from-black to-gray-700 p-2 rounded-full text-white">
                             <item.icon className="h-5 w-5" />
                           </div>
                           <p className="text-muted-foreground font-medium">{item.text}</p>
@@ -510,7 +510,7 @@ const Index = () => {
           className="fixed bottom-4 right-4 z-50"
         >
           <Button
-            className="rounded-full h-12 w-12 shadow-lg bg-modernIndigo hover:bg-modernIndigo-dark transition-colors"
+            className="rounded-full h-12 w-12 shadow-lg bg-black hover:bg-gray-800 transition-colors"
             onClick={handleBotClick}
             type="button"
           >
@@ -526,8 +526,8 @@ const Index = () => {
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               className="fixed bottom-20 right-4 w-full max-w-96 h-[600px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 z-40 flex flex-col"
             >
-              <div className="p-4 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-modernIndigo/5 to-modernIndigo-light/5">
-                <h3 className="text-lg font-semibold text-modernIndigo">Chat with Bot</h3>
+              <div className="p-4 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-black/5 to-gray-500/5">
+                <h3 className="text-lg font-semibold text-black">Chat with Bot</h3>
               </div>
               
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -541,7 +541,7 @@ const Index = () => {
                     <div
                       className={`max-w-[80%] p-3 rounded-lg ${
                         message.sender === 'user'
-                          ? 'bg-modernIndigo text-white ml-auto'
+                          ? 'bg-black text-white ml-auto'
                           : 'bg-slate-100 dark:bg-slate-800'
                       }`}
                     >
@@ -570,13 +570,13 @@ const Index = () => {
                       }
                     }}
                     placeholder="Type your message..."
-                    className="resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-modernIndigo/30"
+                    className="resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-black/30"
                     rows={2}
                   />
                   <Button
                     onClick={handleSendMessage}
                     size="icon"
-                    className="h-auto bg-modernIndigo hover:bg-modernIndigo-dark"
+                    className="h-auto bg-black hover:bg-gray-800"
                     disabled={!currentMessage.trim() || isLoading}
                   >
                     <Send className="h-4 w-4" />
