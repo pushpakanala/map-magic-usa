@@ -56,43 +56,6 @@
   color: #888;
 }
 
-/* Professional card styling */
-.pro-card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.pro-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.pro-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.08),
-    transparent
-  );
-  transition: 0.5s;
-}
-
-.pro-card:hover::before {
-  left: 100%;
-}
-
 /* Modern Try Now button styling */
 .try-now-button {
   position: relative;
@@ -133,43 +96,4 @@
 
 .try-now-button:hover:after {
   width: 100%;
-}
-
-/* Card hover effect */
-.card-hover-effect {
-  transition: all 0.3s ease;
-}
-
-.card-hover-effect:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px -10px rgba(155, 135, 245, 0.5);
-}
-
-/* Gradient text effect */
-.gradient-text {
-  background: linear-gradient(90deg, #9b87f5 0%, #D6BCFA 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Gradient border effect */
-.gradient-border {
-  position: relative;
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-
-.gradient-border::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 0.5rem;
-  padding: 2px;
-  background: linear-gradient(90deg, #9b87f5 0%, #D6BCFA 100%);
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
 }
