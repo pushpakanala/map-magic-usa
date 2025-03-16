@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { statesData } from '@/lib/states-data';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GraduationCap, Search, Users, Building2, BookOpen, Award, Map, School, Compass, BrainCircuit, Globe2, BarChart3, MapPin, BookOpen, GraduationCap, BookOpen, ChartBar, Users, TrendingUp } from 'lucide-react';
+import { GraduationCap, Search, Users, Building2, BookOpen, Award, Map, School, Compass, BrainCircuit, Globe2, BarChart3, MapPin, ChartBar, TrendingUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIsMobile } from '@/hooks/use-mobile';
 
