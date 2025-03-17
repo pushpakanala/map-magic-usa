@@ -20,58 +20,58 @@ interface HoverPosition {
   y: number;
 }
 
-// State abbreviations with refined positions
+// Updated state abbreviations with refined positions to ensure proper placement
 const stateAbbreviations: { [key: string]: { abbr: string, position: [number, number] } } = {
-  "Alabama": { abbr: "AL", position: [622, 445] },
-  "Alaska": { abbr: "AK", position: [170, 590] },
-  "Arizona": { abbr: "AZ", position: [245, 370] },
-  "Arkansas": { abbr: "AR", position: [545, 400] },
-  "California": { abbr: "CA", position: [135, 305] },
-  "Colorado": { abbr: "CO", position: [360, 322] },
-  "Connecticut": { abbr: "CT", position: [860, 240] },
-  "Delaware": { abbr: "DE", position: [825, 282] },
-  "Florida": { abbr: "FL", position: [735, 510] },
-  "Georgia": { abbr: "GA", position: [700, 420] },
-  "Hawaii": { abbr: "HI", position: [230, 520] },
-  "Idaho": { abbr: "ID", position: [220, 230] },
-  "Illinois": { abbr: "IL", position: [595, 320] },
-  "Indiana": { abbr: "IN", position: [652, 300] },
-  "Iowa": { abbr: "IA", position: [550, 275] },
-  "Kansas": { abbr: "KS", position: [480, 340] },
-  "Kentucky": { abbr: "KY", position: [665, 350] },
-  "Louisiana": { abbr: "LA", position: [550, 470] },
+  "Alabama": { abbr: "AL", position: [625, 435] },
+  "Alaska": { abbr: "AK", position: [140, 550] },
+  "Arizona": { abbr: "AZ", position: [235, 365] },
+  "Arkansas": { abbr: "AR", position: [545, 395] },
+  "California": { abbr: "CA", position: [125, 310] },
+  "Colorado": { abbr: "CO", position: [350, 320] },
+  "Connecticut": { abbr: "CT", position: [865, 240] },
+  "Delaware": { abbr: "DE", position: [830, 282] },
+  "Florida": { abbr: "FL", position: [735, 505] },
+  "Georgia": { abbr: "GA", position: [700, 425] },
+  "Hawaii": { abbr: "HI", position: [230, 510] },
+  "Idaho": { abbr: "ID", position: [210, 230] },
+  "Illinois": { abbr: "IL", position: [590, 320] },
+  "Indiana": { abbr: "IN", position: [647, 300] },
+  "Iowa": { abbr: "IA", position: [540, 273] },
+  "Kansas": { abbr: "KS", position: [470, 345] },
+  "Kentucky": { abbr: "KY", position: [662, 345] },
+  "Louisiana": { abbr: "LA", position: [550, 465] },
   "Maine": { abbr: "ME", position: [875, 170] },
-  "Maryland": { abbr: "MD", position: [800, 290] },
+  "Maryland": { abbr: "MD", position: [805, 290] },
   "Massachusetts": { abbr: "MA", position: [860, 225] },
-  "Michigan": { abbr: "MI", position: [640, 235] },
-  "Minnesota": { abbr: "MN", position: [530, 195] },
-  "Mississippi": { abbr: "MS", position: [590, 450] },
-  "Missouri": { abbr: "MO", position: [550, 350] },
+  "Michigan": { abbr: "MI", position: [635, 235] },
+  "Minnesota": { abbr: "MN", position: [525, 195] },
+  "Mississippi": { abbr: "MS", position: [585, 445] },
+  "Missouri": { abbr: "MO", position: [545, 345] },
   "Montana": { abbr: "MT", position: [300, 180] },
-  "Nebraska": { abbr: "NE", position: [465, 285] },
-  "Nevada": { abbr: "NV", position: [180, 280] },
-  "New Hampshire": { abbr: "NH", position: [870, 200] },
-  "New Jersey": { abbr: "NJ", position: [840, 265] },
-  "New Mexico": { abbr: "NM", position: [340, 390] },
-  "New York": { abbr: "NY", position: [820, 220] },
+  "Nebraska": { abbr: "NE", position: [460, 280] },
+  "Nevada": { abbr: "NV", position: [175, 275] },
+  "New Hampshire": { abbr: "NH", position: [865, 200] },
+  "New Jersey": { abbr: "NJ", position: [838, 265] },
+  "New Mexico": { abbr: "NM", position: [335, 390] },
+  "New York": { abbr: "NY", position: [815, 220] },
   "North Carolina": { abbr: "NC", position: [760, 370] },
-  "North Dakota": { abbr: "ND", position: [470, 180] },
-  "Ohio": { abbr: "OH", position: [700, 295] },
-  "Oklahoma": { abbr: "OK", position: [480, 380] },
-  "Oregon": { abbr: "OR", position: [150, 200] },
-  "Pennsylvania": { abbr: "PA", position: [780, 265] },
+  "North Dakota": { abbr: "ND", position: [465, 180] },
+  "Ohio": { abbr: "OH", position: [695, 290] },
+  "Oklahoma": { abbr: "OK", position: [475, 380] },
+  "Oregon": { abbr: "OR", position: [145, 200] },
+  "Pennsylvania": { abbr: "PA", position: [775, 265] },
   "Rhode Island": { abbr: "RI", position: [872, 232] },
   "South Carolina": { abbr: "SC", position: [740, 400] },
-  "South Dakota": { abbr: "SD", position: [460, 230] },
-  "Tennessee": { abbr: "TN", position: [650, 375] },
-  "Texas": { abbr: "TX", position: [450, 450] },
-  "Utah": { abbr: "UT", position: [265, 300] },
+  "South Dakota": { abbr: "SD", position: [455, 230] },
+  "Tennessee": { abbr: "TN", position: [645, 370] },
+  "Texas": { abbr: "TX", position: [445, 445] },
+  "Utah": { abbr: "UT", position: [260, 300] },
   "Vermont": { abbr: "VT", position: [845, 195] },
-  "Virginia": { abbr: "VA", position: [780, 330] },
-  "Washington": { abbr: "WA", position: [170, 150] },
-  "West Virginia": { abbr: "WV", position: [745, 315] },
-  "Wisconsin": { abbr: "WI", position: [590, 230] },
-  "Wyoming": { abbr: "WY", position: [350, 255] },
+  "Virginia": { abbr: "VA", position: [780, 325] },
+  "Washington": { abbr: "WA", position: [165, 150] },
+  "West Virginia": { abbr: "WV", position: [740, 315] },
+  "Wisconsin": { abbr: "WI", position: [585, 230] },
+  "Wyoming": { abbr: "WY", position: [340, 250] },
 };
 
 const USAMap: React.FC = () => {
@@ -124,20 +124,20 @@ const USAMap: React.FC = () => {
     }
   };
 
+  // Updated color palette to match the image - blue-gray gradient
   const getStateColor = (index: number) => {
-    // Blue-gray colors based on the image
     const colors = [
-      '#A4B7C6', // Light blue-gray
-      '#7D8FA3', // Medium blue-gray
-      '#5C6F84', // Darker blue-gray
-      '#485A71', // Deep blue-gray
-      '#364459', // Very dark blue-gray
+      '#B8C3CE', // Light blue-gray
+      '#8794A3', // Medium blue-gray
+      '#5F6D7E', // Darker blue-gray
+      '#485869', // Deep blue-gray
+      '#364254', // Very dark blue-gray
     ];
     return colors[index % colors.length];
   };
 
   if (isLoading) return (
-    <div className="w-full h-[500px] relative">
+    <div className="w-full h-[600px] relative">
       <Skeleton className="absolute inset-0" />
     </div>
   );
@@ -165,7 +165,7 @@ const USAMap: React.FC = () => {
               ref={mapRef}
               viewBox="-0 -0 1000 700"
               preserveAspectRatio="xMidYMid meet"
-              className="w-full h-full max-h-[500px]" 
+              className="w-full h-full max-h-[600px]" 
               onMouseMove={handleMouseMove}
               style={{ 
                 filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
@@ -190,7 +190,7 @@ const USAMap: React.FC = () => {
                     filter: hoveredState === state.id ? 'url(#glow)' : 'none',
                     opacity: 0.9,
                     stroke: '#FFFFFF',
-                    strokeWidth: 0.5,
+                    strokeWidth: 1,
                   }}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 0.9, scale: 1 }}
@@ -202,7 +202,7 @@ const USAMap: React.FC = () => {
                 />
               ))}
               
-              {/* State abbreviations */}
+              {/* State abbreviations with improved positioning */}
               {Object.entries(stateAbbreviations).map(([stateName, stateInfo]) => {
                 const stateData = statesData.find(s => s.name === stateName);
                 if (!stateData) return null;

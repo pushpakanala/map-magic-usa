@@ -19,6 +19,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
 import { BOT_GEMINI } from '../constants';
+import { Card, CardContent } from "@/components/ui/card";
 import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, Compass, School, BookOpen, Lightbulb, Sparkles, Rocket } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
@@ -273,48 +274,64 @@ const Index = () => {
                 <div className="w-full mx-auto">
                   <USAMap />
                 </div>
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                {/* Updated modern cards below the map */}
+                <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-gray-200/10 rounded-lg p-4 border border-black/20 flex items-center gap-3"
+                    className="group"
                   >
-                    <div className="bg-black/10 p-2 rounded-full">
-                      <GraduationCap className="h-6 w-6 text-black" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-slate-800 dark:text-slate-200">4,000+</h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Universities</p>
-                    </div>
+                    <Card className="relative h-full overflow-hidden border-none bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 hover:shadow-xl transition-all duration-300">
+                      <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-black/10 dark:from-white/5 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <CardContent className="p-6 flex flex-col space-y-3">
+                        <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-2">
+                          <GraduationCap className="h-6 w-6 text-black dark:text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold">4,000+ Universities</h3>
+                        <p className="text-muted-foreground">Explore thousands of universities across the United States, each with detailed information about programs, campus life, and more.</p>
+                        <div className="absolute bottom-0 right-0 w-24 h-24 -m-12 bg-black/5 dark:bg-white/5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-150"></div>
+                      </CardContent>
+                    </Card>
                   </motion.div>
+                  
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="bg-gray-200/10 rounded-lg p-4 border border-black/20 flex items-center gap-3"
+                    className="group"
                   >
-                    <div className="bg-black/10 p-2 rounded-full">
-                      <Map className="h-6 w-6 text-black" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-slate-800 dark:text-slate-200">50</h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">States Covered</p>
-                    </div>
+                    <Card className="relative h-full overflow-hidden border-none bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 hover:shadow-xl transition-all duration-300">
+                      <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-black/10 dark:from-white/5 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <CardContent className="p-6 flex flex-col space-y-3">
+                        <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-2">
+                          <Map className="h-6 w-6 text-black dark:text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold">Nationwide Coverage</h3>
+                        <p className="text-muted-foreground">Access educational institutions from all 50 states with our interactive map interface, allowing you to discover schools by location.</p>
+                        <div className="absolute bottom-0 right-0 w-24 h-24 -m-12 bg-black/5 dark:bg-white/5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-150"></div>
+                      </CardContent>
+                    </Card>
                   </motion.div>
+                  
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="bg-gray-200/10 rounded-lg p-4 border border-black/20 flex items-center gap-3"
+                    className="group"
                   >
-                    <div className="bg-black/10 p-2 rounded-full">
-                      <BarChart3 className="h-6 w-6 text-black" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-slate-800 dark:text-slate-200">Detailed</h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Rankings & Data</p>
-                    </div>
+                    <Card className="relative h-full overflow-hidden border-none bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 hover:shadow-xl transition-all duration-300">
+                      <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-black/10 dark:from-white/5 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <CardContent className="p-6 flex flex-col space-y-3">
+                        <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-2">
+                          <BarChart3 className="h-6 w-6 text-black dark:text-white" />
+                        </div>
+                        <h3 className="text-xl font-bold">Compare & Analyze</h3>
+                        <p className="text-muted-foreground">Use our powerful comparison tools to analyze multiple universities side by side, helping you make informed decisions about your academic future.</p>
+                        <div className="absolute bottom-0 right-0 w-24 h-24 -m-12 bg-black/5 dark:bg-white/5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-150"></div>
+                      </CardContent>
+                    </Card>
                   </motion.div>
                 </div>
               </TabsContent>
@@ -504,6 +521,7 @@ const Index = () => {
           </motion.div>
         </motion.div>
 
+        {/* Updated Bot button with a more modern design */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -511,27 +529,54 @@ const Index = () => {
           className="fixed bottom-4 right-4 z-50"
         >
           <Button
-            className="rounded-full h-12 w-12 shadow-lg bg-black hover:bg-gray-800 transition-colors"
+            className={`rounded-full h-14 w-14 shadow-lg transition-all duration-300 ${
+              isChatOpen 
+                ? "bg-red-500 hover:bg-red-600" 
+                : "bg-gradient-to-br from-gray-800 to-black hover:shadow-xl"
+            }`}
             onClick={handleBotClick}
             type="button"
           >
-            {isChatOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
+            {isChatOpen ? 
+              <X className="h-6 w-6" /> : 
+              <Bot className="h-6 w-6 animate-pulse" />
+            }
           </Button>
         </motion.div>
 
+        {/* Redesigned Chat Window */}
         <AnimatePresence>
           {isChatOpen && (
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="fixed bottom-20 right-4 w-full max-w-96 h-[600px] bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 z-40 flex flex-col"
+              className="fixed bottom-20 right-4 w-full max-w-96 h-[600px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-xl shadow-2xl border border-gray-200 dark:border-slate-700 z-40 flex flex-col overflow-hidden"
             >
-              <div className="p-4 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-black/5 to-gray-500/5">
-                <h3 className="text-lg font-semibold text-black">Chat with Bot</h3>
+              <div className="p-4 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-black p-2 rounded-full">
+                    <Bot className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">UniQuest Assistant</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Ask me anything about universities</p>
+                  </div>
+                </div>
               </div>
               
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50/50 to-white/50 dark:from-gray-900/50 dark:to-slate-900/50">
+                {messages.length === 0 && (
+                  <div className="h-full flex items-center justify-center">
+                    <div className="text-center p-6 rounded-lg bg-gray-100/50 dark:bg-gray-800/50 max-w-xs mx-auto">
+                      <BrainCircuit className="h-10 w-10 mx-auto mb-2 text-gray-400 dark:text-gray-500" />
+                      <p className="text-gray-500 dark:text-gray-400 text-sm">
+                        Ask me about universities, programs, or how to use UniQuest!
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
                 {messages.map((message) => (
                   <motion.div
                     key={message.id}
@@ -543,23 +588,28 @@ const Index = () => {
                       className={`max-w-[80%] p-3 rounded-lg ${
                         message.sender === 'user'
                           ? 'bg-black text-white ml-auto'
-                          : 'bg-slate-100 dark:bg-slate-800'
+                          : 'bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200'
                       }`}
                     >
                       {message.text}
                     </div>
                   </motion.div>
                 ))}
+                
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
-                      <span className="animate-pulse">Thinking...</span>
+                    <div className="bg-gray-200 dark:bg-slate-700 p-3 rounded-lg">
+                      <span className="flex items-center space-x-2">
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      </span>
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="p-4 border-t border-slate-200 dark:border-slate-700">
+              <div className="p-4 border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
                 <div className="flex gap-2">
                   <Textarea
                     value={currentMessage}
@@ -571,19 +621,19 @@ const Index = () => {
                       }
                     }}
                     placeholder="Type your message..."
-                    className="resize-none border-slate-200 dark:border-slate-700 focus-visible:ring-black/30"
+                    className="resize-none border-gray-300 dark:border-slate-700 focus-visible:ring-black/30 bg-gray-100/50 dark:bg-slate-800/50 rounded-lg"
                     rows={2}
                   />
                   <Button
                     onClick={handleSendMessage}
                     size="icon"
-                    className="h-auto bg-black hover:bg-gray-800"
+                    className="h-auto bg-black hover:bg-gray-800 transition-colors"
                     disabled={!currentMessage.trim() || isLoading}
                   >
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                   Press Enter to send, Shift + Enter for new line
                 </p>
               </div>
