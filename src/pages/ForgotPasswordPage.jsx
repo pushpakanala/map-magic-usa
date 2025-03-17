@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
-import { AtSign, KeyRound } from 'lucide-react';
+import { AtSign, KeyRound, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { VERIFY_MAIL, UPDATE_PWD } from '../constants';
 
@@ -19,6 +19,8 @@ const ForgotPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleVerifyEmail = async (e) => {
     e.preventDefault();
@@ -161,27 +163,53 @@ const ForgotPasswordPage = () => {
               <div className="relative">
                 <KeyRound className="absolute left-3 top-3 h-5 w-5 text-primary/70" />
                 <Input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="New Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={!isEmailVerified}
-                  className="pl-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80"
+                  className="pl-10 pr-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80"
                   required
                 />
+                <button 
+                  type="button"
+                  className="absolute right-3 top-3 text-primary/70 hover:text-primary focus:outline-none"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                  disabled={!isEmailVerified}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
 
               <div className="relative">
                 <KeyRound className="absolute left-3 top-3 h-5 w-5 text-primary/70" />
                 <Input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm New Password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   disabled={!isEmailVerified}
-                  className="pl-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80"
+                  className="pl-10 pr-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80"
                   required
                 />
+                <button 
+                  type="button"
+                  className="absolute right-3 top-3 text-primary/70 hover:text-primary focus:outline-none"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  tabIndex={-1}
+                  disabled={!isEmailVerified}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
 
               <Button 

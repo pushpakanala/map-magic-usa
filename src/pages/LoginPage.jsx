@@ -4,7 +4,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
-import { AtSign, KeyRound } from 'lucide-react';
+import { AtSign, KeyRound, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { LOGIN } from '../constants';
 import { useToast } from '@/hooks/use-toast';
@@ -15,6 +15,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   
   // Check if user is already logged in, redirect to explore page
@@ -62,6 +63,10 @@ const LoginPage = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -138,13 +143,25 @@ const LoginPage = () => {
                 <div className="relative">
                   <KeyRound className="absolute left-3 top-3 h-5 w-5 text-primary/70" />
                   <Input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80"
+                    className="pl-10 pr-10 h-12 bg-background/50 backdrop-blur-sm transition-colors focus:bg-background/80"
                     required
                   />
+                  <button 
+                    type="button"
+                    className="absolute right-3 top-3 text-primary/70 hover:text-primary focus:outline-none"
+                    onClick={togglePasswordVisibility}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
                 </div>
               </motion.div>
 

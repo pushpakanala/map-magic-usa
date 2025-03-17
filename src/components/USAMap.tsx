@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -46,32 +46,32 @@ const USAMap: React.FC = () => {
     }
   });
 
-  const handleStateClick = (stateName: string) => {
+  const handleStateClick = useCallback((stateName: string) => {
     navigate(`/state/${stateName.toLowerCase()}`);
-  };
+  }, [navigate]);
 
-  const getPopulation = (stateId: string) => {
+  const getPopulation = useCallback((stateId: string) => {
     if (!populationData) return 'Loading...';
     const stateData = populationData.find((state: StateData) => state.state === stateId);
     return stateData ? stateData.population.toLocaleString() : 'N/A';
-  };
+  }, [populationData]);
 
-  const getStateName = (stateId: string) => {
+  const getStateName = useCallback((stateId: string) => {
     const state = statesData.find(state => state.id === stateId);
     return state ? state.name : stateId;
-  };
+  }, []);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (mapRef.current) {
       const rect = mapRef.current.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       setHoverPosition({ x, y });
     }
-  };
+  }, []);
 
   // Updated color palette to match the image - blue-gray gradient
-  const getStateColor = (index: number) => {
+  const getStateColor = useCallback((index: number) => {
     const colors = [
       '#B8C3CE', // Light blue-gray
       '#8794A3', // Medium blue-gray
@@ -80,7 +80,7 @@ const USAMap: React.FC = () => {
       '#364254', // Very dark blue-gray
     ];
     return colors[index % colors.length];
-  };
+  }, []);
 
   if (isLoading) return (
     <div className="w-full h-[600px] relative">
