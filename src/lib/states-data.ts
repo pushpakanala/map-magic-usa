@@ -1,3 +1,4 @@
+
 export const statesData = [
   {
     id: "AL",
@@ -43,4 +44,5 @@ export const statesData = [
     id:"RI",
     name:"Rhode Island",
     path: "M1048.1,279.8l-0.5-4.2l-0.8-4.4l-1.7-5.9l5.7-1.5l1.6,1.1l3.4,4.4l2.9,4.4l-2.9,1.5l-1.3-0.2   l-1.1,1.8l-2.4,1.9L1048.1,279.8z",
-  },
+  }
+];
