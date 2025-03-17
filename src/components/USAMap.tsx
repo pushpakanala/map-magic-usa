@@ -20,17 +20,17 @@ interface HoverPosition {
   y: number;
 }
 
-// Define state abbreviation mapping with centralized positions
+// Updated state abbreviation positions with better centered coordinates
 const stateAbbreviations: Record<string, {abbr: string, x: number, y: number}> = {
-  "Alabama": { abbr: "AL", x: 625, y: 435 },
+  "Alabama": { abbr: "AL", x: 628, y: 430 },
   "Alaska": { abbr: "AK", x: 140, y: 550 },
   "Arizona": { abbr: "AZ", x: 235, y: 365 },
   "Arkansas": { abbr: "AR", x: 545, y: 395 },
   "California": { abbr: "CA", x: 125, y: 310 },
   "Colorado": { abbr: "CO", x: 350, y: 320 },
   "Connecticut": { abbr: "CT", x: 865, y: 240 },
-  "Delaware": { abbr: "DE", x: 830, y: 282 },
-  "Florida": { abbr: "FL", x: 735, y: 505 },
+  "Delaware": { abbr: "DE", x: 840, y: 282 },
+  "Florida": { abbr: "FL", x: 750, y: 505 },
   "Georgia": { abbr: "GA", x: 700, y: 425 },
   "Hawaii": { abbr: "HI", x: 230, y: 510 },
   "Idaho": { abbr: "ID", x: 210, y: 230 },
@@ -41,7 +41,7 @@ const stateAbbreviations: Record<string, {abbr: string, x: number, y: number}> =
   "Kentucky": { abbr: "KY", x: 662, y: 345 },
   "Louisiana": { abbr: "LA", x: 550, y: 465 },
   "Maine": { abbr: "ME", x: 875, y: 170 },
-  "Maryland": { abbr: "MD", x: 805, y: 290 },
+  "Maryland": { abbr: "MD", x: 815, y: 290 },
   "Massachusetts": { abbr: "MA", x: 860, y: 225 },
   "Michigan": { abbr: "MI", x: 635, y: 235 },
   "Minnesota": { abbr: "MN", x: 525, y: 195 },
@@ -51,7 +51,7 @@ const stateAbbreviations: Record<string, {abbr: string, x: number, y: number}> =
   "Nebraska": { abbr: "NE", x: 460, y: 280 },
   "Nevada": { abbr: "NV", x: 175, y: 275 },
   "New Hampshire": { abbr: "NH", x: 865, y: 200 },
-  "New Jersey": { abbr: "NJ", x: 838, y: 265 },
+  "New Jersey": { abbr: "NJ", x: 842, y: 265 },
   "New Mexico": { abbr: "NM", x: 335, y: 390 },
   "New York": { abbr: "NY", x: 815, y: 220 },
   "North Carolina": { abbr: "NC", x: 760, y: 370 },
@@ -59,9 +59,9 @@ const stateAbbreviations: Record<string, {abbr: string, x: number, y: number}> =
   "Ohio": { abbr: "OH", x: 695, y: 290 },
   "Oklahoma": { abbr: "OK", x: 475, y: 380 },
   "Oregon": { abbr: "OR", x: 145, y: 200 },
-  "Pennsylvania": { abbr: "PA", x: 775, y: 265 },
+  "Pennsylvania": { abbr: "PA", x: 780, y: 265 },
   "Rhode Island": { abbr: "RI", x: 872, y: 232 },
-  "South Carolina": { abbr: "SC", x: 740, y: 400 },
+  "South Carolina": { abbr: "SC", x: 745, y: 400 },
   "South Dakota": { abbr: "SD", x: 455, y: 230 },
   "Tennessee": { abbr: "TN", x: 645, y: 370 },
   "Texas": { abbr: "TX", x: 445, y: 445 },
@@ -137,7 +137,7 @@ const USAMap: React.FC = () => {
   };
 
   if (isLoading) return (
-    <div className="w-full h-[600px] relative">
+    <div className="w-full h-[700px] relative">
       <Skeleton className="absolute inset-0" />
     </div>
   );
@@ -151,9 +151,15 @@ const USAMap: React.FC = () => {
     return <div>Error loading map</div>;
   }
 
+  // Connect state paths with their names
+  const stateMap = statesData.reduce((acc, state) => {
+    acc[state.id] = state.name;
+    return acc;
+  }, {} as Record<string, string>);
+
   return (
     <div className="w-full bg-gradient-to-b from-background to-background/80">
-      <div className="max-w-[1200px] mx-auto p-4">
+      <div className="max-w-[1300px] mx-auto p-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -163,9 +169,9 @@ const USAMap: React.FC = () => {
           <div className="relative">
             <svg
               ref={mapRef}
-              viewBox="-0 -0 1200 700"
+              viewBox="-0 -0 1000 600"
               preserveAspectRatio="xMidYMid meet"
-              className="w-full h-full max-h-[700px]" 
+              className="w-full h-full max-h-[800px]" 
               onMouseMove={handleMouseMove}
               style={{ 
                 filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
@@ -196,29 +202,34 @@ const USAMap: React.FC = () => {
                   animate={{ opacity: 0.9, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.01 }}
                   whileHover={{ scale: 1.02, opacity: 1 }}
-                  onMouseEnter={() => setHoveredState(state.name)}
+                  onMouseEnter={() => setHoveredState(state.id)}
                   onMouseLeave={() => setHoveredState(null)}
                   onClick={() => handleStateClick(state.name)}
                 />
               ))}
               
-              {/* Place state abbreviations with specific coordinates */}
+              {/* Place state abbreviations */}
               {statesData.map(state => {
                 const stateInfo = stateAbbreviations[state.name];
                 if (!stateInfo) return null;
                 
                 return (
-                  <text
-                    key={`text-${state.name}`}
-                    x={stateInfo.x}
-                    y={stateInfo.y}
-                    className="text-[12px] font-bold pointer-events-none select-none"
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    style={{ fill: '#000000' }}
+                  <g 
+                    key={`label-${state.id}`} 
+                    className="cursor-pointer"
+                    onClick={() => handleStateClick(state.name)}
                   >
-                    {stateInfo.abbr}
-                  </text>
+                    <text
+                      x={stateInfo.x}
+                      y={stateInfo.y}
+                      className="text-[14px] font-bold pointer-events-none select-none"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      style={{ fill: '#000000', fontWeight: 700 }}
+                    >
+                      {stateInfo.abbr}
+                    </text>
+                  </g>
                 );
               })}
             </svg>
@@ -229,10 +240,12 @@ const USAMap: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  className="absolute bg-white/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-slate-200/50 pointer-events-none z-10"
+                  className="absolute z-50 bg-white/90 backdrop-blur-md p-4 rounded-lg shadow-lg border border-slate-200/50 pointer-events-none"
                   style={{
                     left: `${hoverPosition.x}px`,
                     top: `${hoverPosition.y}px`,
+                    transform: 'translate(-50%, -100%)',
+                    marginTop: '-10px'
                   }}
                 >
                   <p className="font-semibold text-lg text-slate-700">
