@@ -1,7 +1,8 @@
 
-import axios from 'axios';
+import axios from 'axios'; 
+import { METRICS_LOGGING } from '../constants';
 
-const API_ENDPOINT = 'https://api.example.com/logs'; // Replace with your actual logging API endpoint
+const API_ENDPOINT = METRICS_LOGGING; // Replace with your actual logging API endpoint
 
 export const logEvent = async (event, details = {}) => {
   try {
