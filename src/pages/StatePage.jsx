@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,7 @@ import { useComparison } from '../hooks/use-comparison';
 import { GraduationCap } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
-import { logPageView, logButtonClick, logEvent, startTimeTracking, endTimeTracking } from '@/utils/logger';
+import { logPageView, logEvent, startTimeTracking, endTimeTracking } from '@/utils/logger';
 
 const LoadingState = () => (
   <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
@@ -66,17 +67,17 @@ const StatePage = () => {
   }, [stateName]);
 
   const handleFavoriteWithLogging = (universityName) => {
-    logButtonClick('toggle_favorite', universityName);
+    logEvent('toggle_favorite', { university: universityName, action: 'toggle' });
     handleFavoriteClick(universityName);
   };
 
   const handleCompareWithLogging = (universityName) => {
-    logButtonClick('toggle_compare', universityName);
+    logEvent('toggle_compare', { university: universityName, action: 'toggle' });
     handleCompareClick(universityName);
   };
 
   const handleClearComparisonWithLogging = () => {
-    logButtonClick('clear_comparison', 'all');
+    logEvent('clear_comparison', { action: 'clear_all' });
     clearComparedUniversities();
   };
 
@@ -139,12 +140,12 @@ const StatePage = () => {
   });
 
   const handleCollegeClick = (college) => {
-    logButtonClick('view_university', college.name);
+    logEvent('view_university', { university: college.name });
     navigate(`/college/${encodeURIComponent(college.name)}`);
   };
 
   const handleBackClick = () => {
-    logButtonClick('back_to_map', `from_state_${stateName}`);
+    logEvent('navigation', { from: `state_${stateName}`, to: 'explore', action: 'back_to_map' });
     navigate('/explore');
   };
 
