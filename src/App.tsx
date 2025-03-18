@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
@@ -13,59 +12,39 @@ import LandingPage from './pages/LandingPage';
 import ComparePage from './pages/ComparePage';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
-import { logEvent, logPageView } from './utils/logger';
+import { logEvent, logPageView, EVENT_TYPES } from './utils/logger';
 import './App.css';
+
+// Set up a flag to prevent axios interceptor loops
+let isLoggingRequest = false;
 
 // Setup axios interceptors for logging
 axios.interceptors.request.use(
   (config) => {
+    if (isLoggingRequest) return config;
+    
     const url = config.url || '';
     
     // Don't log the actual logging requests to avoid infinite loops
-    if (!url.includes('logs')) {
-      logEvent('api_request', {
+    if (!url.includes('metrics-logging') && !url.includes('logs')) {
+      isLoggingRequest = true;
+      setTimeout(() => { isLoggingRequest = false; }, 100); // Reset flag after a short delay
+      
+      logEvent(EVENT_TYPES.BUTTON_CLICK, {
+        action: "api_request",
         method: config.method?.toUpperCase(),
         url: url,
-        params: config.params,
       });
     }
     return config;
   },
   (error) => {
-    logEvent('api_request_error', { error: error.message });
     return Promise.reject(error);
   }
 );
 
-axios.interceptors.response.use(
-  (response) => {
-    const url = response.config.url || '';
-    
-    // Don't log the actual logging responses to avoid infinite loops
-    if (!url.includes('logs')) {
-      logEvent('api_response', {
-        method: response.config.method?.toUpperCase(),
-        url: url,
-        status: response.status,
-      });
-    }
-    return response;
-  },
-  (error) => {
-    const url = error.config?.url || '';
-    
-    // Don't log the actual logging errors to avoid infinite loops
-    if (!url.includes('logs')) {
-      logEvent('api_response_error', {
-        method: error.config?.method?.toUpperCase(),
-        url: url,
-        status: error.response?.status,
-        message: error.message,
-      });
-    }
-    return Promise.reject(error);
-  }
-);
+// We don't need response interceptors for logging purposes as they can cause
+// infinite loops. Removing them to prevent continuous requests.
 
 // Route-change tracking component
 const RouteTracker = () => {
@@ -82,13 +61,19 @@ const RouteTracker = () => {
 const queryClient = new QueryClient();
 
 function App() {
-  // Log application start
+  // Log application start only once
   useEffect(() => {
-    logEvent('app_started', { timestamp: new Date().toISOString() });
+    const hasStarted = sessionStorage.getItem('app_started');
     
-    return () => {
-      logEvent('app_closed', { timestamp: new Date().toISOString() });
-    };
+    if (!hasStarted) {
+      logEvent(EVENT_TYPES.PAGE_VISIT, { action: 'app_started' });
+      sessionStorage.setItem('app_started', 'true');
+      
+      return () => {
+        logEvent(EVENT_TYPES.PAGE_VISIT, { action: 'app_closed' });
+        sessionStorage.removeItem('app_started');
+      };
+    }
   }, []);
 
   return (
