@@ -35,7 +35,7 @@ axios.interceptors.request.use(
       
       // Only log API requests if user is logged in
       if (isLoggedIn) {
-        logEvent(EVENT_TYPES.BUTTON_CLICK, {
+        logEvent(EVENT_TYPES.API_REQUEST, {  // Changed from BUTTON_CLICK to API_REQUEST
           action: "api_request",
           method: config.method?.toUpperCase(),
           url: url,

@@ -9,8 +9,8 @@ export const EVENT_TYPES = {
   SIGNUP: 'signup',
   PAGE_VISIT: 'page_visit',
   UNIVERSITY_SEARCH: 'university_search', 
-  BUTTON_CLICK: 'button_click',
-  TIME_SPENT: 'time_spent'
+  TIME_SPENT: 'time_spent',
+  API_REQUEST: 'api_request'  // Changed from BUTTON_CLICK to API_REQUEST
 };
 
 // Configure the logger
@@ -111,11 +111,11 @@ const standardizeDetails = (event, details) => {
         filters: details.filters || {} 
       };
     
-    case EVENT_TYPES.BUTTON_CLICK:
+    case EVENT_TYPES.API_REQUEST:  // Updated from BUTTON_CLICK to API_REQUEST
       return { 
-        button: details.button || 'unknown',
-        location: details.location || 'unknown',
-        action: details.action || 'click' 
+        method: details.method || 'unknown',
+        url: details.url || 'unknown',
+        action: details.action || 'request' 
       };
     
     case EVENT_TYPES.TIME_SPENT:
@@ -149,8 +149,14 @@ export const logPageView = (pageName) => {
   logEvent(EVENT_TYPES.PAGE_VISIT, { page: pageName });
 };
 
-export const logButtonClick = (buttonName, location) => {
-  logEvent(EVENT_TYPES.BUTTON_CLICK, { button: buttonName, location });
+// Remove the logButtonClick function
+// export const logButtonClick = (buttonName, location) => {
+//   logEvent(EVENT_TYPES.BUTTON_CLICK, { button: buttonName, location });
+// };
+
+// Add API request logging function
+export const logApiRequest = (method, url) => {
+  logEvent(EVENT_TYPES.API_REQUEST, { method, url });
 };
 
 export const logUniversitySearch = (query, state) => {
