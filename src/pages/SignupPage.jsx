@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { UserRound, AtSign } from 'lucide-react';
 import axios from 'axios';
 import { USER_RESOURCE } from '../constants';
-import { logSignupEvent, logButtonClick, logPageView, startTimeTracking, endTimeTracking } from '@/utils/logger';
+import { logSignupEvent, logEvent, logPageView, startTimeTracking, endTimeTracking } from '@/utils/logger';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const SignupPage = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    logButtonClick('signup_submit', 'signup_page');
+    logEvent('signup_submit', { location: 'signup_page', action: 'submit_form' });
 
     try {
       
