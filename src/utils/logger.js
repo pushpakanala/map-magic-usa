@@ -18,7 +18,19 @@ const API_ENDPOINT = METRICS_LOGGING;
 
 // Track if we've already logged an error to prevent infinite loops
 let hasLoggedNetworkError = false;
+// Track if user is authenticated
+let isAuthenticated = false;
 
+/**
+ * Update authentication status when user logs in or out
+ */
+export const setAuthenticationStatus = (status) => {
+  isAuthenticated = status;
+};
+
+/**
+ * Main logging function
+ */
 export const logEvent = async (event, details = {}) => {
   // Don't log anything if we're already having network issues
   if (hasLoggedNetworkError) {
@@ -29,10 +41,24 @@ export const logEvent = async (event, details = {}) => {
     const user = JSON.parse(sessionStorage.getItem('user') || '{}');
     const userId = user.name || 'anonymous';
     
+    // Skip logging for anonymous users except for login, signup, or page_visit to landing pages
+    if (!isAuthenticated && 
+        userId === 'anonymous' && 
+        event !== EVENT_TYPES.LOGIN && 
+        event !== EVENT_TYPES.SIGNUP &&
+        !(event === EVENT_TYPES.PAGE_VISIT && 
+          (details.page === '/login' || details.page === '/signup' || details.page === '/' || 
+           details.page === '/forgot-password' || details.action === 'app_started'))) {
+      return;
+    }
+    
+    // Standardize details object structure based on event type
+    const standardizedDetails = standardizeDetails(event, details);
+    
     const logData = {
       user_id: userId,
       event: event,
-      details: details,
+      details: standardizedDetails,
       timestamp: new Date().toISOString()
     };
     
@@ -57,17 +83,66 @@ export const logEvent = async (event, details = {}) => {
   }
 };
 
+/**
+ * Standardize details object based on event type
+ */
+const standardizeDetails = (event, details) => {
+  switch (event) {
+    case EVENT_TYPES.LOGIN:
+      return { email: details.email || 'unknown' };
+    
+    case EVENT_TYPES.SIGNUP:
+      return { email: details.email || 'unknown' };
+    
+    case EVENT_TYPES.LOGOUT:
+      return { reason: details.reason || 'user_initiated' };
+    
+    case EVENT_TYPES.PAGE_VISIT:
+      return { 
+        page: details.page || 'unknown',
+        referrer: details.referrer || document.referrer || 'direct',
+        action: details.action || 'view'
+      };
+    
+    case EVENT_TYPES.UNIVERSITY_SEARCH:
+      return { 
+        query: details.query || '',
+        state: details.state || 'all',
+        filters: details.filters || {} 
+      };
+    
+    case EVENT_TYPES.BUTTON_CLICK:
+      return { 
+        button: details.button || 'unknown',
+        location: details.location || 'unknown',
+        action: details.action || 'click' 
+      };
+    
+    case EVENT_TYPES.TIME_SPENT:
+      return { 
+        page: details.page || 'unknown',
+        seconds: details.seconds || 0 
+      };
+    
+    default:
+      return details;
+  }
+};
+
 // Specialized logging functions for specific events
 export const logLoginEvent = (email) => {
+  setAuthenticationStatus(true);
   logEvent(EVENT_TYPES.LOGIN, { email });
 };
 
 export const logSignupEvent = (email) => {
+  setAuthenticationStatus(true);
   logEvent(EVENT_TYPES.SIGNUP, { email });
 };
 
-export const logLogoutEvent = () => {
-  logEvent(EVENT_TYPES.LOGOUT);
+export const logLogoutEvent = (reason = 'user_initiated') => {
+  logEvent(EVENT_TYPES.LOGOUT, { reason });
+  setAuthenticationStatus(false);
 };
 
 export const logPageView = (pageName) => {

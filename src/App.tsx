@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
@@ -12,7 +13,7 @@ import LandingPage from './pages/LandingPage';
 import ComparePage from './pages/ComparePage';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
-import { logEvent, logPageView, EVENT_TYPES } from './utils/logger';
+import { logEvent, logPageView, EVENT_TYPES, setAuthenticationStatus } from './utils/logger';
 import './App.css';
 
 // Set up a flag to prevent axios interceptor loops
@@ -30,11 +31,16 @@ axios.interceptors.request.use(
       isLoggingRequest = true;
       setTimeout(() => { isLoggingRequest = false; }, 100); // Reset flag after a short delay
       
-      logEvent(EVENT_TYPES.BUTTON_CLICK, {
-        action: "api_request",
-        method: config.method?.toUpperCase(),
-        url: url,
-      });
+      const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+      
+      // Only log API requests if user is logged in
+      if (isLoggedIn) {
+        logEvent(EVENT_TYPES.BUTTON_CLICK, {
+          action: "api_request",
+          method: config.method?.toUpperCase(),
+          url: url,
+        });
+      }
     }
     return config;
   },
@@ -52,7 +58,12 @@ const RouteTracker = () => {
   
   useEffect(() => {
     const path = location.pathname;
-    logPageView(path);
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    
+    // Only log page views for public pages or if user is logged in
+    if (isLoggedIn || path === '/login' || path === '/signup' || path === '/' || path === '/forgot-password') {
+      logPageView(path);
+    }
   }, [location]);
   
   return null;
@@ -61,8 +72,11 @@ const RouteTracker = () => {
 const queryClient = new QueryClient();
 
 function App() {
-  // Log application start only once
+  // Check authentication status and log application start only once
   useEffect(() => {
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    setAuthenticationStatus(isLoggedIn);
+    
     const hasStarted = sessionStorage.getItem('app_started');
     
     if (!hasStarted) {
@@ -70,7 +84,10 @@ function App() {
       sessionStorage.setItem('app_started', 'true');
       
       return () => {
-        logEvent(EVENT_TYPES.PAGE_VISIT, { action: 'app_closed' });
+        // Only log app_closed if user was logged in to avoid excess logs
+        if (sessionStorage.getItem('isLoggedIn') === 'true') {
+          logEvent(EVENT_TYPES.PAGE_VISIT, { action: 'app_closed' });
+        }
         sessionStorage.removeItem('app_started');
       };
     }
