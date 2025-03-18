@@ -10,12 +10,11 @@ import SignupPage from './pages/SignupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import LandingPage from './pages/LandingPage';
 import ComparePage from './pages/ComparePage';
+import AdminPage from './pages/AdminPage';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
 import { setAuthenticationStatus } from './utils/logger';
 import './App.css';
-
-// Route-change tracking component has been removed to prevent logging page visits
 
 const queryClient = new QueryClient();
 
@@ -57,6 +56,11 @@ function App() {
           <Route path="/compare" element={
             <ProtectedRoute>
               <ComparePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute adminOnly={true}>
+              <AdminPage />
             </ProtectedRoute>
           } />
         </Routes>

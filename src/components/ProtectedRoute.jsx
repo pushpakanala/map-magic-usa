@@ -1,21 +1,59 @@
 
-import { Navigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { useToast } from "@/hooks/use-toast";
 
-const ProtectedRoute = ({ children }) => {
-  const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-  const location = useLocation();
-  
-  // If we're on the landing page and the user is logged in, redirect to explore
-  if (location.pathname === '/' && isLoggedIn) {
-    return <Navigate to="/explore" replace />;
+const ProtectedRoute = ({ children, adminOnly = false }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+      
+      if (!isLoggedIn) {
+        setIsAuthorized(false);
+        setIsLoading(false);
+        return;
+      }
+      
+      if (adminOnly) {
+        const userStr = sessionStorage.getItem('user');
+        if (userStr) {
+          const user = JSON.parse(userStr);
+          const isAdmin = user.role === 'admin';
+          
+          if (!isAdmin) {
+            toast({
+              title: "Access Denied",
+              description: "You need administrator privileges to access this page.",
+              variant: "destructive",
+            });
+          }
+          
+          setIsAuthorized(isAdmin);
+        } else {
+          setIsAuthorized(false);
+        }
+      } else {
+        setIsAuthorized(true);
+      }
+      
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, [adminOnly, toast]);
+
+  if (isLoading) {
+    return <div className="flex h-screen items-center justify-center">Loading...</div>;
   }
-  
-  // If the user is not logged in and trying to access protected pages, redirect to login
-  if (!isLoggedIn && location.pathname !== '/' && location.pathname !== '/login' && 
-      location.pathname !== '/signup' && location.pathname !== '/forgot-password') {
+
+  if (!isAuthorized) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return children;
 };
 

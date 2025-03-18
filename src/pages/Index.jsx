@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
@@ -24,6 +23,7 @@ import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, Compass
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
 import { useIsMobile } from '@/hooks/use-mobile';
+import AdminManagement from '@/components/AdminManagement';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -129,7 +129,6 @@ const Index = () => {
 
   const handleBotClick = () => {
     setIsChatOpen(!isChatOpen);
-    console.log('Bot clicked, chat open:', !isChatOpen);
   };
 
   return (
@@ -220,6 +219,16 @@ const Index = () => {
                       <KeyRound className="mr-2 h-4 w-4" />
                       Change Password
                     </Button>
+                    {userData?.role === 'admin' && (
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start mb-2"
+                        onClick={() => navigate('/admin')}
+                      >
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin Management
+                      </Button>
+                    )}
                     <Button 
                       variant="ghost" 
                       className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
@@ -275,7 +284,6 @@ const Index = () => {
                   <USAMap />
                 </div>
                 
-                {/* Updated modern cards below the map */}
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
@@ -511,17 +519,13 @@ const Index = () => {
 
               {userData?.role === 'admin' && (
                 <TabsContent value="admin" className="focus-visible:outline-none focus-visible:ring-0">
-                  <div className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg shadow-lg border border-slate-200 dark:border-slate-700">
-                    <h2 className="text-2xl font-bold text-primary mb-4">Admin Dashboard</h2>
-                    <p className="text-muted-foreground">Welcome to the admin dashboard. Here you can manage universities and user data.</p>
-                  </div>
+                  <AdminManagement />
                 </TabsContent>
               )}
             </Tabs>
           </motion.div>
         </motion.div>
 
-        {/* Updated Bot button with a more modern design */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -544,7 +548,6 @@ const Index = () => {
           </Button>
         </motion.div>
 
-        {/* Redesigned Chat Window */}
         <AnimatePresence>
           {isChatOpen && (
             <motion.div
