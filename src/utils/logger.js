@@ -30,6 +30,11 @@ export const setAuthenticationStatus = (status) => {
  */
 export const logEvent = async (event, details = {}) => {
   try {
+    // Skip logging if it's not one of our essential event types
+    if (!Object.values(EVENT_TYPES).includes(event)) {
+      return;
+    }
+    
     const user = JSON.parse(sessionStorage.getItem('user') || '{}');
     const userId = user.name || 'anonymous';
     
@@ -38,11 +43,6 @@ export const logEvent = async (event, details = {}) => {
         userId === 'anonymous' && 
         event !== EVENT_TYPES.LOGIN && 
         event !== EVENT_TYPES.SIGNUP) {
-      return;
-    }
-    
-    // Only proceed if it's one of our essential event types
-    if (!Object.values(EVENT_TYPES).includes(event)) {
       return;
     }
     
