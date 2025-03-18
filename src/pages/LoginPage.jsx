@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,7 @@ import { AtSign, KeyRound, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { LOGIN } from '../constants';
 import { useToast } from '@/hooks/use-toast';
-import { logLoginEvent, logButtonClick, logPageView, startTimeTracking, endTimeTracking } from '@/utils/logger';
+import { logLoginEvent, logEvent, logPageView, startTimeTracking, endTimeTracking } from '@/utils/logger';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -39,7 +38,7 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    logButtonClick('login_submit', 'login_page');
+    logEvent('login_submit', { location: 'login_page', action: 'submit_form' });
 
     try {
       const response = await axios.post(`${LOGIN}?email=${email}&password=${password}`);
@@ -83,7 +82,7 @@ const LoginPage = () => {
   };
 
   const togglePasswordVisibility = () => {
-    logButtonClick('toggle_password', 'login_page');
+    logEvent('toggle_password', { location: 'login_page', action: 'toggle_visibility' });
     setShowPassword(!showPassword);
   };
 
