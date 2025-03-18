@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
@@ -9,7 +8,7 @@ import { statesData } from '@/lib/states-data';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Map, Compass } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { logButtonClick, logEvent } from '@/utils/logger';
+import { logEvent } from '@/utils/logger';
 
 interface StateData {
   state: string;
@@ -52,8 +51,8 @@ const USAMap: React.FC = () => {
   });
 
   const handleStateClick = useCallback((stateName: string) => {
-    // Log state click
-    logButtonClick('state_map', stateName);
+    // Log state click through an event instead of using the removed logButtonClick function
+    logEvent('state_click', { state: stateName });
     navigate(`/state/${stateName.toLowerCase()}`);
   }, [navigate]);
 
