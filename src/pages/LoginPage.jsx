@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,7 +8,6 @@ import { AtSign, KeyRound, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { LOGIN } from '../constants';
 import { useToast } from '@/hooks/use-toast';
-import { logLoginEvent, logEvent } from '@/utils/logger';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -29,19 +29,15 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    logEvent('login_submit', { location: 'login_page', action: 'submit_form' });
 
     try {
       const response = await axios.post(`${LOGIN}?email=${email}&password=${password}`);
       
       if (response.data) {
-        // Extract user role from the API response or default to 'user'
-        const userRole = response.data.data.role || 'user';
-        
         const userData = {
           email,
           name: response.data.data.name,
-          role: userRole  // Store the role in the userData object
+          role: 'user'
         };
         
         const token = response.data.data.access_token;
@@ -49,9 +45,6 @@ const LoginPage = () => {
         sessionStorage.setItem('user', JSON.stringify(userData));
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('token', token);
-        
-        // Log successful login
-        logLoginEvent(email);
         
         navigate('/explore', { replace: true });
         toast({
@@ -62,9 +55,6 @@ const LoginPage = () => {
         throw new Error('Invalid credentials');
       }
     } catch (error) {
-      // Log login failure
-      logEvent('login_failed', { email, reason: error.message });
-      
       toast({
         variant: "destructive",
         title: "Error",
@@ -76,7 +66,6 @@ const LoginPage = () => {
   };
 
   const togglePasswordVisibility = () => {
-    logEvent('toggle_password', { location: 'login_page', action: 'toggle_visibility' });
     setShowPassword(!showPassword);
   };
 

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,7 +8,6 @@ import { motion } from 'framer-motion';
 import { UserRound, AtSign } from 'lucide-react';
 import axios from 'axios';
 import { USER_RESOURCE } from '../constants';
-import { logSignupEvent, logEvent, logPageView, startTimeTracking, endTimeTracking } from '@/utils/logger';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -16,18 +16,9 @@ const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    logPageView('signup');
-    startTimeTracking('signup');
-    return () => {
-      endTimeTracking('signup');
-    };
-  }, []);
-
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    logEvent('signup_submit', { location: 'signup_page', action: 'submit_form' });
 
     try {
       
@@ -38,27 +29,17 @@ const SignupPage = () => {
       });
       
       if (response.status === 200) {
-        // Store user role in session storage
-        const userData = {
-          email,
-          name,
-          role: 'user'  // Default role for new sign-ups
-        };
-        
-        // Don't set isLoggedIn yet since they need to login with credentials
-        sessionStorage.setItem('user', JSON.stringify(userData));
-        
-        logSignupEvent(email);
-        
         toast({
           title: "Success!",
           description: "Account created successfully! Please check your email for login credentials.",
           duration: 5000,
         });
         
+        // Clear form data
         setName('');
         setEmail('');
         
+        // Wait for toast to be visible before navigating
         setTimeout(() => {
           navigate('/login', { replace: true });
         }, 2000);
@@ -71,8 +52,6 @@ const SignupPage = () => {
       } else if (error.response?.status === 409) {
         errorMessage = "Email already exists. Please use a different email.";
       }
-      
-      logEvent('signup_failed', { email, name, reason: errorMessage });
       
       toast({
         variant: "destructive",

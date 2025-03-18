@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -14,7 +14,6 @@ import { useComparison } from '../hooks/use-comparison';
 import { GraduationCap } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
-import { logUniversitySearch } from '@/utils/logger';
 
 const LoadingState = () => (
   <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
@@ -52,25 +51,6 @@ const StatePage = () => {
   const token = sessionStorage.getItem("token");
   const [isSessionExpired, setIsSessionExpired] = useState(false);
 
-  useEffect(() => {
-    if (stateName) {
-      // Log university search when viewing a state page
-      logUniversitySearch('', stateName);
-    }
-  }, [stateName]);
-
-  const handleFavoriteWithLogging = (universityName) => {
-    handleFavoriteClick(universityName);
-  };
-
-  const handleCompareWithLogging = (universityName) => {
-    handleCompareClick(universityName);
-  };
-
-  const handleClearComparisonWithLogging = () => {
-    clearComparedUniversities();
-  };
-
   const { data: stateData, isLoading: stateLoading } = useQuery({
     queryKey: ['stateDetails', stateName],
     queryFn: async () => {
@@ -85,7 +65,6 @@ const StatePage = () => {
       const formattedData = response.data.slice(1).find((item) => 
         item[0].toLowerCase() === stateName?.toLowerCase()
       );
-      
       return formattedData ? {
         population: parseInt(formattedData[1]).toLocaleString(),
         male: parseInt(formattedData[2]).toLocaleString(),
@@ -101,12 +80,9 @@ const StatePage = () => {
         const response = await axios.get(`${TOP_GPT_UNIVERSITIES_LLM}?state_name=${stateName}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        
-        const universities = response.data.data.map((item) => ({
+        return response.data.data.map((item) => ({
           name: item.university_name,
         }));
-        
-        return universities;
       } catch (error) {
         if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
           setIsSessionExpired(true);
@@ -120,10 +96,6 @@ const StatePage = () => {
     navigate(`/college/${encodeURIComponent(college.name)}`);
   };
 
-  const handleBackClick = () => {
-    navigate('/explore');
-  };
-
   if (stateLoading || universitiesLoading) {
     return <LoadingState />;
   }
@@ -135,7 +107,7 @@ const StatePage = () => {
           <div className="w-full max-w-7xl text-left">
             <Button 
               variant="ghost" 
-              onClick={handleBackClick} 
+              onClick={() => navigate('/explore')} 
               className="mb-8 hover:bg-background/80 backdrop-blur-sm"
             >
               ← Back to Map
@@ -159,8 +131,8 @@ const StatePage = () => {
                 universities={universities}
                 favorites={favorites}
                 comparedUniversities={comparedUniversities}
-                onFavoriteClick={handleFavoriteWithLogging}
-                onCompareClick={handleCompareWithLogging}
+                onFavoriteClick={handleFavoriteClick}
+                onCompareClick={handleCompareClick}
                 onUniversityClick={handleCollegeClick}
               />
             )}
@@ -170,7 +142,7 @@ const StatePage = () => {
 
       <ComparisonBanner 
         comparedUniversities={comparedUniversities} 
-        onClear={handleClearComparisonWithLogging} 
+        onClear={clearComparedUniversities} 
       />
 
       <SessionExpiredDialog 

@@ -11,7 +11,6 @@ const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCo
     if (e && e.stopPropagation) {
       e.stopPropagation();
     }
-    
     if (onFavoriteClick) {
       onFavoriteClick(college.name);
     }
@@ -21,15 +20,8 @@ const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCo
     if (e && e.stopPropagation) {
       e.stopPropagation();
     }
-    
     if (onCompareClick) {
       onCompareClick(college.name);
-    }
-  };
-  
-  const handleCardClick = () => {
-    if (onClick) {
-      onClick(college);
     }
   };
 
@@ -41,7 +33,7 @@ const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCo
     >
       <Card 
         className="cursor-pointer relative overflow-hidden bg-gradient-to-br from-card/80 to-card/30 backdrop-blur-sm border-primary/10 hover:shadow-lg hover:shadow-primary/10 transition-all h-full group"
-        onClick={handleCardClick}
+        onClick={onClick}
       >
         {/* Color overlay with gradient that animates on hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-300" />

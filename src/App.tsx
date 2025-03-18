@@ -1,7 +1,6 @@
 
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import Index from './pages/Index';
 import StatePage from './pages/StatePage';
 import CollegePage from './pages/CollegePage';
@@ -10,21 +9,13 @@ import SignupPage from './pages/SignupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import LandingPage from './pages/LandingPage';
 import ComparePage from './pages/ComparePage';
-import AdminPage from './pages/AdminPage';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
-import { setAuthenticationStatus } from './utils/logger';
 import './App.css';
 
 const queryClient = new QueryClient();
 
 function App() {
-  // Check authentication status on load
-  useEffect(() => {
-    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-    setAuthenticationStatus(isLoggedIn);
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
@@ -56,11 +47,6 @@ function App() {
           <Route path="/compare" element={
             <ProtectedRoute>
               <ComparePage />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin" element={
-            <ProtectedRoute adminOnly={true}>
-              <AdminPage />
             </ProtectedRoute>
           } />
         </Routes>
