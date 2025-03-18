@@ -10,7 +10,7 @@ export const EVENT_TYPES = {
   PAGE_VISIT: 'page_visit',
   UNIVERSITY_SEARCH: 'university_search', 
   TIME_SPENT: 'time_spent',
-  API_REQUEST: 'api_request'  // Changed from BUTTON_CLICK to API_REQUEST
+  API_REQUEST: 'api_request'
 };
 
 // Configure the logger
@@ -62,15 +62,11 @@ export const logEvent = async (event, details = {}) => {
       timestamp: new Date().toISOString()
     };
     
-    console.log('Logging event:', logData);
-    
     // Only send log data to API if it's one of our defined event types
     if (Object.values(EVENT_TYPES).includes(event)) {
       await axios.post(API_ENDPOINT, logData);
     }
   } catch (error) {
-    console.error('Error logging event:', error);
-    // Mark that we've had a network error to prevent more requests
     if (error.code === 'ERR_NETWORK') {
       hasLoggedNetworkError = true;
       
@@ -111,7 +107,7 @@ const standardizeDetails = (event, details) => {
         filters: details.filters || {} 
       };
     
-    case EVENT_TYPES.API_REQUEST:  // Updated from BUTTON_CLICK to API_REQUEST
+    case EVENT_TYPES.API_REQUEST:
       return { 
         method: details.method || 'unknown',
         url: details.url || 'unknown',
@@ -149,12 +145,6 @@ export const logPageView = (pageName) => {
   logEvent(EVENT_TYPES.PAGE_VISIT, { page: pageName });
 };
 
-// Remove the logButtonClick function
-// export const logButtonClick = (buttonName, location) => {
-//   logEvent(EVENT_TYPES.BUTTON_CLICK, { button: buttonName, location });
-// };
-
-// Add API request logging function
 export const logApiRequest = (method, url) => {
   logEvent(EVENT_TYPES.API_REQUEST, { method, url });
 };
