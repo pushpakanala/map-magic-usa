@@ -125,3 +125,8 @@ export const logUniversitySearch = (query, state) => {
 export const logBotInteraction = (query, responseId) => {
   logEvent(EVENT_TYPES.BOT_INTERACTION, { query, response_id: responseId });
 };
+
+// Remove all these exports to prevent any page_visit logging
+// export const logPageView = () => {};
+// export const startTimeTracking = () => {};
+// export const endTimeTracking = () => {};

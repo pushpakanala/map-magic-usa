@@ -21,18 +21,23 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
       if (adminOnly) {
         const userStr = sessionStorage.getItem('user');
         if (userStr) {
-          const user = JSON.parse(userStr);
-          const isAdmin = user.role === 'admin';
-          
-          if (!isAdmin) {
-            toast({
-              title: "Access Denied",
-              description: "You need administrator privileges to access this page.",
-              variant: "destructive",
-            });
+          try {
+            const user = JSON.parse(userStr);
+            const isAdmin = user.role === 'admin';
+            
+            if (!isAdmin) {
+              toast({
+                title: "Access Denied",
+                description: "You need administrator privileges to access this page.",
+                variant: "destructive",
+              });
+            }
+            
+            setIsAuthorized(isAdmin);
+          } catch (error) {
+            console.error("Error parsing user data:", error);
+            setIsAuthorized(false);
           }
-          
-          setIsAuthorized(isAdmin);
         } else {
           setIsAuthorized(false);
         }

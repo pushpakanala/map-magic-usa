@@ -38,6 +38,16 @@ const SignupPage = () => {
       });
       
       if (response.status === 200) {
+        // Store user role in session storage
+        const userData = {
+          email,
+          name,
+          role: 'user'  // Default role for new sign-ups
+        };
+        
+        // Don't set isLoggedIn yet since they need to login with credentials
+        sessionStorage.setItem('user', JSON.stringify(userData));
+        
         logSignupEvent(email);
         
         toast({

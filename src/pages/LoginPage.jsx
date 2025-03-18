@@ -7,7 +7,7 @@ import { AtSign, KeyRound, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { LOGIN } from '../constants';
 import { useToast } from '@/hooks/use-toast';
-import { logLoginEvent, logEvent, logPageView, startTimeTracking, endTimeTracking } from '@/utils/logger';
+import { logLoginEvent, logEvent } from '@/utils/logger';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -18,15 +18,6 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   
-  // Start time tracking and log page view
-  useEffect(() => {
-    logPageView('login');
-    startTimeTracking('login');
-    return () => {
-      endTimeTracking('login');
-    };
-  }, []);
-
   // Check if user is already logged in, redirect to explore page
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
@@ -44,10 +35,13 @@ const LoginPage = () => {
       const response = await axios.post(`${LOGIN}?email=${email}&password=${password}`);
       
       if (response.data) {
+        // Extract user role from the API response or default to 'user'
+        const userRole = response.data.data.role || 'user';
+        
         const userData = {
           email,
           name: response.data.data.name,
-          role: 'user'
+          role: userRole  // Store the role in the userData object
         };
         
         const token = response.data.data.access_token;
