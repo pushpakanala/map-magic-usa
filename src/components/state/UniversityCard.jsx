@@ -5,19 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from '@/lib/utils';
-import { logEvent } from '@/utils/logger';
 
 const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCompareClick, onClick }) => {
   const handleFavoriteClick = (e) => {
     if (e && e.stopPropagation) {
       e.stopPropagation();
     }
-    
-    // Log the favorite action
-    logEvent('toggle_favorite', { 
-      university: college.name, 
-      action: isFavorite ? 'remove' : 'add'
-    });
     
     if (onFavoriteClick) {
       onFavoriteClick(college.name);
@@ -29,21 +22,12 @@ const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCo
       e.stopPropagation();
     }
     
-    // Log the compare action
-    logEvent('toggle_compare', { 
-      university: college.name, 
-      action: isCompared ? 'remove' : 'add'
-    });
-    
     if (onCompareClick) {
       onCompareClick(college.name);
     }
   };
   
   const handleCardClick = () => {
-    // Log the card click
-    logEvent('university_card_click', { university: college.name });
-    
     if (onClick) {
       onClick(college);
     }

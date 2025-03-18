@@ -14,7 +14,7 @@ import { useComparison } from '../hooks/use-comparison';
 import { GraduationCap } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
-import { logPageView, logEvent, startTimeTracking, endTimeTracking } from '@/utils/logger';
+import { logUniversitySearch } from '@/utils/logger';
 
 const LoadingState = () => (
   <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
@@ -54,30 +54,20 @@ const StatePage = () => {
 
   useEffect(() => {
     if (stateName) {
-      logPageView(`state_${stateName}`);
-      logEvent('state_page_view', { state: stateName });
-      startTimeTracking(`state_${stateName}`);
+      // Log university search when viewing a state page
+      logUniversitySearch('', stateName);
     }
-    
-    return () => {
-      if (stateName) {
-        endTimeTracking(`state_${stateName}`);
-      }
-    };
   }, [stateName]);
 
   const handleFavoriteWithLogging = (universityName) => {
-    logEvent('toggle_favorite', { university: universityName, action: 'toggle' });
     handleFavoriteClick(universityName);
   };
 
   const handleCompareWithLogging = (universityName) => {
-    logEvent('toggle_compare', { university: universityName, action: 'toggle' });
     handleCompareClick(universityName);
   };
 
   const handleClearComparisonWithLogging = () => {
-    logEvent('clear_comparison', { action: 'clear_all' });
     clearComparedUniversities();
   };
 
@@ -95,13 +85,6 @@ const StatePage = () => {
       const formattedData = response.data.slice(1).find((item) => 
         item[0].toLowerCase() === stateName?.toLowerCase()
       );
-      
-      if (formattedData) {
-        logEvent('state_data_loaded', { 
-          state: stateName,
-          population: parseInt(formattedData[1])
-        });
-      }
       
       return formattedData ? {
         population: parseInt(formattedData[1]).toLocaleString(),
@@ -123,16 +106,10 @@ const StatePage = () => {
           name: item.university_name,
         }));
         
-        logEvent('universities_loaded', { 
-          state: stateName,
-          count: universities.length
-        });
-        
         return universities;
       } catch (error) {
         if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
           setIsSessionExpired(true);
-          logEvent('session_expired', { page: `state_${stateName}` });
         }
         throw error;
       }
@@ -140,12 +117,10 @@ const StatePage = () => {
   });
 
   const handleCollegeClick = (college) => {
-    logEvent('view_university', { university: college.name });
     navigate(`/college/${encodeURIComponent(college.name)}`);
   };
 
   const handleBackClick = () => {
-    logEvent('navigation', { from: `state_${stateName}`, to: 'explore', action: 'back_to_map' });
     navigate('/explore');
   };
 
