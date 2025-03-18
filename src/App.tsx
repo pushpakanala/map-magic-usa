@@ -11,10 +11,9 @@ import SignupPage from './pages/SignupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import LandingPage from './pages/LandingPage';
 import ComparePage from './pages/ComparePage';
-import AdminDashboard from './pages/AdminDashboard';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
-import { logEvent, EVENT_TYPES, setAuthenticationStatus } from './utils/logger';
+import { logEvent, logPageView, EVENT_TYPES, setAuthenticationStatus } from './utils/logger';
 import './App.css';
 
 // Set up a flag to prevent axios interceptor loops
@@ -36,7 +35,7 @@ axios.interceptors.request.use(
       
       // Only log API requests if user is logged in
       if (isLoggedIn) {
-        logEvent(EVENT_TYPES.API_REQUEST, {
+        logEvent(EVENT_TYPES.API_REQUEST, {  // Changed from BUTTON_CLICK to API_REQUEST
           action: "api_request",
           method: config.method?.toUpperCase(),
           url: url,
@@ -50,6 +49,9 @@ axios.interceptors.request.use(
   }
 );
 
+// We don't need response interceptors for logging purposes as they can cause
+// infinite loops. Removing them to prevent continuous requests.
+
 // Route-change tracking component
 const RouteTracker = () => {
   const location = useLocation();
@@ -60,7 +62,7 @@ const RouteTracker = () => {
     
     // Only log page views for public pages or if user is logged in
     if (isLoggedIn || path === '/login' || path === '/signup' || path === '/' || path === '/forgot-password') {
-      logEvent(EVENT_TYPES.PAGE_VISIT, { page: path });
+      logPageView(path);
     }
   }, [location]);
   
@@ -123,11 +125,6 @@ function App() {
           <Route path="/compare" element={
             <ProtectedRoute>
               <ComparePage />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin" element={
-            <ProtectedRoute>
-              <AdminDashboard />
             </ProtectedRoute>
           } />
         </Routes>
