@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -14,6 +13,7 @@ import { useComparison } from '../hooks/use-comparison';
 import { GraduationCap } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
+import { logPageView, logButtonClick, logEvent, startTimeTracking, endTimeTracking } from '@/utils/logger';
 
 const LoadingState = () => (
   <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
@@ -51,6 +51,35 @@ const StatePage = () => {
   const token = sessionStorage.getItem("token");
   const [isSessionExpired, setIsSessionExpired] = useState(false);
 
+  useEffect(() => {
+    if (stateName) {
+      logPageView(`state_${stateName}`);
+      logEvent('state_page_view', { state: stateName });
+      startTimeTracking(`state_${stateName}`);
+    }
+    
+    return () => {
+      if (stateName) {
+        endTimeTracking(`state_${stateName}`);
+      }
+    };
+  }, [stateName]);
+
+  const handleFavoriteWithLogging = (universityName) => {
+    logButtonClick('toggle_favorite', universityName);
+    handleFavoriteClick(universityName);
+  };
+
+  const handleCompareWithLogging = (universityName) => {
+    logButtonClick('toggle_compare', universityName);
+    handleCompareClick(universityName);
+  };
+
+  const handleClearComparisonWithLogging = () => {
+    logButtonClick('clear_comparison', 'all');
+    clearComparedUniversities();
+  };
+
   const { data: stateData, isLoading: stateLoading } = useQuery({
     queryKey: ['stateDetails', stateName],
     queryFn: async () => {
@@ -65,6 +94,14 @@ const StatePage = () => {
       const formattedData = response.data.slice(1).find((item) => 
         item[0].toLowerCase() === stateName?.toLowerCase()
       );
+      
+      if (formattedData) {
+        logEvent('state_data_loaded', { 
+          state: stateName,
+          population: parseInt(formattedData[1])
+        });
+      }
+      
       return formattedData ? {
         population: parseInt(formattedData[1]).toLocaleString(),
         male: parseInt(formattedData[2]).toLocaleString(),
@@ -80,12 +117,21 @@ const StatePage = () => {
         const response = await axios.get(`${TOP_GPT_UNIVERSITIES_LLM}?state_name=${stateName}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        return response.data.data.map((item) => ({
+        
+        const universities = response.data.data.map((item) => ({
           name: item.university_name,
         }));
+        
+        logEvent('universities_loaded', { 
+          state: stateName,
+          count: universities.length
+        });
+        
+        return universities;
       } catch (error) {
         if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
           setIsSessionExpired(true);
+          logEvent('session_expired', { page: `state_${stateName}` });
         }
         throw error;
       }
@@ -93,7 +139,13 @@ const StatePage = () => {
   });
 
   const handleCollegeClick = (college) => {
+    logButtonClick('view_university', college.name);
     navigate(`/college/${encodeURIComponent(college.name)}`);
+  };
+
+  const handleBackClick = () => {
+    logButtonClick('back_to_map', `from_state_${stateName}`);
+    navigate('/explore');
   };
 
   if (stateLoading || universitiesLoading) {
@@ -107,7 +159,7 @@ const StatePage = () => {
           <div className="w-full max-w-7xl text-left">
             <Button 
               variant="ghost" 
-              onClick={() => navigate('/explore')} 
+              onClick={handleBackClick} 
               className="mb-8 hover:bg-background/80 backdrop-blur-sm"
             >
               ← Back to Map
@@ -131,8 +183,8 @@ const StatePage = () => {
                 universities={universities}
                 favorites={favorites}
                 comparedUniversities={comparedUniversities}
-                onFavoriteClick={handleFavoriteClick}
-                onCompareClick={handleCompareClick}
+                onFavoriteClick={handleFavoriteWithLogging}
+                onCompareClick={handleCompareWithLogging}
                 onUniversityClick={handleCollegeClick}
               />
             )}
@@ -142,7 +194,7 @@ const StatePage = () => {
 
       <ComparisonBanner 
         comparedUniversities={comparedUniversities} 
-        onClear={clearComparedUniversities} 
+        onClear={handleClearComparisonWithLogging} 
       />
 
       <SessionExpiredDialog 

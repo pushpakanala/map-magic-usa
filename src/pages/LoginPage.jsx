@@ -8,6 +8,7 @@ import { AtSign, KeyRound, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { LOGIN } from '../constants';
 import { useToast } from '@/hooks/use-toast';
+import { logLoginEvent, logButtonClick, logPageView, startTimeTracking, endTimeTracking } from '@/utils/logger';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -18,6 +19,15 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   
+  // Start time tracking and log page view
+  useEffect(() => {
+    logPageView('login');
+    startTimeTracking('login');
+    return () => {
+      endTimeTracking('login');
+    };
+  }, []);
+
   // Check if user is already logged in, redirect to explore page
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
@@ -29,6 +39,7 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    logButtonClick('login_submit', 'login_page');
 
     try {
       const response = await axios.post(`${LOGIN}?email=${email}&password=${password}`);
@@ -46,6 +57,9 @@ const LoginPage = () => {
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('token', token);
         
+        // Log successful login
+        logLoginEvent(email);
+        
         navigate('/explore', { replace: true });
         toast({
           title: "Success",
@@ -55,6 +69,9 @@ const LoginPage = () => {
         throw new Error('Invalid credentials');
       }
     } catch (error) {
+      // Log login failure
+      logEvent('login_failed', { email, reason: error.message });
+      
       toast({
         variant: "destructive",
         title: "Error",
@@ -66,6 +83,7 @@ const LoginPage = () => {
   };
 
   const togglePasswordVisibility = () => {
+    logButtonClick('toggle_password', 'login_page');
     setShowPassword(!showPassword);
   };
 

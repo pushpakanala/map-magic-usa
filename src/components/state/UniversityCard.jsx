@@ -5,12 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from '@/lib/utils';
+import { logEvent } from '@/utils/logger';
 
 const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCompareClick, onClick }) => {
   const handleFavoriteClick = (e) => {
     if (e && e.stopPropagation) {
       e.stopPropagation();
     }
+    
+    // Log the favorite action
+    logEvent('toggle_favorite', { 
+      university: college.name, 
+      action: isFavorite ? 'remove' : 'add'
+    });
+    
     if (onFavoriteClick) {
       onFavoriteClick(college.name);
     }
@@ -20,8 +28,24 @@ const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCo
     if (e && e.stopPropagation) {
       e.stopPropagation();
     }
+    
+    // Log the compare action
+    logEvent('toggle_compare', { 
+      university: college.name, 
+      action: isCompared ? 'remove' : 'add'
+    });
+    
     if (onCompareClick) {
       onCompareClick(college.name);
+    }
+  };
+  
+  const handleCardClick = () => {
+    // Log the card click
+    logEvent('university_card_click', { university: college.name });
+    
+    if (onClick) {
+      onClick(college);
     }
   };
 
@@ -33,7 +57,7 @@ const UniversityCard = ({ college, isFavorite, isCompared, onFavoriteClick, onCo
     >
       <Card 
         className="cursor-pointer relative overflow-hidden bg-gradient-to-br from-card/80 to-card/30 backdrop-blur-sm border-primary/10 hover:shadow-lg hover:shadow-primary/10 transition-all h-full group"
-        onClick={onClick}
+        onClick={handleCardClick}
       >
         {/* Color overlay with gradient that animates on hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-300" />

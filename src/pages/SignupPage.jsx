@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +7,7 @@ import { motion } from 'framer-motion';
 import { UserRound, AtSign } from 'lucide-react';
 import axios from 'axios';
 import { USER_RESOURCE } from '../constants';
+import { logSignupEvent, logButtonClick, logPageView, startTimeTracking, endTimeTracking } from '@/utils/logger';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -16,9 +16,18 @@ const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    logPageView('signup');
+    startTimeTracking('signup');
+    return () => {
+      endTimeTracking('signup');
+    };
+  }, []);
+
   const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    logButtonClick('signup_submit', 'signup_page');
 
     try {
       
@@ -29,17 +38,17 @@ const SignupPage = () => {
       });
       
       if (response.status === 200) {
+        logSignupEvent(email);
+        
         toast({
           title: "Success!",
           description: "Account created successfully! Please check your email for login credentials.",
           duration: 5000,
         });
         
-        // Clear form data
         setName('');
         setEmail('');
         
-        // Wait for toast to be visible before navigating
         setTimeout(() => {
           navigate('/login', { replace: true });
         }, 2000);
@@ -52,6 +61,8 @@ const SignupPage = () => {
       } else if (error.response?.status === 409) {
         errorMessage = "Email already exists. Please use a different email.";
       }
+      
+      logEvent('signup_failed', { email, name, reason: errorMessage });
       
       toast({
         variant: "destructive",

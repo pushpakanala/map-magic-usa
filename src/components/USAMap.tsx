@@ -9,6 +9,7 @@ import { statesData } from '@/lib/states-data';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Map, Compass } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { logButtonClick, logEvent } from '@/utils/logger';
 
 interface StateData {
   state: string;
@@ -42,11 +43,17 @@ const USAMap: React.FC = () => {
         state: item[0],
         population: parseInt(item[1])
       }));
+      
+      // Log successful data fetch
+      logEvent('population_data_loaded', { count: formattedData.length });
+      
       return formattedData;
     }
   });
 
   const handleStateClick = useCallback((stateName: string) => {
+    // Log state click
+    logButtonClick('state_map', stateName);
     navigate(`/state/${stateName.toLowerCase()}`);
   }, [navigate]);
 
@@ -69,6 +76,13 @@ const USAMap: React.FC = () => {
       setHoverPosition({ x, y });
     }
   }, []);
+  
+  const handleStateHover = useCallback((stateName: string | null) => {
+    if (stateName && stateName !== hoveredState) {
+      logEvent('state_hover', { state: stateName });
+    }
+    setHoveredState(stateName);
+  }, [hoveredState]);
 
   // Updated color palette to match the image - blue-gray gradient
   const getStateColor = useCallback((index: number) => {
@@ -89,6 +103,9 @@ const USAMap: React.FC = () => {
   );
 
   if (error) {
+    // Log error
+    logEvent('map_data_error', { error: (error as Error).message });
+    
     toast({
       title: "Error loading map data",
       description: "Please try again later",
@@ -142,8 +159,8 @@ const USAMap: React.FC = () => {
                   animate={{ opacity: 0.9, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.01 }}
                   whileHover={{ scale: 1.02, opacity: 1 }}
-                  onMouseEnter={() => setHoveredState(state.name)}
-                  onMouseLeave={() => setHoveredState(null)}
+                  onMouseEnter={() => handleStateHover(state.name)}
+                  onMouseLeave={() => handleStateHover(null)}
                   onClick={() => handleStateClick(state.name)}
                 />
               ))}
