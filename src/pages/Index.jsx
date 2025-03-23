@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
@@ -39,7 +39,6 @@ const Index = () => {
   const token = sessionStorage.getItem("token");
   const [isSessionExpired, setIsSessionExpired] = useState(false);
   const isMobile = useIsMobile();
-  const chatContainerRef = useRef(null);
 
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
@@ -76,14 +75,12 @@ const Index = () => {
   const handleSendMessage = async () => {
     if (!currentMessage.trim() || isLoading) return;
     
-    const userMessage = {
+    setMessages(prev => [...prev, {
       id: Date.now(),
       text: currentMessage,
       sender: 'user'
-    };
+    }]);
     
-    setMessages(prev => [...prev, userMessage]);
-    setCurrentMessage('');
     setIsLoading(true);
     
     try {
@@ -108,21 +105,12 @@ const Index = () => {
         }
       }
       
-      const botMessage = {
+      setMessages(prev => [...prev, {
         id: Date.now() + 1,
         text: botResponse,
         sender: 'bot',
         rawData: rawData || response.data.data
-      };
-      
-      setMessages(prev => [...prev, botMessage]);
-      
-      setTimeout(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-        }
-      }, 100);
-      
+      }]);
     } catch (error) {
       if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
         setIsSessionExpired(true);
@@ -141,19 +129,12 @@ const Index = () => {
       }
     } finally {
       setIsLoading(false);
+      setCurrentMessage('');
     }
   };
 
   const generateTextSummary = (data) => {
     if (!data) return "No information available.";
-    
-    if (data.name && data.role) {
-      return `${data.name}: ${data.role}`;
-    }
-    
-    if (data.message && Object.keys(data).length === 1) {
-      return data.message;
-    }
     
     let summary = [];
     
@@ -201,32 +182,6 @@ const Index = () => {
 
   const handleBotClick = () => {
     setIsChatOpen(!isChatOpen);
-    
-    if (!isChatOpen && messages.length === 0) {
-      setIsLoading(true);
-      
-      setTimeout(() => {
-        setMessages([{
-          id: Date.now(),
-          text: "Hello! I'm the UniQuest Assistant. How can I help you explore universities in the USA?",
-          sender: 'bot',
-          rawData: {
-            response: {
-              name: "UniQuest Assistant",
-              role: "Guide for exploring universities in the USA",
-              capabilities: [
-                "Suggest universities by state or program",
-                "Explain admission requirements",
-                "List top courses and programs",
-                "Provide tuition and fee details",
-                "Help with scholarships and living costs information"
-              ]
-            }
-          }
-        }]);
-        setIsLoading(false);
-      }, 500);
-    }
   };
 
   return (
@@ -637,7 +592,7 @@ const Index = () => {
             className={`rounded-full h-14 w-14 shadow-lg transition-all duration-300 ${
               isChatOpen 
                 ? "bg-red-500 hover:bg-red-600" 
-                : "bg-gradient-to-br from-uniquestPurple to-uniquestPurple-dark hover:shadow-xl"
+                : "bg-gradient-to-br from-gray-800 to-black hover:shadow-xl"
             }`}
             onClick={handleBotClick}
             type="button"
@@ -657,9 +612,9 @@ const Index = () => {
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               className="fixed bottom-20 right-4 w-full max-w-96 h-[600px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-xl shadow-2xl border border-gray-200 dark:border-slate-700 z-40 flex flex-col overflow-hidden"
             >
-              <div className="p-4 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-uniquestPurple/10 to-uniquestPurple/5 dark:from-uniquestPurple/20 dark:to-uniquestPurple/10">
+              <div className="p-4 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
                 <div className="flex items-center space-x-3">
-                  <div className="bg-gradient-to-br from-uniquestPurple to-uniquestPurple-dark p-2 rounded-full">
+                  <div className="bg-black p-2 rounded-full">
                     <Bot className="h-5 w-5 text-white" />
                   </div>
                   <div>
@@ -669,36 +624,29 @@ const Index = () => {
                 </div>
               </div>
               
-              <div 
-                className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50/50 to-white/50 dark:from-gray-900/50 dark:to-slate-900/50"
-                ref={chatContainerRef}
-              >
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50/50 to-white/50 dark:from-gray-900/50 dark:to-slate-900/50">
                 {messages.length === 0 && (
                   <div className="h-full flex items-center justify-center">
                     <div className="text-center p-6 rounded-lg bg-gray-100/50 dark:bg-gray-800/50 max-w-xs mx-auto">
-                      <BrainCircuit className="h-10 w-10 mx-auto mb-2 text-uniquestPurple/50 dark:text-uniquestPurple/30" />
-                      <p className="text-gray-600 dark:text-gray-300 text-sm">
+                      <BrainCircuit className="h-10 w-10 mx-auto mb-2 text-gray-400 dark:text-gray-500" />
+                      <p className="text-gray-500 dark:text-gray-400 text-sm">
                         Ask me about universities, programs, or how to use UniQuest!
                       </p>
                     </div>
                   </div>
                 )}
                 
-                {messages.map((message, index) => (
-                  <ChatMessage 
-                    key={message.id} 
-                    message={message} 
-                    isLatest={index === messages.length - 1}
-                  />
+                {messages.map((message) => (
+                  <ChatMessage key={message.id} message={message} />
                 ))}
                 
                 {isLoading && (
                   <div className="flex justify-start">
                     <div className="bg-gray-200 dark:bg-slate-700 p-3 rounded-lg">
                       <span className="flex items-center space-x-2">
-                        <span className="w-2 h-2 bg-uniquestPurple/70 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                        <span className="w-2 h-2 bg-uniquestPurple/70 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                        <span className="w-2 h-2 bg-uniquestPurple/70 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                       </span>
                     </div>
                   </div>
@@ -717,13 +665,13 @@ const Index = () => {
                       }
                     }}
                     placeholder="Type your message..."
-                    className="resize-none border-gray-300 dark:border-slate-700 focus-visible:ring-uniquestPurple/30 bg-gray-100/50 dark:bg-slate-800/50 rounded-lg"
+                    className="resize-none border-gray-300 dark:border-slate-700 focus-visible:ring-black/30 bg-gray-100/50 dark:bg-slate-800/50 rounded-lg"
                     rows={2}
                   />
                   <Button
                     onClick={handleSendMessage}
                     size="icon"
-                    className="h-auto bg-gradient-to-r from-uniquestPurple to-uniquestPurple-dark hover:shadow-lg transition-all"
+                    className="h-auto bg-black hover:bg-gray-800 transition-colors"
                     disabled={!currentMessage.trim() || isLoading}
                   >
                     <Send className="h-4 w-4" />
@@ -752,4 +700,3 @@ const Index = () => {
 };
 
 export default Index;
-
