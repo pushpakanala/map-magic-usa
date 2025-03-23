@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BOT_RESPONSE_TYPES } from '@/constants';
-import { GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, BookOpen, Users, Globe, Lightbulb, School } from 'lucide-react';
+import { GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, BookOpen, Users, Globe, Lightbulb, School, MessageCircle } from 'lucide-react';
 
 const ChatMessage = ({ message }) => {
   const isBot = message.sender === 'bot';
@@ -29,6 +29,18 @@ const ChatMessage = ({ message }) => {
   
   const renderStructuredResponse = (data) => {
     if (!data) return null;
+    
+    // If the response contains just a message field, render it as a simple message
+    if (data.message && Object.keys(data).length === 1) {
+      return (
+        <div className="space-y-2">
+          <div className="flex items-start gap-2">
+            <MessageCircle className="h-5 w-5 text-uniquestPurple mt-1 flex-shrink-0" />
+            <p className="text-gray-800 dark:text-gray-200">{data.message}</p>
+          </div>
+        </div>
+      );
+    }
     
     return (
       <div className="space-y-4">

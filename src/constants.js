@@ -27,5 +27,6 @@ export const BOT_RESPONSE_TYPES = {
   CAMPUS_LIFE: 'campus_life',
   NOTABLE_ALUMNI: 'notable_alumni',
   RESEARCH: 'research',
-  STUDENT_BODY: 'student_body'
+  STUDENT_BODY: 'student_body',
+  MESSAGE: 'message'
 }
