@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
-import { BOT_GEMINI, BOT_RESPONSE_TYPES } from '../constants';
+import { BOT_GEMINI } from '../constants';
 import { Card, CardContent } from "@/components/ui/card";
 import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, Compass, School, BookOpen, Lightbulb, Sparkles, Rocket } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
@@ -39,8 +39,7 @@ const Index = () => {
   const token = sessionStorage.getItem("token");
   const [isSessionExpired, setIsSessionExpired] = useState(false);
   const isMobile = useIsMobile();
-  const chatContainerRef = useRef(null);
-  
+
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem('isLoggedIn');
     if (!isLoggedIn) {
@@ -52,12 +51,6 @@ const Index = () => {
       }
     }
   }, [navigate]);
-
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }
-  }, [messages]);
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
@@ -143,14 +136,6 @@ const Index = () => {
   const generateTextSummary = (data) => {
     if (!data) return "No information available.";
     
-    if (data.name || data.role || data.capabilities) {
-      return `${data.name || 'Assistant'} - ${data.role || 'University Guide'}`;
-    }
-    
-    if (data.message && Object.keys(data).length === 1) {
-      return data.message;
-    }
-    
     let summary = [];
     
     if (data.universities && data.universities.length > 0) {
@@ -197,31 +182,6 @@ const Index = () => {
 
   const handleBotClick = () => {
     setIsChatOpen(!isChatOpen);
-    
-    if (!isChatOpen && messages.length === 0) {
-      const assistantInfoData = {
-        name: "Uniquest Assistant",
-        role: "Guide for exploring universities in the USA",
-        capabilities: [
-          "Suggest universities",
-          "Explain admission requirements",
-          "List top courses",
-          "Provide fee details",
-          "Help with scholarships and living costs"
-        ]
-      };
-      
-      setMessages([{
-        id: Date.now(),
-        text: "Hello! I'm the Uniquest Assistant, here to help with your academic journey.",
-        sender: 'bot',
-        rawData: {
-          data: {
-            response: assistantInfoData
-          }
-        }
-      }]);
-    }
   };
 
   return (
@@ -664,10 +624,7 @@ const Index = () => {
                 </div>
               </div>
               
-              <div 
-                ref={chatContainerRef}
-                className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50/50 to-white/50 dark:from-gray-900/50 dark:to-slate-900/50"
-              >
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50/50 to-white/50 dark:from-gray-900/50 dark:to-slate-900/50">
                 {messages.length === 0 && (
                   <div className="h-full flex items-center justify-center">
                     <div className="text-center p-6 rounded-lg bg-gray-100/50 dark:bg-gray-800/50 max-w-xs mx-auto">
