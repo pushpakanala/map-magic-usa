@@ -13,3 +13,19 @@ export const TOP_GPT_UNIVERSITIES_LLM = `${API_SERVER_URL}/llm/llm/top-universit
 export const UNIVERSITIS_DATA_GPT = `${API_SERVER_URL}/llm/llm/gpt-universities-data`
 export const BOT_GEMINI = `${API_SERVER_URL}/llm/llm/`
 export const UNIVERSITIES_COMPARE = `${API_SERVER_URL}/llm/llm/compare-universities-llm`
+
+// Response structure types for the bot
+export const BOT_RESPONSE_TYPES = {
+  UNIVERSITIES: 'universities',
+  COURSES: 'courses',
+  FEES: 'fees',
+  REQUIREMENTS: 'requirements',
+  SCHOLARSHIPS: 'scholarships',
+  LIVING_COSTS: 'living_costs',
+  RANKINGS: 'rankings',
+  ADMISSION_RATE: 'admission_rate',
+  CAMPUS_LIFE: 'campus_life',
+  NOTABLE_ALUMNI: 'notable_alumni',
+  RESEARCH: 'research',
+  STUDENT_BODY: 'student_body'
+}

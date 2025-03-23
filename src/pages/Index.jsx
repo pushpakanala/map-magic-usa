@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
@@ -24,6 +23,7 @@ import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, Compass
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
 import { useIsMobile } from '@/hooks/use-mobile';
+import ChatMessage from '@/components/bot/ChatMessage';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -88,37 +88,28 @@ const Index = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       
-      // Handle dynamic JSON response
-      let botResponse;
+      let botResponse = "I received a response in an unexpected format. Please try again.";
+      let rawData = null;
       
-      // Check if response data is a valid JSON format
       if (response.data && response.data.data) {
         const responseData = response.data.data;
         
-        // Check if it's the traditional response format or a new JSON format
         if (typeof responseData.response === 'string') {
-          // Traditional string response
           botResponse = responseData.response;
+        } else if (responseData.response && typeof responseData.response === 'object') {
+          rawData = responseData;
+          
+          botResponse = generateTextSummary(responseData.response);
         } else {
-          // New JSON format - format as a readable message
-          try {
-            const formattedResponse = formatDynamicResponse(responseData);
-            botResponse = formattedResponse;
-          } catch (formatError) {
-            // Fallback to JSON stringification if formatting fails
-            botResponse = JSON.stringify(responseData, null, 2);
-          }
+          botResponse = JSON.stringify(responseData, null, 2);
         }
-      } else {
-        // Fallback for unexpected response format
-        botResponse = "I received data in an unexpected format. Please try again.";
       }
       
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
         text: botResponse,
         sender: 'bot',
-        rawData: response.data.data // Store the raw data for potential rendering purposes
+        rawData: rawData || response.data.data
       }]);
     } catch (error) {
       if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
@@ -142,106 +133,39 @@ const Index = () => {
     }
   };
 
-  // Format dynamic JSON response into readable text
-  const formatDynamicResponse = (data) => {
-    // If it's a simple response, return it directly
-    if (typeof data === 'string') return data;
-    if (data.response && typeof data.response === 'string') return data.response;
+  const generateTextSummary = (data) => {
+    if (!data) return "No information available.";
     
-    // Handle structured university data if present
-    if (data.universities) {
-      let response = "Here's information about the universities you requested:\n\n";
-      
-      data.universities.forEach((university, index) => {
-        response += `${index + 1}. **${university.name || 'Unnamed University'}**\n`;
-        
-        if (university.location) response += `   📍 Location: ${university.location}\n`;
-        if (university.ranking) response += `   🏆 Ranking: ${university.ranking}\n`;
-        if (university.acceptanceRate) response += `   📊 Acceptance Rate: ${university.acceptanceRate}\n`;
-        if (university.tuition) response += `   💰 Tuition: ${university.tuition}\n`;
-        if (university.description) response += `   ℹ️ ${university.description}\n`;
-        
-        response += '\n';
-      });
-      
-      return response;
+    let summary = [];
+    
+    if (data.universities && data.universities.length > 0) {
+      const universitiesText = data.universities.length === 1 
+        ? `About ${data.universities[0]}`
+        : `About ${data.universities.length} universities`;
+      summary.push(universitiesText);
     }
     
-    // Handle comparison data if present
-    if (data.comparison) {
-      let response = `**Comparison of Universities**\n\n`;
-      
-      Object.entries(data.comparison).forEach(([category, value]) => {
-        response += `**${category}**: ${value}\n`;
-      });
-      
-      return response;
+    if (data.courses && data.courses.length > 0) {
+      summary.push(`${data.courses.length} programs/schools available`);
     }
     
-    // Handle recommendation data if present
-    if (data.recommendations) {
-      let response = `**University Recommendations**\n\n`;
-      
-      data.recommendations.forEach((rec, index) => {
-        response += `${index + 1}. **${rec.name}**\n`;
-        if (rec.reason) response += `   Reason: ${rec.reason}\n`;
-        response += '\n';
-      });
-      
-      return response;
+    const availableInfo = [];
+    if (data.fees) availableInfo.push("fees");
+    if (data.requirements) availableInfo.push("requirements");
+    if (data.scholarships) availableInfo.push("scholarships");
+    if (data.living_costs) availableInfo.push("living costs");
+    if (data.rankings) availableInfo.push("rankings");
+    if (data.admission_rate) availableInfo.push("admission rates");
+    if (data.campus_life) availableInfo.push("campus life");
+    if (data.notable_alumni) availableInfo.push("notable alumni");
+    if (data.research) availableInfo.push("research");
+    if (data.student_body) availableInfo.push("student body info");
+    
+    if (availableInfo.length > 0) {
+      summary.push(`Information available on: ${availableInfo.join(", ")}`);
     }
     
-    // Default: convert JSON to formatted string if none of the above formats match
-    return `Here's what I found:\n\n${JSON.stringify(data, null, 2)}`;
-  };
-
-  const renderMessage = (message) => {
-    const isBot = message.sender === 'bot';
-    
-    // For basic text messages
-    if (!message.rawData || typeof message.text === 'string') {
-      return (
-        <div className={`max-w-[80%] p-3 rounded-lg ${
-          isBot
-            ? 'bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200'
-            : 'bg-black text-white ml-auto'
-        }`}>
-          {message.text.split('\n').map((line, index) => {
-            // Check if line contains markdown-style bold text (**text**)
-            const boldRegex = /\*\*(.*?)\*\*/g;
-            const formattedLine = line.replace(boldRegex, '<strong>$1</strong>');
-            
-            return (
-              <div 
-                key={index} 
-                className="mb-1"
-                dangerouslySetInnerHTML={{ __html: formattedLine }}
-              />
-            );
-          })}
-        </div>
-      );
-    }
-    
-    // For advanced structured data responses, we could implement specific UI components
-    // This would be expanded based on the types of structured responses received
-    return (
-      <div className="max-w-[80%] bg-gray-200 dark:bg-slate-700 p-3 rounded-lg text-gray-800 dark:text-gray-200">
-        {message.text.split('\n').map((line, index) => {
-          // Check if line contains markdown-style bold text (**text**)
-          const boldRegex = /\*\*(.*?)\*\*/g;
-          const formattedLine = line.replace(boldRegex, '<strong>$1</strong>');
-          
-          return (
-            <div 
-              key={index} 
-              className="mb-1"
-              dangerouslySetInnerHTML={{ __html: formattedLine }}
-            />
-          );
-        })}
-      </div>
-    );
+    return summary.join(". ");
   };
 
   const handleLogout = () => {
@@ -413,7 +337,6 @@ const Index = () => {
                   <USAMap />
                 </div>
                 
-                {/* Updated modern cards below the map */}
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
@@ -659,7 +582,6 @@ const Index = () => {
           </motion.div>
         </motion.div>
 
-        {/* Updated Bot button with a more modern design */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -682,7 +604,6 @@ const Index = () => {
           </Button>
         </motion.div>
 
-        {/* Redesigned Chat Window with dynamic content rendering */}
         <AnimatePresence>
           {isChatOpen && (
             <motion.div
@@ -716,14 +637,7 @@ const Index = () => {
                 )}
                 
                 {messages.map((message) => (
-                  <motion.div
-                    key={message.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    {renderMessage(message)}
-                  </motion.div>
+                  <ChatMessage key={message.id} message={message} />
                 ))}
                 
                 {isLoading && (
