@@ -1,13 +1,24 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BOT_RESPONSE_TYPES } from '@/constants';
-import { GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, BookOpen, Users, Globe, Lightbulb, School, MessageCircle } from 'lucide-react';
+import { 
+  GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, 
+  BookOpen, Users, Globe, Lightbulb, School, MessageCircle, Sparkles, 
+  Info, Robot, CheckCircle, List
+} from 'lucide-react';
 
-const ChatMessage = ({ message }) => {
+const ChatMessage = ({ message, isLatest = false }) => {
   const isBot = message.sender === 'bot';
+  const messageRef = useRef(null);
+  
+  useEffect(() => {
+    if (isLatest && messageRef.current) {
+      messageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }, [isLatest, message]);
   
   // Helper function to render a list of items
   const renderList = (items, icon) => {
@@ -38,6 +49,40 @@ const ChatMessage = ({ message }) => {
             <MessageCircle className="h-5 w-5 text-uniquestPurple mt-1 flex-shrink-0" />
             <p className="text-gray-800 dark:text-gray-200">{data.message}</p>
           </div>
+        </div>
+      );
+    }
+    
+    // If the response contains assistant info (name, role, capabilities)
+    if (data.name && data.role && data.capabilities) {
+      return (
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-uniquestPurple to-uniquestPurple-dark flex items-center justify-center text-white">
+              <Robot className="h-6 w-6" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-lg text-uniquestPurple">{data.name}</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400 italic">{data.role}</p>
+            </div>
+          </div>
+          
+          {data.capabilities && data.capabilities.length > 0 && (
+            <div className="bg-uniquestPurple/5 dark:bg-uniquestPurple/10 rounded-lg p-4 border border-uniquestPurple/20">
+              <h5 className="text-sm font-medium text-uniquestPurple flex items-center mb-3 gap-2">
+                <Sparkles className="h-4 w-4" />
+                Capabilities
+              </h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {data.capabilities.map((capability, index) => (
+                  <div key={index} className="flex items-center gap-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-uniquestPurple/60 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-300">{capability}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       );
     }
@@ -182,8 +227,8 @@ const ChatMessage = ({ message }) => {
   // For user messages
   if (!isBot) {
     return (
-      <div className="flex justify-end mb-4">
-        <div className="max-w-[80%] p-3 rounded-lg bg-black text-white">
+      <div ref={messageRef} className="flex justify-end mb-4">
+        <div className="max-w-[80%] p-3 rounded-lg bg-gradient-to-br from-uniquestPurple to-uniquestPurple-dark text-white shadow-md">
           {message.text}
         </div>
       </div>
@@ -193,8 +238,8 @@ const ChatMessage = ({ message }) => {
   // For bot messages with structured data
   if (isBot && message.rawData && message.rawData.response && typeof message.rawData.response === 'object') {
     return (
-      <div className="flex justify-start mb-4">
-        <Card className="max-w-[85%] bg-gradient-to-br from-gray-50 to-white dark:from-slate-950 dark:to-slate-900 shadow-md border-uniquestPurple/20 overflow-hidden">
+      <div ref={messageRef} className="flex justify-start mb-4 animate-fade-in">
+        <Card className="max-w-[85%] bg-gradient-to-br from-gray-50 to-white dark:from-slate-950 dark:to-slate-900 shadow-md border-uniquestPurple/20 overflow-hidden hover:shadow-lg transition-all duration-300">
           <CardContent className="p-4">
             {renderStructuredResponse(message.rawData.response)}
           </CardContent>
@@ -205,8 +250,8 @@ const ChatMessage = ({ message }) => {
   
   // For simple text bot messages
   return (
-    <div className="flex justify-start mb-4">
-      <div className="max-w-[80%] p-3 rounded-lg bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200">
+    <div ref={messageRef} className="flex justify-start mb-4 animate-fade-in">
+      <div className="max-w-[80%] p-3 rounded-lg bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 shadow-sm">
         {message.text.split('\n').map((line, index) => {
           const boldRegex = /\*\*(.*?)\*\*/g;
           const formattedLine = line.replace(boldRegex, '<strong>$1</strong>');
