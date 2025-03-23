@@ -88,10 +88,37 @@ const Index = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       
+      // Handle dynamic JSON response
+      let botResponse;
+      
+      // Check if response data is a valid JSON format
+      if (response.data && response.data.data) {
+        const responseData = response.data.data;
+        
+        // Check if it's the traditional response format or a new JSON format
+        if (typeof responseData.response === 'string') {
+          // Traditional string response
+          botResponse = responseData.response;
+        } else {
+          // New JSON format - format as a readable message
+          try {
+            const formattedResponse = formatDynamicResponse(responseData);
+            botResponse = formattedResponse;
+          } catch (formatError) {
+            // Fallback to JSON stringification if formatting fails
+            botResponse = JSON.stringify(responseData, null, 2);
+          }
+        }
+      } else {
+        // Fallback for unexpected response format
+        botResponse = "I received data in an unexpected format. Please try again.";
+      }
+      
       setMessages(prev => [...prev, {
         id: Date.now() + 1,
-        text: response.data.data.response,
-        sender: 'bot'
+        text: botResponse,
+        sender: 'bot',
+        rawData: response.data.data // Store the raw data for potential rendering purposes
       }]);
     } catch (error) {
       if (error.response?.status === 401 || error.response?.data?.status?.code === 401) {
@@ -115,6 +142,108 @@ const Index = () => {
     }
   };
 
+  // Format dynamic JSON response into readable text
+  const formatDynamicResponse = (data) => {
+    // If it's a simple response, return it directly
+    if (typeof data === 'string') return data;
+    if (data.response && typeof data.response === 'string') return data.response;
+    
+    // Handle structured university data if present
+    if (data.universities) {
+      let response = "Here's information about the universities you requested:\n\n";
+      
+      data.universities.forEach((university, index) => {
+        response += `${index + 1}. **${university.name || 'Unnamed University'}**\n`;
+        
+        if (university.location) response += `   📍 Location: ${university.location}\n`;
+        if (university.ranking) response += `   🏆 Ranking: ${university.ranking}\n`;
+        if (university.acceptanceRate) response += `   📊 Acceptance Rate: ${university.acceptanceRate}\n`;
+        if (university.tuition) response += `   💰 Tuition: ${university.tuition}\n`;
+        if (university.description) response += `   ℹ️ ${university.description}\n`;
+        
+        response += '\n';
+      });
+      
+      return response;
+    }
+    
+    // Handle comparison data if present
+    if (data.comparison) {
+      let response = `**Comparison of Universities**\n\n`;
+      
+      Object.entries(data.comparison).forEach(([category, value]) => {
+        response += `**${category}**: ${value}\n`;
+      });
+      
+      return response;
+    }
+    
+    // Handle recommendation data if present
+    if (data.recommendations) {
+      let response = `**University Recommendations**\n\n`;
+      
+      data.recommendations.forEach((rec, index) => {
+        response += `${index + 1}. **${rec.name}**\n`;
+        if (rec.reason) response += `   Reason: ${rec.reason}\n`;
+        response += '\n';
+      });
+      
+      return response;
+    }
+    
+    // Default: convert JSON to formatted string if none of the above formats match
+    return `Here's what I found:\n\n${JSON.stringify(data, null, 2)}`;
+  };
+
+  const renderMessage = (message) => {
+    const isBot = message.sender === 'bot';
+    
+    // For basic text messages
+    if (!message.rawData || typeof message.text === 'string') {
+      return (
+        <div className={`max-w-[80%] p-3 rounded-lg ${
+          isBot
+            ? 'bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200'
+            : 'bg-black text-white ml-auto'
+        }`}>
+          {message.text.split('\n').map((line, index) => {
+            // Check if line contains markdown-style bold text (**text**)
+            const boldRegex = /\*\*(.*?)\*\*/g;
+            const formattedLine = line.replace(boldRegex, '<strong>$1</strong>');
+            
+            return (
+              <div 
+                key={index} 
+                className="mb-1"
+                dangerouslySetInnerHTML={{ __html: formattedLine }}
+              />
+            );
+          })}
+        </div>
+      );
+    }
+    
+    // For advanced structured data responses, we could implement specific UI components
+    // This would be expanded based on the types of structured responses received
+    return (
+      <div className="max-w-[80%] bg-gray-200 dark:bg-slate-700 p-3 rounded-lg text-gray-800 dark:text-gray-200">
+        {message.text.split('\n').map((line, index) => {
+          // Check if line contains markdown-style bold text (**text**)
+          const boldRegex = /\*\*(.*?)\*\*/g;
+          const formattedLine = line.replace(boldRegex, '<strong>$1</strong>');
+          
+          return (
+            <div 
+              key={index} 
+              className="mb-1"
+              dangerouslySetInnerHTML={{ __html: formattedLine }}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
   const handleLogout = () => {
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('user');
@@ -129,7 +258,6 @@ const Index = () => {
 
   const handleBotClick = () => {
     setIsChatOpen(!isChatOpen);
-    console.log('Bot clicked, chat open:', !isChatOpen);
   };
 
   return (
@@ -220,6 +348,16 @@ const Index = () => {
                       <KeyRound className="mr-2 h-4 w-4" />
                       Change Password
                     </Button>
+                    {userData?.role === 'admin' && (
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-start mb-2"
+                        onClick={() => navigate('/admin')}
+                      >
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin Management
+                      </Button>
+                    )}
                     <Button 
                       variant="ghost" 
                       className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
@@ -544,7 +682,7 @@ const Index = () => {
           </Button>
         </motion.div>
 
-        {/* Redesigned Chat Window */}
+        {/* Redesigned Chat Window with dynamic content rendering */}
         <AnimatePresence>
           {isChatOpen && (
             <motion.div
@@ -584,15 +722,7 @@ const Index = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
-                    <div
-                      className={`max-w-[80%] p-3 rounded-lg ${
-                        message.sender === 'user'
-                          ? 'bg-black text-white ml-auto'
-                          : 'bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200'
-                      }`}
-                    >
-                      {message.text}
-                    </div>
+                    {renderMessage(message)}
                   </motion.div>
                 ))}
                 
