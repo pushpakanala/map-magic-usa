@@ -28,5 +28,6 @@ export const BOT_RESPONSE_TYPES = {
   NOTABLE_ALUMNI: 'notable_alumni',
   RESEARCH: 'research',
   STUDENT_BODY: 'student_body',
-  MESSAGE: 'message'
+  MESSAGE: 'message',
+  ASSISTANT_INFO: 'assistant_info'
 }

@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BOT_RESPONSE_TYPES } from '@/constants';
-import { GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, BookOpen, Users, Globe, Lightbulb, School, MessageCircle } from 'lucide-react';
+import { GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, BookOpen, Users, Globe, Lightbulb, School, MessageCircle, Bot, CheckCircle } from 'lucide-react';
 
 const ChatMessage = ({ message }) => {
   const isBot = message.sender === 'bot';
@@ -26,6 +26,35 @@ const ChatMessage = ({ message }) => {
       </div>
     );
   };
+
+  // Function to render assistant info card
+  const renderAssistantInfo = (data) => {
+    if (!data.name && !data.role && !data.capabilities) return null;
+
+    return (
+      <div className="space-y-4 bg-gradient-to-br from-gray-100/30 to-uniquestPurple/5 p-4 rounded-lg">
+        {data.name && (
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-full bg-uniquestPurple/10">
+              <Bot className="h-5 w-5 text-uniquestPurple" />
+            </div>
+            <h3 className="text-lg font-semibold">{data.name}</h3>
+          </div>
+        )}
+        
+        {data.role && (
+          <p className="text-sm text-muted-foreground italic ml-12">{data.role}</p>
+        )}
+        
+        {data.capabilities && data.capabilities.length > 0 && (
+          <div className="ml-12 space-y-1 mt-3">
+            <div className="text-sm font-medium mb-2">I can help you with:</div>
+            {renderList(data.capabilities, CheckCircle)}
+          </div>
+        )}
+      </div>
+    );
+  };
   
   const renderStructuredResponse = (data) => {
     if (!data) return null;
@@ -40,6 +69,13 @@ const ChatMessage = ({ message }) => {
           </div>
         </div>
       );
+    }
+
+    // If the response contains assistant info (name, role, capabilities)
+    if ((data.name || data.role || data.capabilities) && 
+        !data.universities && !data.courses && !data.fees && 
+        !data.requirements && !data.scholarships && !data.living_costs) {
+      return renderAssistantInfo(data);
     }
     
     return (
