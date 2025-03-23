@@ -27,6 +27,22 @@ const ChatMessage = ({ message }) => {
     );
   };
 
+  // Helper function to format nested object data
+  const formatNestedObject = (obj) => {
+    if (!obj || typeof obj !== 'object') return null;
+    
+    return (
+      <div className="space-y-2 mt-2">
+        {Object.entries(obj).map(([key, value], index) => (
+          <div key={index} className="ml-2">
+            <div className="font-medium capitalize">{key.replace(/_/g, ' ')}:</div>
+            <div className="ml-4 text-gray-600 dark:text-gray-300">{value}</div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   // Function to render assistant info card
   const renderAssistantInfo = (data) => {
     if (!data.name && !data.role && !data.capabilities) return null;
@@ -125,7 +141,7 @@ const ChatMessage = ({ message }) => {
               <DollarSign className="h-5 w-5" />
               Tuition & Fees
             </h4>
-            <p>{data.fees}</p>
+            <p>{typeof data.fees === 'object' ? JSON.stringify(data.fees) : data.fees}</p>
           </div>
         )}
         
@@ -136,7 +152,7 @@ const ChatMessage = ({ message }) => {
               <ClipboardList className="h-5 w-5" />
               Admission Requirements
             </h4>
-            <p>{data.requirements}</p>
+            <p>{typeof data.requirements === 'object' ? JSON.stringify(data.requirements) : data.requirements}</p>
           </div>
         )}
         
@@ -147,7 +163,7 @@ const ChatMessage = ({ message }) => {
               <Award className="h-5 w-5" />
               Scholarships
             </h4>
-            <p>{data.scholarships}</p>
+            <p>{typeof data.scholarships === 'object' ? JSON.stringify(data.scholarships) : data.scholarships}</p>
           </div>
         )}
         
@@ -158,7 +174,11 @@ const ChatMessage = ({ message }) => {
               <Home className="h-5 w-5" />
               Living Costs
             </h4>
-            <p>{data.living_costs}</p>
+            {typeof data.living_costs === 'string' ? (
+              <p>{data.living_costs}</p>
+            ) : (
+              formatNestedObject(data.living_costs)
+            )}
           </div>
         )}
         
@@ -169,7 +189,7 @@ const ChatMessage = ({ message }) => {
               <Trophy className="h-5 w-5" />
               Rankings
             </h4>
-            <p>{data.rankings}</p>
+            <p>{typeof data.rankings === 'object' ? JSON.stringify(data.rankings) : data.rankings}</p>
           </div>
         )}
         
@@ -180,7 +200,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Admission Rate
             </h4>
-            <p>{data.admission_rate}</p>
+            <p>{typeof data.admission_rate === 'object' ? JSON.stringify(data.admission_rate) : data.admission_rate}</p>
           </div>
         )}
         
@@ -191,7 +211,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Campus Life
             </h4>
-            <p>{data.campus_life}</p>
+            <p>{typeof data.campus_life === 'object' ? JSON.stringify(data.campus_life) : data.campus_life}</p>
           </div>
         )}
         
@@ -213,7 +233,7 @@ const ChatMessage = ({ message }) => {
               <Lightbulb className="h-5 w-5" />
               Research
             </h4>
-            <p>{data.research}</p>
+            <p>{typeof data.research === 'object' ? JSON.stringify(data.research) : data.research}</p>
           </div>
         )}
         
@@ -224,7 +244,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Student Body
             </h4>
-            <p>{data.student_body}</p>
+            <p>{typeof data.student_body === 'object' ? JSON.stringify(data.student_body) : data.student_body}</p>
           </div>
         )}
       </div>
