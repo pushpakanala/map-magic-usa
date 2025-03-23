@@ -1,8 +1,6 @@
 
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
 import { BOT_RESPONSE_TYPES } from '@/constants';
 import { GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, BookOpen, Users, Globe, Lightbulb, School, MessageCircle, Bot, CheckCircle } from 'lucide-react';
 
@@ -56,12 +54,12 @@ const ChatMessage = ({ message }) => {
             <div className="p-2 rounded-full bg-uniquestPurple/10">
               <Bot className="h-5 w-5 text-uniquestPurple" />
             </div>
-            <h3 className="text-lg font-semibold">{data.name}</h3>
+            <h3 className="text-lg font-semibold">{formatValue(data.name)}</h3>
           </div>
         )}
         
         {data.role && (
-          <p className="text-sm text-muted-foreground italic ml-12">{data.role}</p>
+          <p className="text-sm text-muted-foreground italic ml-12">{formatValue(data.role)}</p>
         )}
         
         {data.capabilities && data.capabilities.length > 0 && (
@@ -83,7 +81,7 @@ const ChatMessage = ({ message }) => {
         {universities.map((university, index) => (
           <div key={index} className="p-4 border border-uniquestPurple/20 rounded-lg bg-gray-50/50 dark:bg-gray-900/50">
             <h3 className="text-lg font-semibold text-uniquestPurple mb-2">
-              {university.name}
+              {formatValue(university.name)}
             </h3>
             <div className="space-y-3">
               {university.requirements && (
@@ -92,7 +90,7 @@ const ChatMessage = ({ message }) => {
                     <ClipboardList className="h-4 w-4" />
                     Requirements
                   </h4>
-                  <p className="text-sm">{university.requirements}</p>
+                  <p className="text-sm">{formatValue(university.requirements)}</p>
                 </div>
               )}
               
@@ -102,7 +100,7 @@ const ChatMessage = ({ message }) => {
                     <Book className="h-4 w-4" />
                     Courses
                   </h4>
-                  <p className="text-sm">{university.courses}</p>
+                  <p className="text-sm">{formatValue(university.courses)}</p>
                 </div>
               )}
               
@@ -112,7 +110,7 @@ const ChatMessage = ({ message }) => {
                     <DollarSign className="h-4 w-4" />
                     Fees
                   </h4>
-                  <p className="text-sm">{university.fees}</p>
+                  <p className="text-sm">{formatValue(university.fees)}</p>
                 </div>
               )}
               
@@ -122,7 +120,7 @@ const ChatMessage = ({ message }) => {
                     <Award className="h-4 w-4" />
                     Scholarships
                   </h4>
-                  <p className="text-sm">{university.scholarships}</p>
+                  <p className="text-sm">{formatValue(university.scholarships)}</p>
                 </div>
               )}
               
@@ -132,7 +130,7 @@ const ChatMessage = ({ message }) => {
                     <Home className="h-4 w-4" />
                     Living Costs
                   </h4>
-                  <p className="text-sm">{university.living_costs}</p>
+                  <p className="text-sm">{formatValue(university.living_costs)}</p>
                 </div>
               )}
               
@@ -142,7 +140,7 @@ const ChatMessage = ({ message }) => {
                     <Award className="h-4 w-4" />
                     IELTS Requirements
                   </h4>
-                  <p className="text-sm">{university.ielts_requirement}</p>
+                  <p className="text-sm">{formatValue(university.ielts_requirement)}</p>
                 </div>
               )}
             </div>
@@ -161,7 +159,7 @@ const ChatMessage = ({ message }) => {
         <div className="space-y-2">
           <div className="flex items-start gap-2">
             <MessageCircle className="h-5 w-5 text-uniquestPurple mt-1 flex-shrink-0" />
-            <p className="text-gray-800 dark:text-gray-200">{data.message}</p>
+            <p className="text-gray-800 dark:text-gray-200">{formatValue(data.message)}</p>
           </div>
         </div>
       );
@@ -337,16 +335,21 @@ const ChatMessage = ({ message }) => {
   }
   
   // For bot messages with structured data
-  if (isBot && message.rawData && message.rawData.response && typeof message.rawData.response === 'object') {
-    return (
-      <div className="flex justify-start mb-4">
-        <Card className="max-w-[85%] bg-gradient-to-br from-gray-50 to-white dark:from-slate-950 dark:to-slate-900 shadow-md border-uniquestPurple/20 overflow-hidden">
-          <CardContent className="p-4">
-            {renderStructuredResponse(message.rawData.response)}
-          </CardContent>
-        </Card>
-      </div>
-    );
+  if (isBot && message.rawData) {
+    // Handle different response structures
+    const responseData = message.rawData.data?.response || message.rawData.response;
+    
+    if (responseData && typeof responseData === 'object') {
+      return (
+        <div className="flex justify-start mb-4">
+          <Card className="max-w-[85%] bg-gradient-to-br from-gray-50 to-white dark:from-slate-950 dark:to-slate-900 shadow-md border-uniquestPurple/20 overflow-hidden">
+            <CardContent className="p-4">
+              {renderStructuredResponse(responseData)}
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }
   }
   
   // For simple text bot messages
