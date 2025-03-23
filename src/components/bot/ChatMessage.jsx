@@ -9,6 +9,36 @@ import { GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, Bo
 const ChatMessage = ({ message }) => {
   const isBot = message.sender === 'bot';
   
+  // Helper function to safely format any value for display
+  const formatValue = (value) => {
+    if (value === null || value === undefined) {
+      return '';
+    }
+    
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+      return String(value);
+    }
+    
+    if (Array.isArray(value)) {
+      return value.map(item => formatValue(item)).join(', ');
+    }
+    
+    if (typeof value === 'object') {
+      // For objects, convert to a readable string
+      try {
+        if (value.name) {
+          return String(value.name);
+        }
+        // Format object as JSON string
+        return JSON.stringify(value, null, 2);
+      } catch (e) {
+        return '[Object]';
+      }
+    }
+    
+    return String(value);
+  };
+  
   // Helper function to render a list of items
   const renderList = (items, icon) => {
     if (!items || items.length === 0) return null;
@@ -17,10 +47,10 @@ const ChatMessage = ({ message }) => {
     
     return (
       <div className="space-y-2 mt-2">
-        {items.map((item, index) => (
+        {Array.isArray(items) && items.map((item, index) => (
           <div key={index} className="flex items-center gap-2">
             <IconComponent className="h-4 w-4 text-uniquestPurple/70 flex-shrink-0" />
-            <span>{item}</span>
+            <span>{formatValue(item)}</span>
           </div>
         ))}
       </div>
@@ -36,7 +66,7 @@ const ChatMessage = ({ message }) => {
         <div className="space-y-2">
           <div className="flex items-start gap-2">
             <MessageCircle className="h-5 w-5 text-uniquestPurple mt-1 flex-shrink-0" />
-            <p className="text-gray-800 dark:text-gray-200">{data.message}</p>
+            <p className="text-gray-800 dark:text-gray-200">{formatValue(data.message)}</p>
           </div>
         </div>
       );
@@ -49,7 +79,7 @@ const ChatMessage = ({ message }) => {
           <div className="space-y-2">
             <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
               <School className="h-5 w-5" />
-              {data.universities.length > 1 ? 'Universities' : 'University'}
+              {Array.isArray(data.universities) && data.universities.length > 1 ? 'Universities' : 'University'}
             </h4>
             {renderList(data.universities, School)}
           </div>
@@ -73,7 +103,7 @@ const ChatMessage = ({ message }) => {
               <DollarSign className="h-5 w-5" />
               Tuition & Fees
             </h4>
-            <p>{data.fees}</p>
+            <p>{formatValue(data.fees)}</p>
           </div>
         )}
         
@@ -84,7 +114,7 @@ const ChatMessage = ({ message }) => {
               <ClipboardList className="h-5 w-5" />
               Admission Requirements
             </h4>
-            <p>{data.requirements}</p>
+            <p>{formatValue(data.requirements)}</p>
           </div>
         )}
         
@@ -95,7 +125,7 @@ const ChatMessage = ({ message }) => {
               <Award className="h-5 w-5" />
               Scholarships
             </h4>
-            <p>{data.scholarships}</p>
+            <p>{formatValue(data.scholarships)}</p>
           </div>
         )}
         
@@ -106,7 +136,7 @@ const ChatMessage = ({ message }) => {
               <Home className="h-5 w-5" />
               Living Costs
             </h4>
-            <p>{data.living_costs}</p>
+            <p>{formatValue(data.living_costs)}</p>
           </div>
         )}
         
@@ -117,7 +147,7 @@ const ChatMessage = ({ message }) => {
               <Trophy className="h-5 w-5" />
               Rankings
             </h4>
-            <p>{data.rankings}</p>
+            <p>{formatValue(data.rankings)}</p>
           </div>
         )}
         
@@ -128,7 +158,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Admission Rate
             </h4>
-            <p>{data.admission_rate}</p>
+            <p>{formatValue(data.admission_rate)}</p>
           </div>
         )}
         
@@ -139,7 +169,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Campus Life
             </h4>
-            <p>{data.campus_life}</p>
+            <p>{formatValue(data.campus_life)}</p>
           </div>
         )}
         
@@ -161,7 +191,7 @@ const ChatMessage = ({ message }) => {
               <Lightbulb className="h-5 w-5" />
               Research
             </h4>
-            <p>{data.research}</p>
+            <p>{formatValue(data.research)}</p>
           </div>
         )}
         
@@ -172,7 +202,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Student Body
             </h4>
-            <p>{data.student_body}</p>
+            <p>{formatValue(data.student_body)}</p>
           </div>
         )}
       </div>
