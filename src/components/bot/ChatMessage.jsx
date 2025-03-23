@@ -9,6 +9,24 @@ import { GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, Bo
 const ChatMessage = ({ message }) => {
   const isBot = message.sender === 'bot';
   
+  // Helper function to safely format any value for display
+  const formatValue = (value) => {
+    if (value === null || value === undefined) {
+      return 'N/A';
+    }
+    
+    if (typeof value === 'object') {
+      if (Array.isArray(value)) {
+        return value.map(item => formatValue(item)).join(', ');
+      } else {
+        // Convert object to string representation
+        return JSON.stringify(value);
+      }
+    }
+    
+    return String(value);
+  };
+  
   // Helper function to render a list of items
   const renderList = (items, icon) => {
     if (!items || items.length === 0) return null;
@@ -20,7 +38,7 @@ const ChatMessage = ({ message }) => {
         {items.map((item, index) => (
           <div key={index} className="flex items-center gap-2">
             <IconComponent className="h-4 w-4 text-uniquestPurple/70 flex-shrink-0" />
-            <span>{item}</span>
+            <span>{formatValue(item)}</span>
           </div>
         ))}
       </div>
@@ -56,6 +74,84 @@ const ChatMessage = ({ message }) => {
     );
   };
   
+  // Function to render university items when universities is an array
+  const renderUniversityItems = (universities) => {
+    if (!Array.isArray(universities) || universities.length === 0) return null;
+    
+    return (
+      <div className="space-y-6">
+        {universities.map((university, index) => (
+          <div key={index} className="p-4 border border-uniquestPurple/20 rounded-lg bg-gray-50/50 dark:bg-gray-900/50">
+            <h3 className="text-lg font-semibold text-uniquestPurple mb-2">
+              {university.name}
+            </h3>
+            <div className="space-y-3">
+              {university.requirements && (
+                <div className="space-y-1">
+                  <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                    <ClipboardList className="h-4 w-4" />
+                    Requirements
+                  </h4>
+                  <p className="text-sm">{university.requirements}</p>
+                </div>
+              )}
+              
+              {university.courses && (
+                <div className="space-y-1">
+                  <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                    <Book className="h-4 w-4" />
+                    Courses
+                  </h4>
+                  <p className="text-sm">{university.courses}</p>
+                </div>
+              )}
+              
+              {university.fees && (
+                <div className="space-y-1">
+                  <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                    <DollarSign className="h-4 w-4" />
+                    Fees
+                  </h4>
+                  <p className="text-sm">{university.fees}</p>
+                </div>
+              )}
+              
+              {university.scholarships && (
+                <div className="space-y-1">
+                  <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                    <Award className="h-4 w-4" />
+                    Scholarships
+                  </h4>
+                  <p className="text-sm">{university.scholarships}</p>
+                </div>
+              )}
+              
+              {university.living_costs && (
+                <div className="space-y-1">
+                  <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                    <Home className="h-4 w-4" />
+                    Living Costs
+                  </h4>
+                  <p className="text-sm">{university.living_costs}</p>
+                </div>
+              )}
+              
+              {university.ielts_requirement && (
+                <div className="space-y-1">
+                  <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                    <Award className="h-4 w-4" />
+                    IELTS Requirements
+                  </h4>
+                  <p className="text-sm">{university.ielts_requirement}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
   const renderStructuredResponse = (data) => {
     if (!data) return null;
     
@@ -78,6 +174,11 @@ const ChatMessage = ({ message }) => {
       return renderAssistantInfo(data);
     }
     
+    // Handle universities array
+    if (data.universities && Array.isArray(data.universities)) {
+      return renderUniversityItems(data.universities);
+    }
+    
     return (
       <div className="space-y-4">
         {/* Universities Section */}
@@ -85,20 +186,26 @@ const ChatMessage = ({ message }) => {
           <div className="space-y-2">
             <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
               <School className="h-5 w-5" />
-              {data.universities.length > 1 ? 'Universities' : 'University'}
+              {Array.isArray(data.universities) && data.universities.length > 1 ? 'Universities' : 'University'}
             </h4>
-            {renderList(data.universities, School)}
+            {Array.isArray(data.universities) 
+              ? renderList(data.universities, School)
+              : <p>{formatValue(data.universities)}</p>
+            }
           </div>
         )}
         
         {/* Courses Section */}
-        {data.courses && data.courses.length > 0 && (
+        {data.courses && (
           <div className="space-y-2">
             <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
               <Book className="h-5 w-5" />
               Programs & Schools
             </h4>
-            {renderList(data.courses, GraduationCap)}
+            {Array.isArray(data.courses) 
+              ? renderList(data.courses, GraduationCap)
+              : <p>{formatValue(data.courses)}</p>
+            }
           </div>
         )}
         
@@ -109,7 +216,7 @@ const ChatMessage = ({ message }) => {
               <DollarSign className="h-5 w-5" />
               Tuition & Fees
             </h4>
-            <p>{data.fees}</p>
+            <p>{formatValue(data.fees)}</p>
           </div>
         )}
         
@@ -120,7 +227,7 @@ const ChatMessage = ({ message }) => {
               <ClipboardList className="h-5 w-5" />
               Admission Requirements
             </h4>
-            <p>{data.requirements}</p>
+            <p>{formatValue(data.requirements)}</p>
           </div>
         )}
         
@@ -131,7 +238,7 @@ const ChatMessage = ({ message }) => {
               <Award className="h-5 w-5" />
               Scholarships
             </h4>
-            <p>{data.scholarships}</p>
+            <p>{formatValue(data.scholarships)}</p>
           </div>
         )}
         
@@ -142,7 +249,7 @@ const ChatMessage = ({ message }) => {
               <Home className="h-5 w-5" />
               Living Costs
             </h4>
-            <p>{data.living_costs}</p>
+            <p>{formatValue(data.living_costs)}</p>
           </div>
         )}
         
@@ -153,7 +260,7 @@ const ChatMessage = ({ message }) => {
               <Trophy className="h-5 w-5" />
               Rankings
             </h4>
-            <p>{data.rankings}</p>
+            <p>{formatValue(data.rankings)}</p>
           </div>
         )}
         
@@ -164,7 +271,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Admission Rate
             </h4>
-            <p>{data.admission_rate}</p>
+            <p>{formatValue(data.admission_rate)}</p>
           </div>
         )}
         
@@ -175,7 +282,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Campus Life
             </h4>
-            <p>{data.campus_life}</p>
+            <p>{formatValue(data.campus_life)}</p>
           </div>
         )}
         
@@ -186,7 +293,10 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Notable Alumni
             </h4>
-            {renderList(data.notable_alumni, Users)}
+            {Array.isArray(data.notable_alumni)
+              ? renderList(data.notable_alumni, Users)
+              : <p>{formatValue(data.notable_alumni)}</p>
+            }
           </div>
         )}
         
@@ -197,7 +307,7 @@ const ChatMessage = ({ message }) => {
               <Lightbulb className="h-5 w-5" />
               Research
             </h4>
-            <p>{data.research}</p>
+            <p>{formatValue(data.research)}</p>
           </div>
         )}
         
@@ -208,7 +318,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Student Body
             </h4>
-            <p>{data.student_body}</p>
+            <p>{formatValue(data.student_body)}</p>
           </div>
         )}
       </div>
