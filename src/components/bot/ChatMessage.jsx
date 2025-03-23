@@ -27,6 +27,13 @@ const ChatMessage = ({ message }) => {
     );
   };
 
+  // Helper function to safely format any value
+  const formatValue = (value) => {
+    if (value === null || value === undefined) return "N/A";
+    if (typeof value === 'object') return JSON.stringify(value);
+    return String(value);
+  };
+
   // Helper function to format nested object data
   const formatNestedObject = (obj) => {
     if (!obj || typeof obj !== 'object') return null;
@@ -36,7 +43,9 @@ const ChatMessage = ({ message }) => {
         {Object.entries(obj).map(([key, value], index) => (
           <div key={index} className="ml-2">
             <div className="font-medium capitalize">{key.replace(/_/g, ' ')}:</div>
-            <div className="ml-4 text-gray-600 dark:text-gray-300">{value}</div>
+            <div className="ml-4 text-gray-600 dark:text-gray-300">
+              {typeof value === 'object' ? JSON.stringify(value) : formatValue(value)}
+            </div>
           </div>
         ))}
       </div>
@@ -99,7 +108,7 @@ const ChatMessage = ({ message }) => {
                 <ClipboardList className="h-4 w-4" />
                 Requirements
               </h4>
-              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">{university.requirements}</p>
+              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">{formatValue(university.requirements)}</p>
             </div>
           )}
           
@@ -109,7 +118,7 @@ const ChatMessage = ({ message }) => {
                 <GraduationCap className="h-4 w-4" />
                 Courses
               </h4>
-              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">{university.courses}</p>
+              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">{formatValue(university.courses)}</p>
             </div>
           )}
           
@@ -119,9 +128,7 @@ const ChatMessage = ({ message }) => {
                 <DollarSign className="h-4 w-4" />
                 Fees
               </h4>
-              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">
-                {typeof university.fees === 'object' ? JSON.stringify(university.fees) : university.fees}
-              </p>
+              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">{formatValue(university.fees)}</p>
             </div>
           )}
           
@@ -131,9 +138,7 @@ const ChatMessage = ({ message }) => {
                 <Award className="h-4 w-4" />
                 Scholarships
               </h4>
-              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">
-                {typeof university.scholarships === 'object' ? JSON.stringify(university.scholarships) : university.scholarships}
-              </p>
+              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">{formatValue(university.scholarships)}</p>
             </div>
           )}
           
@@ -147,7 +152,7 @@ const ChatMessage = ({ message }) => {
                 {typeof university.living_costs === 'string' ? (
                   <p>{university.living_costs}</p>
                 ) : (
-                  formatNestedObject(university.living_costs)
+                  formatValue(university.living_costs)
                 )}
               </div>
             </div>
@@ -159,7 +164,7 @@ const ChatMessage = ({ message }) => {
                 <Globe className="h-4 w-4" />
                 IELTS Requirement
               </h4>
-              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">{university.ielts_requirement}</p>
+              <p className="text-sm mt-1 text-gray-700 dark:text-gray-300">{formatValue(university.ielts_requirement)}</p>
             </div>
           )}
         </div>
@@ -178,7 +183,7 @@ const ChatMessage = ({ message }) => {
             <div className="p-1.5 rounded-full bg-uniquestPurple/20 mt-0.5">
               <MessageCircle className="h-4 w-4 text-uniquestPurple" />
             </div>
-            <p className="text-gray-800 dark:text-gray-200">{data.message}</p>
+            <p className="text-gray-800 dark:text-gray-200">{formatValue(data.message)}</p>
           </div>
           <div className="absolute -bottom-4 -right-4 opacity-20">
             <Zap className="h-10 w-10 text-uniquestPurple" />
@@ -216,20 +221,27 @@ const ChatMessage = ({ message }) => {
           <div className="space-y-2 bg-gradient-to-r from-gray-100/30 to-gray-100/10 dark:from-gray-800/30 dark:to-gray-800/10 p-3 rounded-lg border-l-2 border-uniquestPurple">
             <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
               <School className="h-5 w-5" />
-              {data.universities.length > 1 ? 'Universities' : 'University'}
+              {typeof data.universities === 'object' && 'length' in data.universities && data.universities.length > 1 
+                ? 'Universities' : 'University'}
             </h4>
-            {renderList(data.universities, School)}
+            {typeof data.universities === 'string' 
+              ? <p>{data.universities}</p> 
+              : Array.isArray(data.universities) 
+                ? renderList(data.universities, School) 
+                : formatValue(data.universities)}
           </div>
         )}
         
         {/* Courses Section */}
-        {data.courses && data.courses.length > 0 && (
+        {data.courses && (
           <div className="space-y-2 bg-gradient-to-r from-gray-100/30 to-gray-100/10 dark:from-gray-800/30 dark:to-gray-800/10 p-3 rounded-lg border-l-2 border-modernTeal">
             <h4 className="font-semibold text-modernTeal flex items-center gap-2">
               <Book className="h-5 w-5" />
               Programs & Schools
             </h4>
-            {renderList(data.courses, GraduationCap)}
+            {Array.isArray(data.courses) 
+              ? renderList(data.courses, GraduationCap) 
+              : <p>{formatValue(data.courses)}</p>}
           </div>
         )}
         
@@ -240,7 +252,7 @@ const ChatMessage = ({ message }) => {
               <DollarSign className="h-5 w-5" />
               Tuition & Fees
             </h4>
-            <p>{typeof data.fees === 'object' ? JSON.stringify(data.fees) : data.fees}</p>
+            <p>{formatValue(data.fees)}</p>
           </div>
         )}
         
@@ -251,7 +263,7 @@ const ChatMessage = ({ message }) => {
               <ClipboardList className="h-5 w-5" />
               Admission Requirements
             </h4>
-            <p>{typeof data.requirements === 'object' ? JSON.stringify(data.requirements) : data.requirements}</p>
+            <p>{formatValue(data.requirements)}</p>
           </div>
         )}
         
@@ -262,7 +274,7 @@ const ChatMessage = ({ message }) => {
               <Award className="h-5 w-5" />
               Scholarships
             </h4>
-            <p>{typeof data.scholarships === 'object' ? JSON.stringify(data.scholarships) : data.scholarships}</p>
+            <p>{formatValue(data.scholarships)}</p>
           </div>
         )}
         
@@ -276,7 +288,7 @@ const ChatMessage = ({ message }) => {
             {typeof data.living_costs === 'string' ? (
               <p>{data.living_costs}</p>
             ) : (
-              formatNestedObject(data.living_costs)
+              <p>{formatValue(data.living_costs)}</p>
             )}
           </div>
         )}
@@ -288,7 +300,7 @@ const ChatMessage = ({ message }) => {
               <Trophy className="h-5 w-5" />
               Rankings
             </h4>
-            <p>{typeof data.rankings === 'object' ? JSON.stringify(data.rankings) : data.rankings}</p>
+            <p>{formatValue(data.rankings)}</p>
           </div>
         )}
         
@@ -299,7 +311,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Admission Rate
             </h4>
-            <p>{typeof data.admission_rate === 'object' ? JSON.stringify(data.admission_rate) : data.admission_rate}</p>
+            <p>{formatValue(data.admission_rate)}</p>
           </div>
         )}
         
@@ -310,7 +322,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Campus Life
             </h4>
-            <p>{typeof data.campus_life === 'object' ? JSON.stringify(data.campus_life) : data.campus_life}</p>
+            <p>{formatValue(data.campus_life)}</p>
           </div>
         )}
         
@@ -321,7 +333,9 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Notable Alumni
             </h4>
-            {renderList(data.notable_alumni, Users)}
+            {Array.isArray(data.notable_alumni) 
+              ? renderList(data.notable_alumni, Users) 
+              : <p>{formatValue(data.notable_alumni)}</p>}
           </div>
         )}
         
@@ -332,7 +346,7 @@ const ChatMessage = ({ message }) => {
               <Lightbulb className="h-5 w-5" />
               Research
             </h4>
-            <p>{typeof data.research === 'object' ? JSON.stringify(data.research) : data.research}</p>
+            <p>{formatValue(data.research)}</p>
           </div>
         )}
         
@@ -343,7 +357,7 @@ const ChatMessage = ({ message }) => {
               <Users className="h-5 w-5" />
               Student Body
             </h4>
-            <p>{typeof data.student_body === 'object' ? JSON.stringify(data.student_body) : data.student_body}</p>
+            <p>{formatValue(data.student_body)}</p>
           </div>
         )}
         
@@ -354,7 +368,7 @@ const ChatMessage = ({ message }) => {
               <Globe className="h-5 w-5" />
               IELTS Requirement
             </h4>
-            <p>{data.ielts_requirement}</p>
+            <p>{formatValue(data.ielts_requirement)}</p>
           </div>
         )}
       </div>
@@ -407,4 +421,3 @@ const ChatMessage = ({ message }) => {
 };
 
 export default ChatMessage;
-
