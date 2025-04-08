@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
@@ -20,7 +19,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
 import { BOT_GEMINI } from '../constants';
 import { Card, CardContent } from "@/components/ui/card";
-import { Map, Search, GraduationCap, Users, Globe2, Award, Compass, School, BookOpen, Lightbulb, Rocket } from 'lucide-react';
+import { Map, Search, GraduationCap, Users, Globe2, Award, Compass, School, BookOpen, Lightbulb, Rocket, Star } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -297,7 +296,6 @@ const Index = () => {
             </div>
           </header>
 
-          {/* AI Advanced Search Button - Prominent and Visible */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -517,7 +515,7 @@ const Index = () => {
                           color: "bg-uniquestPurple/10 text-uniquestPurple border-uniquestPurple/20"
                         },
                         { 
-                          icon: Sparkles, 
+                          icon: Star, 
                           title: "Personalized Recommendations", 
                           description: "Receive tailored university suggestions based on your preferences.",
                           color: "bg-uniquestPurple/10 text-uniquestPurple border-uniquestPurple/20"
