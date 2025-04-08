@@ -304,7 +304,7 @@ const Index = () => {
             className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50"
           >
             <Tabs defaultValue="map" className="w-full">
-              <TabsList className={`grid w-full max-w-[700px] mx-auto mb-6 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 ${userData?.role === 'admin' ? 'grid-cols-4' : 'grid-cols-3'}`}>
+              <TabsList className={`grid w-full max-w-[700px] mx-auto mb-6 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 ${userData?.role === 'admin' ? 'grid-cols-5' : 'grid-cols-4'}`}>
                 <TabsTrigger value="map" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
                   <MapPin className="h-4 w-4" />
                   <span className="hidden sm:inline">Map View</span>
@@ -316,6 +316,10 @@ const Index = () => {
                 <TabsTrigger value="about" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
                   <Info className="h-4 w-4" />
                   <span className="hidden sm:inline">About</span>
+                </TabsTrigger>
+                <TabsTrigger value="ai-advanced" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
+                  <Sparkles className="h-4 w-4" />
+                  <span className="hidden sm:inline">AI Advanced</span>
                 </TabsTrigger>
                 {userData?.role === 'admin' && (
                   <TabsTrigger value="admin" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
@@ -383,15 +387,15 @@ const Index = () => {
                     transition={{ delay: 0.4 }}
                     className="group"
                   >
-                    <Card className="relative h-full overflow-hidden border-none bg-gradient-to-br from-indigo-100 to-indigo-200 dark:from-indigo-900/40 dark:to-indigo-800/40 hover:shadow-xl transition-all duration-300" onClick={() => navigate('/ai-advanced')}>
+                    <Card className="relative h-full overflow-hidden border-none bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 hover:shadow-xl transition-all duration-300">
                       <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-black/10 dark:from-white/5 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <CardContent className="p-6 flex flex-col space-y-3 cursor-pointer">
-                        <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center mb-2">
-                          <BrainCircuit className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+                      <CardContent className="p-6 flex flex-col space-y-3">
+                        <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-2">
+                          <BarChart3 className="h-6 w-6 text-black" />
                         </div>
-                        <h3 className="text-xl font-bold">AI Advanced Assistant</h3>
-                        <p className="text-muted-foreground">Explore our powerful AI assistant for in-depth information about universities, programs, and educational options.</p>
-                        <div className="absolute bottom-0 right-0 w-24 h-24 -m-12 bg-indigo-500/10 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-150"></div>
+                        <h3 className="text-xl font-bold">Compare & Analyze</h3>
+                        <p className="text-muted-foreground">Use our powerful comparison tools to analyze multiple universities side by side, helping you make informed decisions about your academic future.</p>
+                        <div className="absolute bottom-0 right-0 w-24 h-24 -m-12 bg-black/5 dark:bg-white/5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-150"></div>
                       </CardContent>
                     </Card>
                   </motion.div>
@@ -571,6 +575,16 @@ const Index = () => {
                 </motion.div>
               </TabsContent>
 
+              <TabsContent value="ai-advanced" className="focus-visible:outline-none focus-visible:ring-0">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="max-w-6xl mx-auto"
+                >
+                  <AdvancedChat />
+                </motion.div>
+              </TabsContent>
+
               {userData?.role === 'admin' && (
                 <TabsContent value="admin" className="focus-visible:outline-none focus-visible:ring-0">
                   <div className="p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg shadow-lg border border-slate-200 dark:border-slate-700">
@@ -596,12 +610,12 @@ const Index = () => {
                 : "bg-gradient-to-br from-gray-800 to-black hover:shadow-xl"
             }`}
             onClick={handleBotClick}
+            type="button"
           >
-            {isChatOpen ? (
-              <X className="h-6 w-6 text-white" />
-            ) : (
-              <Bot className="h-6 w-6 text-white" />
-            )}
+            {isChatOpen ? 
+              <X className="h-6 w-6" /> : 
+              <Bot className="h-6 w-6 animate-pulse" />
+            }
           </Button>
         </motion.div>
 
@@ -611,123 +625,91 @@ const Index = () => {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="fixed bottom-20 right-4 w-full max-w-md z-50"
+              className="fixed bottom-20 right-4 w-full max-w-96 h-[600px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-xl shadow-2xl border border-gray-200 dark:border-slate-700 z-40 flex flex-col overflow-hidden"
             >
-              <Card className="overflow-hidden border border-gray-200 dark:border-gray-800 shadow-xl">
-                <div className="bg-gradient-to-r from-gray-800 to-black p-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-white/10 p-1.5 rounded-md">
-                      <Bot className="h-5 w-5 text-white" />
-                    </div>
-                    <h3 className="font-medium text-white">UniQuest AI</h3>
+              <div className="p-4 border-b border-gray-200 dark:border-slate-700 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
+                <div className="flex items-center space-x-3">
+                  <div className="bg-black p-2 rounded-full">
+                    <Bot className="h-5 w-5 text-white" />
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-8 w-8 rounded-full text-white hover:bg-white/10"
-                    onClick={handleBotClick}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">UniQuest Assistant</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Ask me anything about universities</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50/50 to-white/50 dark:from-gray-900/50 dark:to-slate-900/50">
+                {messages.length === 0 && (
+                  <div className="h-full flex items-center justify-center">
+                    <div className="text-center p-6 rounded-lg bg-gray-100/50 dark:bg-gray-800/50 max-w-xs mx-auto">
+                      <BrainCircuit className="h-10 w-10 mx-auto mb-2 text-gray-400 dark:text-gray-500" />
+                      <p className="text-gray-500 dark:text-gray-400 text-sm">
+                        Ask me about universities, programs, or how to use UniQuest!
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                {messages.map((message) => (
+                  <ChatMessage key={message.id} message={message} />
+                ))}
+                
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-gray-200 dark:bg-slate-700 p-3 rounded-lg">
+                      <span className="flex items-center space-x-2">
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                        <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                <div className="flex gap-2">
+                  <Textarea
+                    value={currentMessage}
+                    onChange={(e) => setCurrentMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
+                    placeholder="Type your message..."
+                    className="resize-none border-gray-300 dark:border-slate-700 focus-visible:ring-black/30 bg-gray-100/50 dark:bg-slate-800/50 rounded-lg"
+                    rows={2}
+                  />
+                  <Button
+                    onClick={handleSendMessage}
+                    size="icon"
+                    className="h-auto bg-black hover:bg-gray-800 transition-colors"
+                    disabled={!currentMessage.trim() || isLoading}
                   >
-                    <X className="h-4 w-4" />
+                    <Send className="h-4 w-4" />
                   </Button>
                 </div>
-                
-                <div className="h-96 overflow-y-auto p-4 bg-white dark:bg-gray-950 space-y-4">
-                  {messages.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-center">
-                      <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-full mb-3">
-                        <Bot className="h-6 w-6 text-gray-500 dark:text-gray-400" />
-                      </div>
-                      <h3 className="text-lg font-semibold mb-2">How can I help you?</h3>
-                      <p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs">
-                        Ask me anything about universities, programs, admission requirements, etc.
-                      </p>
-                      
-                      <div className="grid grid-cols-1 gap-2 mt-6">
-                        {["Tell me about Harvard", "Top 5 universities for engineering", "Scholarship information"].map((q, i) => (
-                          <Button 
-                            key={i}
-                            variant="outline" 
-                            className="text-xs justify-start"
-                            onClick={() => setCurrentMessage(q)}
-                          >
-                            <Sparkles className="h-3 w-3 mr-2 text-gray-400" />
-                            {q}
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
-                  ) : (
-                    messages.map((message) => (
-                      <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-[80%] ${
-                          message.sender === 'user' 
-                            ? 'bg-black text-white rounded-2xl rounded-tr-sm' 
-                            : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-2xl rounded-tl-sm'
-                        } px-4 py-3 shadow-sm`}>
-                          <ChatMessage message={message} />
-                        </div>
-                      </div>
-                    ))
-                  )}
-                  
-                  {isLoading && (
-                    <div className="flex justify-start">
-                      <div className="max-w-[80%] bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
-                        <div className="flex items-center space-x-2">
-                          <div className="h-2 w-2 bg-gray-400 rounded-full animate-pulse"></div>
-                          <div className="h-2 w-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                          <div className="h-2 w-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
-                  <div className="flex gap-2">
-                    <Textarea
-                      value={currentMessage}
-                      onChange={(e) => setCurrentMessage(e.target.value)}
-                      placeholder="Ask about universities..."
-                      className="resize-none min-h-[60px] bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800"
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSendMessage();
-                        }
-                      }}
-                    />
-                    <Button
-                      onClick={handleSendMessage}
-                      size="icon"
-                      className="h-14 w-14 rounded-full bg-black hover:bg-gray-800"
-                      disabled={!currentMessage.trim() || isLoading}
-                    >
-                      <Send className="h-5 w-5 text-white" />
-                    </Button>
-                  </div>
-                </div>
-              </Card>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  Press Enter to send, Shift + Enter for new line
+                </p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-
-      {isSessionExpired && (
-        <SessionExpiredDialog
-          open={isSessionExpired}
-          onOpenChange={setIsSessionExpired}
-        />
-      )}
-
-      {comparedUniversities.length > 0 && (
-        <ComparisonBanner
-          universities={comparedUniversities}
-          onView={() => navigate('/compare')}
-          onClear={clearComparedUniversities}
-        />
-      )}
+      
+      <ComparisonBanner 
+        comparedUniversities={comparedUniversities} 
+        onClear={clearComparedUniversities} 
+      />
+      
+      <SessionExpiredDialog 
+        open={isSessionExpired} 
+        onOpenChange={setIsSessionExpired}
+      />
     </>
   );
 };
