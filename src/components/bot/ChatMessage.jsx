@@ -80,40 +80,59 @@ const ChatMessage = ({ message }) => {
       );
     }
     
-    // Define the sections and their corresponding icons
-    const sections = [
-      { key: 'universities', title: data.universities && data.universities.length > 1 ? 'Universities' : 'University', icon: School },
-      { key: 'courses', title: 'Programs & Schools', icon: GraduationCap },
-      { key: 'fees', title: 'Tuition & Fees', icon: DollarSign },
-      { key: 'requirements', title: 'Admission Requirements', icon: ClipboardList },
-      { key: 'scholarships', title: 'Scholarships', icon: Award },
-      { key: 'living_costs', title: 'Living Costs', icon: Home },
-      { key: 'rankings', title: 'Rankings', icon: Trophy },
-      { key: 'admission_rate', title: 'Admission Rate', icon: Users },
-      { key: 'campus_life', title: 'Campus Life', icon: Users },
-      { key: 'notable_alumni', title: 'Notable Alumni', icon: Users },
-      { key: 'research', title: 'Research', icon: Lightbulb },
-      { key: 'student_body', title: 'Student Body', icon: Users }
-    ];
+    // Dynamically display all fields in the response that have values
+    const fieldsToRender = Object.keys(data).filter(key => hasValue(data[key]));
+    
+    // Define icons for known fields
+    const fieldIcons = {
+      universities: School,
+      courses: GraduationCap,
+      fees: DollarSign,
+      requirements: ClipboardList,
+      scholarships: Award,
+      living_costs: Home,
+      rankings: Trophy,
+      admission_rate: Users,
+      campus_life: Users,
+      notable_alumni: Users,
+      research: Lightbulb,
+      student_body: Users,
+      message: MessageCircle
+    };
+    
+    // Define human-readable titles for fields
+    const fieldTitles = {
+      universities: data.universities && data.universities.length > 1 ? 'Universities' : 'University',
+      courses: 'Programs & Schools',
+      fees: 'Tuition & Fees',
+      requirements: 'Admission Requirements',
+      scholarships: 'Scholarships',
+      living_costs: 'Living Costs',
+      rankings: 'Rankings',
+      admission_rate: 'Admission Rate',
+      campus_life: 'Campus Life',
+      notable_alumni: 'Notable Alumni',
+      research: 'Research',
+      student_body: 'Student Body',
+      message: 'Message'
+    };
     
     return (
       <div className="space-y-4">
-        {sections.map(section => {
-          // Only render sections that have valid values
-          if (!hasValue(data[section.key])) return null;
-          
-          const IconComponent = section.icon;
+        {fieldsToRender.map(field => {
+          const IconComponent = fieldIcons[field] || Book;
+          const title = fieldTitles[field] || field.charAt(0).toUpperCase() + field.slice(1).replace(/_/g, ' ');
           
           return (
-            <div key={section.key} className="space-y-2">
+            <div key={field} className="space-y-2">
               <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
                 <IconComponent className="h-5 w-5" />
-                {section.title}
+                {title}
               </h4>
               
-              {Array.isArray(data[section.key]) 
-                ? renderList(data[section.key], section.key === 'courses' ? GraduationCap : undefined)
-                : <p>{formatValue(data[section.key])}</p>
+              {Array.isArray(data[field]) 
+                ? renderList(data[field], field === 'courses' ? GraduationCap : fieldIcons[field])
+                : <p>{formatValue(data[field])}</p>
               }
             </div>
           );
