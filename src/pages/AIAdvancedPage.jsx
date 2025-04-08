@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -131,24 +130,13 @@ const AIAdvancedPage = () => {
 
         <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 flex-1 flex flex-col">
           <div className="flex-1 p-4 sm:p-6 flex flex-col">
-            <div className="text-center space-y-3 mb-6">
-              <BrainCircuit className="h-10 w-10 mx-auto text-indigo-600" />
-              <h2 className="text-2xl font-bold">UniQuest Advanced AI Assistant</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Ask me anything about universities, programs, admissions, scholarships, or student life. I'm here to provide detailed information to help with your educational journey.
-              </p>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4 rounded-lg bg-slate-100/50 dark:bg-slate-900/50 mb-4 min-h-[400px]">
+            <div className="flex-1 overflow-y-auto p-4 rounded-lg bg-slate-100/50 dark:bg-slate-900/50 mb-4 min-h-[calc(100vh-200px)]">
               {messages.length === 0 ? (
                 <div className="h-full flex items-center justify-center">
                   <div className="text-center p-6 max-w-lg">
                     <Bot className="h-16 w-16 mx-auto mb-4 text-indigo-500 opacity-50" />
                     <p className="text-lg text-muted-foreground">
                       Start a conversation with the AI Assistant to get detailed information about universities and educational opportunities.
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Try asking about specific universities, admission requirements, scholarship opportunities, or campus life.
                     </p>
                   </div>
                 </div>
