@@ -9,6 +9,20 @@ import { GraduationCap, Book, DollarSign, ClipboardList, Award, Home, Trophy, Bo
 const ChatMessage = ({ message }) => {
   const isBot = message.sender === 'bot';
   
+  // Recursive helper function to check if a field has any valid values
+  const hasValue = (value) => {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'string' && value.trim() === '') return false;
+    if (Array.isArray(value) && value.length === 0) return false;
+    
+    // For objects, check if any property has a valid value
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      return Object.values(value).some(prop => hasValue(prop));
+    }
+    
+    return true;
+  };
+  
   // Helper function to safely format any value for display
   const formatValue = (value) => {
     if (value === null || value === undefined) {
@@ -24,19 +38,67 @@ const ChatMessage = ({ message }) => {
     }
     
     if (typeof value === 'object') {
-      // For objects, convert to a readable string
-      try {
-        if (value.name) {
-          return String(value.name);
-        }
-        // Don't format objects as JSON strings anymore - we'll handle them differently
-        return value;
-      } catch (e) {
-        return '[Object]';
-      }
+      // For objects, return as is - we'll handle them differently
+      return value;
     }
     
     return String(value);
+  };
+  
+  // Recursive function to render nested objects
+  const renderNestedObject = (obj, level = 0) => {
+    if (!obj || typeof obj !== 'object') return null;
+    
+    // Handle array of objects
+    if (Array.isArray(obj)) {
+      if (obj.length === 0) return null;
+      
+      return (
+        <div className="space-y-2">
+          {obj.map((item, index) => (
+            <div key={index} className={`${level > 0 ? 'ml-4' : ''}`}>
+              {typeof item === 'object' && item !== null ? 
+                renderNestedObject(item, level + 1) : 
+                <span>{formatValue(item)}</span>
+              }
+            </div>
+          ))}
+        </div>
+      );
+    }
+    
+    // For regular objects, show each property that has a value
+    return (
+      <div className="space-y-1">
+        {Object.entries(obj).map(([key, value], idx) => {
+          // Skip properties without values
+          if (!hasValue(value)) return null;
+          
+          const formattedKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
+          
+          return (
+            <div key={idx} className={`${level > 0 ? 'ml-4 mt-1' : ''}`}>
+              {typeof value === 'object' && value !== null ? (
+                <div className="mb-1">
+                  <span className="font-medium text-gray-700 dark:text-gray-300">{formattedKey}:</span>
+                  <div className="ml-3 mt-1">
+                    {Array.isArray(value) ? 
+                      renderList(value) : 
+                      renderNestedObject(value, level + 1)
+                    }
+                  </div>
+                </div>
+              ) : (
+                <div className="mb-1">
+                  <span className="font-medium text-gray-700 dark:text-gray-300">{formattedKey}:</span>{' '}
+                  <span className="text-gray-800 dark:text-gray-200">{formatValue(value)}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
   };
   
   // Helper function to render a list of items
@@ -60,58 +122,6 @@ const ChatMessage = ({ message }) => {
         ))}
       </div>
     );
-  };
-  
-  // Function to render nested objects
-  const renderNestedObject = (obj) => {
-    if (!obj || typeof obj !== 'object') return null;
-    
-    // Handle array of objects
-    if (Array.isArray(obj)) {
-      return renderList(obj);
-    }
-    
-    // For regular objects, show each property
-    return (
-      <div className="space-y-1">
-        {Object.entries(obj).map(([key, value], idx) => {
-          if (!hasValue(value)) return null;
-          
-          const formattedKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
-          
-          return (
-            <div key={idx} className="ml-0">
-              {typeof value === 'object' && value !== null && !Array.isArray(value) ? (
-                <div className="mb-1">
-                  <span className="font-medium text-gray-700 dark:text-gray-300">{formattedKey}:</span>
-                  <div className="ml-3 mt-1">{renderNestedObject(value)}</div>
-                </div>
-              ) : (
-                <div className="mb-1">
-                  <span className="font-medium text-gray-700 dark:text-gray-300">{formattedKey}:</span>{' '}
-                  <span className="text-gray-800 dark:text-gray-200">{formatValue(value)}</span>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-  
-  // Function to check if a field has a valid value to display
-  const hasValue = (value) => {
-    if (value === null || value === undefined) return false;
-    if (typeof value === 'string' && value.trim() === '') return false;
-    if (Array.isArray(value) && value.length === 0) return false;
-    
-    // For objects, check if any property has a valid value
-    if (typeof value === 'object' && !Array.isArray(value)) {
-      const hasValuedProperty = Object.values(value).some(prop => hasValue(prop));
-      return hasValuedProperty;
-    }
-    
-    return true;
   };
   
   const renderStructuredResponse = (data) => {
@@ -163,7 +173,10 @@ const ChatMessage = ({ message }) => {
       notable_alumni: 'Notable Alumni',
       research: 'Research',
       student_body: 'Student Body',
-      message: 'Message'
+      message: 'Message',
+      tuition: 'Tuition',
+      additional_costs: 'Additional Costs',
+      financial_aid: 'Financial Aid'
     };
     
     return (
@@ -185,7 +198,19 @@ const ChatMessage = ({ message }) => {
                     {data[field].map((item, index) => (
                       <div key={index} className="bg-white/50 dark:bg-slate-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
                         <h5 className="font-medium mb-2">{item.name || `Item ${index + 1}`}</h5>
-                        {renderNestedObject(item)}
+                        {Object.keys(item).filter(key => key !== 'name' && hasValue(item[key])).map(key => (
+                          <div key={key} className="mb-2">
+                            <span className="font-medium text-gray-700 dark:text-gray-300">
+                              {key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ')}:
+                            </span>
+                            <div className="ml-4 mt-1">
+                              {typeof item[key] === 'object' && item[key] !== null ? 
+                                renderNestedObject(item[key]) : 
+                                <span className="text-gray-800 dark:text-gray-200">{formatValue(item[key])}</span>
+                              }
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     ))}
                   </div>
