@@ -9,6 +9,7 @@ import SignupPage from './pages/SignupPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import LandingPage from './pages/LandingPage';
 import ComparePage from './pages/ComparePage';
+import AIAdvancedPage from './pages/AIAdvancedPage';
 import { Toaster } from "@/components/ui/toaster";
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
@@ -47,6 +48,11 @@ function App() {
           <Route path="/compare" element={
             <ProtectedRoute>
               <ComparePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/ai-advanced" element={
+            <ProtectedRoute>
+              <AIAdvancedPage />
             </ProtectedRoute>
           } />
         </Routes>
