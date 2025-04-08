@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -10,6 +9,7 @@ import axios from 'axios';
 import { BOT_GEMINI } from '../constants';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { v4 as uuidv4 } from 'uuid';
+import ChatMessage from '@/components/bot/ChatMessage';
 
 const AIAdvancedPage = () => {
   const navigate = useNavigate();
@@ -41,9 +41,9 @@ const AIAdvancedPage = () => {
     setIsLoading(true);
     
     try {
-      // Updated API call with session_id parameter
+      // Updated API call with user_message parameter instead of message
       const response = await axios.post(`${BOT_GEMINI}`, {
-        message: currentMessage,
+        user_message: currentMessage,
         session_id: sessionId
       }, {
         headers: { 
@@ -55,14 +55,17 @@ const AIAdvancedPage = () => {
       let botResponse = "I received a response in an unexpected format. Please try again.";
       let rawData = null;
       
+      // Handle the specific response format provided
       if (response.data && response.data.data) {
         const responseData = response.data.data;
         
-        if (typeof responseData.response === 'string') {
+        if (responseData.response && responseData.response.message) {
+          botResponse = responseData.response.message;
+          rawData = responseData;
+        } else if (typeof responseData.response === 'string') {
           botResponse = responseData.response;
         } else if (responseData.response && typeof responseData.response === 'object') {
           rawData = responseData;
-          
           botResponse = generateTextSummary(responseData.response);
         } else {
           botResponse = JSON.stringify(responseData, null, 2);
@@ -166,20 +169,7 @@ const AIAdvancedPage = () => {
                 ) : (
                   <div className="space-y-6">
                     {messages.map((message) => (
-                      <div
-                        key={message.id}
-                        className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                      >
-                        <div
-                          className={`max-w-[85%] p-4 rounded-lg ${
-                            message.sender === 'user'
-                              ? 'bg-indigo-500 text-white'
-                              : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
-                          }`}
-                        >
-                          <p className="whitespace-pre-wrap text-[15px]">{message.text}</p>
-                        </div>
-                      </div>
+                      <ChatMessage key={message.id} message={message} />
                     ))}
                     {isLoading && (
                       <div className="flex justify-start">
