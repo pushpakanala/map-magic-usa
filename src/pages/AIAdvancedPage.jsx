@@ -110,9 +110,9 @@ const AIAdvancedPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      <div className="container mx-auto px-4 py-6">
-        <div className="mb-6 flex items-center gap-4">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex flex-col">
+      <div className="container mx-auto px-4 py-4 flex-1 flex flex-col">
+        <div className="mb-4 flex items-center gap-4">
           <Button 
             variant="ghost" 
             size="icon" 
@@ -129,47 +129,50 @@ const AIAdvancedPage = () => {
           </div>
         </div>
 
-        <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50 min-h-[calc(100vh-12rem)]">
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="text-center space-y-3 mb-8">
+        <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 flex-1 flex flex-col">
+          <div className="flex-1 p-4 sm:p-6 flex flex-col">
+            <div className="text-center space-y-3 mb-6">
               <BrainCircuit className="h-10 w-10 mx-auto text-indigo-600" />
               <h2 className="text-2xl font-bold">UniQuest Advanced AI Assistant</h2>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 Ask me anything about universities, programs, admissions, scholarships, or student life. I'm here to provide detailed information to help with your educational journey.
               </p>
             </div>
 
-            <div className="h-[calc(100vh-26rem)] overflow-y-auto p-4 rounded-lg bg-slate-100/50 dark:bg-slate-900/50 mb-4">
+            <div className="flex-1 overflow-y-auto p-4 rounded-lg bg-slate-100/50 dark:bg-slate-900/50 mb-4 min-h-[400px]">
               {messages.length === 0 ? (
                 <div className="h-full flex items-center justify-center">
-                  <div className="text-center p-6 max-w-md">
-                    <Bot className="h-12 w-12 mx-auto mb-4 text-indigo-500 opacity-50" />
-                    <p className="text-muted-foreground">
+                  <div className="text-center p-6 max-w-lg">
+                    <Bot className="h-16 w-16 mx-auto mb-4 text-indigo-500 opacity-50" />
+                    <p className="text-lg text-muted-foreground">
                       Start a conversation with the AI Assistant to get detailed information about universities and educational opportunities.
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Try asking about specific universities, admission requirements, scholarship opportunities, or campus life.
                     </p>
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {messages.map((message) => (
                     <div
                       key={message.id}
                       className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
                       <div
-                        className={`max-w-[80%] p-4 rounded-lg ${
+                        className={`max-w-[85%] p-4 rounded-lg ${
                           message.sender === 'user'
                             ? 'bg-indigo-500 text-white'
                             : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
                         }`}
                       >
-                        <p className="whitespace-pre-wrap">{message.text}</p>
+                        <p className="whitespace-pre-wrap text-[15px]">{message.text}</p>
                       </div>
                     </div>
                   ))}
                   {isLoading && (
                     <div className="flex justify-start">
-                      <div className="max-w-[80%] p-4 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                      <div className="max-w-[85%] p-4 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                         <span className="flex items-center gap-2">
                           <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
                           <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></span>
@@ -188,7 +191,7 @@ const AIAdvancedPage = () => {
                 onChange={(e) => setCurrentMessage(e.target.value)}
                 placeholder="Ask about universities, programs, admissions, scholarships..."
                 className="resize-none flex-1 p-3 bg-white/80 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700"
-                rows={2}
+                rows={3}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -198,14 +201,14 @@ const AIAdvancedPage = () => {
               />
               <Button
                 onClick={handleSendMessage}
-                className="bg-indigo-600 hover:bg-indigo-700"
+                className="bg-indigo-600 hover:bg-indigo-700 self-end h-12 px-4"
                 disabled={!currentMessage.trim() || isLoading}
               >
                 <Send className="h-4 w-4 mr-2" />
                 Send
               </Button>
             </div>
-            <p className="text-xs text-center text-muted-foreground">
+            <p className="text-xs text-center text-muted-foreground mt-2">
               Press Enter to send, Shift + Enter for new line
             </p>
           </div>
