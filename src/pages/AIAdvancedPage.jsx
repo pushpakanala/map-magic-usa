@@ -11,6 +11,8 @@ import { BOT_GEMINI } from '../constants';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { v4 as uuidv4 } from 'uuid';
 import ChatMessage from '@/components/bot/ChatMessage';
+import SessionExpiredDialog from '@/components/SessionExpiredDialog';
+import { useSessionExpiry } from '@/hooks/use-session-expiry';
 
 const AIAdvancedPage = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ const AIAdvancedPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState('');
   const token = sessionStorage.getItem("token");
+  const { isSessionExpired, resetSessionExpiry } = useSessionExpiry();
 
   useEffect(() => {
     // Generate a session ID when the component mounts
@@ -148,6 +151,10 @@ const AIAdvancedPage = () => {
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex flex-col">
+      <SessionExpiredDialog 
+        open={isSessionExpired} 
+        onOpenChange={resetSessionExpiry} 
+      />
       <div className="container mx-auto px-4 py-4 flex-1 flex flex-col">
         <div className="mb-4 flex items-center gap-4">
           <Button 
