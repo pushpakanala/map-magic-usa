@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
@@ -233,7 +232,7 @@ const ChatMessage = ({ message }) => {
   if (!isBot) {
     return (
       <div className="flex justify-end mb-4">
-        <div className="max-w-[80%] p-3 rounded-lg bg-black text-white">
+        <div className="max-w-[85%] md:max-w-[70%] p-3 rounded-lg bg-black text-white">
           {message.text}
         </div>
       </div>
@@ -243,8 +242,8 @@ const ChatMessage = ({ message }) => {
   // For bot messages with structured data
   if (isBot && message.rawData && message.rawData.response && typeof message.rawData.response === 'object') {
     return (
-      <div className="flex justify-start mb-4">
-        <Card className="max-w-[85%] bg-gradient-to-br from-gray-50 to-white dark:from-slate-950 dark:to-slate-900 shadow-md border-uniquestPurple/20 overflow-hidden">
+      <div className="flex justify-start mb-4 w-full">
+        <Card className="max-w-[95%] md:max-w-[85%] w-full bg-gradient-to-br from-gray-50 to-white dark:from-slate-950 dark:to-slate-900 shadow-md border-uniquestPurple/20 overflow-hidden">
           <CardContent className="p-4">
             {renderStructuredResponse(message.rawData.response)}
           </CardContent>
@@ -255,8 +254,8 @@ const ChatMessage = ({ message }) => {
   
   // For simple text bot messages
   return (
-    <div className="flex justify-start mb-4">
-      <div className="max-w-[80%] p-3 rounded-lg bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200">
+    <div className="flex justify-start mb-4 w-full">
+      <div className="max-w-[95%] md:max-w-[85%] p-3 rounded-lg bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200">
         {message.text.split('\n').map((line, index) => {
           const boldRegex = /\*\*(.*?)\*\*/g;
           const formattedLine = line.replace(boldRegex, '<strong>$1</strong>');
