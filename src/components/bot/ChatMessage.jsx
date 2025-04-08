@@ -57,11 +57,19 @@ const ChatMessage = ({ message }) => {
     );
   };
   
+  // Function to check if a field has a valid value to display
+  const hasValue = (value) => {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'string' && value.trim() === '') return false;
+    if (Array.isArray(value) && value.length === 0) return false;
+    return true;
+  };
+  
   const renderStructuredResponse = (data) => {
     if (!data) return null;
     
     // If the response contains just a message field, render it as a simple message
-    if (data.message && Object.keys(data).length === 1) {
+    if (data.message && Object.keys(data).filter(key => hasValue(data[key])).length === 1) {
       return (
         <div className="space-y-2">
           <div className="flex items-start gap-2">
@@ -72,139 +80,44 @@ const ChatMessage = ({ message }) => {
       );
     }
     
+    // Define the sections and their corresponding icons
+    const sections = [
+      { key: 'universities', title: data.universities && data.universities.length > 1 ? 'Universities' : 'University', icon: School },
+      { key: 'courses', title: 'Programs & Schools', icon: GraduationCap },
+      { key: 'fees', title: 'Tuition & Fees', icon: DollarSign },
+      { key: 'requirements', title: 'Admission Requirements', icon: ClipboardList },
+      { key: 'scholarships', title: 'Scholarships', icon: Award },
+      { key: 'living_costs', title: 'Living Costs', icon: Home },
+      { key: 'rankings', title: 'Rankings', icon: Trophy },
+      { key: 'admission_rate', title: 'Admission Rate', icon: Users },
+      { key: 'campus_life', title: 'Campus Life', icon: Users },
+      { key: 'notable_alumni', title: 'Notable Alumni', icon: Users },
+      { key: 'research', title: 'Research', icon: Lightbulb },
+      { key: 'student_body', title: 'Student Body', icon: Users }
+    ];
+    
     return (
       <div className="space-y-4">
-        {/* Universities Section */}
-        {data.universities && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <School className="h-5 w-5" />
-              {Array.isArray(data.universities) && data.universities.length > 1 ? 'Universities' : 'University'}
-            </h4>
-            {renderList(data.universities, School)}
-          </div>
-        )}
-        
-        {/* Courses Section */}
-        {data.courses && data.courses.length > 0 && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <Book className="h-5 w-5" />
-              Programs & Schools
-            </h4>
-            {renderList(data.courses, GraduationCap)}
-          </div>
-        )}
-        
-        {/* Fees Section */}
-        {data.fees && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <DollarSign className="h-5 w-5" />
-              Tuition & Fees
-            </h4>
-            <p>{formatValue(data.fees)}</p>
-          </div>
-        )}
-        
-        {/* Requirements Section */}
-        {data.requirements && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <ClipboardList className="h-5 w-5" />
-              Admission Requirements
-            </h4>
-            <p>{formatValue(data.requirements)}</p>
-          </div>
-        )}
-        
-        {/* Scholarships Section */}
-        {data.scholarships && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <Award className="h-5 w-5" />
-              Scholarships
-            </h4>
-            <p>{formatValue(data.scholarships)}</p>
-          </div>
-        )}
-        
-        {/* Living Costs Section */}
-        {data.living_costs && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <Home className="h-5 w-5" />
-              Living Costs
-            </h4>
-            <p>{formatValue(data.living_costs)}</p>
-          </div>
-        )}
-        
-        {/* Rankings Section */}
-        {data.rankings && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <Trophy className="h-5 w-5" />
-              Rankings
-            </h4>
-            <p>{formatValue(data.rankings)}</p>
-          </div>
-        )}
-        
-        {/* Admission Rate Section */}
-        {data.admission_rate && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Admission Rate
-            </h4>
-            <p>{formatValue(data.admission_rate)}</p>
-          </div>
-        )}
-        
-        {/* Campus Life Section */}
-        {data.campus_life && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Campus Life
-            </h4>
-            <p>{formatValue(data.campus_life)}</p>
-          </div>
-        )}
-        
-        {/* Notable Alumni Section */}
-        {data.notable_alumni && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Notable Alumni
-            </h4>
-            {renderList(data.notable_alumni, Users)}
-          </div>
-        )}
-        
-        {/* Research Section */}
-        {data.research && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <Lightbulb className="h-5 w-5" />
-              Research
-            </h4>
-            <p>{formatValue(data.research)}</p>
-          </div>
-        )}
-        
-        {/* Student Body Section */}
-        {data.student_body && (
-          <div className="space-y-2">
-            <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Student Body
-            </h4>
-            <p>{formatValue(data.student_body)}</p>
-          </div>
-        )}
+        {sections.map(section => {
+          // Only render sections that have valid values
+          if (!hasValue(data[section.key])) return null;
+          
+          const IconComponent = section.icon;
+          
+          return (
+            <div key={section.key} className="space-y-2">
+              <h4 className="font-semibold text-uniquestPurple flex items-center gap-2">
+                <IconComponent className="h-5 w-5" />
+                {section.title}
+              </h4>
+              
+              {Array.isArray(data[section.key]) 
+                ? renderList(data[section.key], section.key === 'courses' ? GraduationCap : undefined)
+                : <p>{formatValue(data[section.key])}</p>
+              }
+            </div>
+          );
+        })}
       </div>
     );
   };

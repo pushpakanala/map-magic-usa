@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -115,16 +116,28 @@ const AIAdvancedPage = () => {
     }
     
     const availableInfo = [];
-    if (data.fees) availableInfo.push("fees");
-    if (data.requirements) availableInfo.push("requirements");
-    if (data.scholarships) availableInfo.push("scholarships");
-    if (data.living_costs) availableInfo.push("living costs");
-    if (data.rankings) availableInfo.push("rankings");
-    if (data.admission_rate) availableInfo.push("admission rates");
-    if (data.campus_life) availableInfo.push("campus life");
-    if (data.notable_alumni) availableInfo.push("notable alumni");
-    if (data.research) availableInfo.push("research");
-    if (data.student_body) availableInfo.push("student body info");
+    
+    // Only add fields that have actual data
+    const fieldsToCheck = [
+      { key: 'fees', label: 'fees' },
+      { key: 'requirements', label: 'requirements' },
+      { key: 'scholarships', label: 'scholarships' },
+      { key: 'living_costs', label: 'living costs' },
+      { key: 'rankings', label: 'rankings' },
+      { key: 'admission_rate', label: 'admission rates' },
+      { key: 'campus_life', label: 'campus life' },
+      { key: 'notable_alumni', label: 'notable alumni' },
+      { key: 'research', label: 'research' },
+      { key: 'student_body', label: 'student body info' }
+    ];
+    
+    fieldsToCheck.forEach(field => {
+      if (data[field.key] && 
+          (typeof data[field.key] !== 'string' || data[field.key].trim() !== '') &&
+          (!Array.isArray(data[field.key]) || data[field.key].length > 0)) {
+        availableInfo.push(field.label);
+      }
+    });
     
     if (availableInfo.length > 0) {
       summary.push(`Information available on: ${availableInfo.join(", ")}`);
