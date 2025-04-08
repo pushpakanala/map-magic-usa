@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 import { BOT_GEMINI } from '../constants';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { v4 as uuidv4 } from 'uuid';
 
 const AIAdvancedPage = () => {
   const navigate = useNavigate();
@@ -16,7 +17,17 @@ const AIAdvancedPage = () => {
   const [messages, setMessages] = useState([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState('');
   const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    // Generate a session ID when the component mounts
+    const newSessionId = sessionStorage.getItem("chatSessionId") || uuidv4();
+    if (!sessionStorage.getItem("chatSessionId")) {
+      sessionStorage.setItem("chatSessionId", newSessionId);
+    }
+    setSessionId(newSessionId);
+  }, []);
 
   const handleSendMessage = async () => {
     if (!currentMessage.trim() || isLoading) return;
@@ -30,8 +41,15 @@ const AIAdvancedPage = () => {
     setIsLoading(true);
     
     try {
-      const response = await axios.get(`${BOT_GEMINI}?request=${currentMessage}`, {
-        headers: { Authorization: `Bearer ${token}` }
+      // Updated API call with session_id parameter
+      const response = await axios.post(`${BOT_GEMINI}`, {
+        message: currentMessage,
+        session_id: sessionId
+      }, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
       
       let botResponse = "I received a response in an unexpected format. Please try again.";
@@ -58,6 +76,8 @@ const AIAdvancedPage = () => {
         rawData: rawData || response.data.data
       }]);
     } catch (error) {
+      console.error("API error:", error);
+      
       toast({
         title: "Error",
         description: "Failed to get response from the AI assistant",
