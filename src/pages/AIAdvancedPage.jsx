@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,6 +8,7 @@ import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
 import { BOT_GEMINI } from '../constants';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const AIAdvancedPage = () => {
   const navigate = useNavigate();
@@ -130,48 +132,50 @@ const AIAdvancedPage = () => {
 
         <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 flex-1 flex flex-col">
           <div className="flex-1 p-4 sm:p-6 flex flex-col">
-            <div className="flex-1 overflow-y-auto p-4 rounded-lg bg-slate-100/50 dark:bg-slate-900/50 mb-4 min-h-[calc(100vh-200px)]">
-              {messages.length === 0 ? (
-                <div className="h-full flex items-center justify-center">
-                  <div className="text-center p-6 max-w-lg">
-                    <Bot className="h-16 w-16 mx-auto mb-4 text-indigo-500 opacity-50" />
-                    <p className="text-lg text-muted-foreground">
-                      Start a conversation with the AI Assistant to get detailed information about universities and educational opportunities.
-                    </p>
+            <ScrollArea className="flex-1 bg-slate-100/50 dark:bg-slate-900/50 mb-4 rounded-lg min-h-[calc(100vh-200px)]">
+              <div className="p-4">
+                {messages.length === 0 ? (
+                  <div className="h-full flex items-center justify-center min-h-[calc(100vh-250px)]">
+                    <div className="text-center p-6 max-w-lg">
+                      <Bot className="h-16 w-16 mx-auto mb-4 text-indigo-500 opacity-50" />
+                      <p className="text-lg text-muted-foreground">
+                        Start a conversation with the AI Assistant to get detailed information about universities and educational opportunities.
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
+                ) : (
+                  <div className="space-y-6">
+                    {messages.map((message) => (
                       <div
-                        className={`max-w-[85%] p-4 rounded-lg ${
-                          message.sender === 'user'
-                            ? 'bg-indigo-500 text-white'
-                            : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
-                        }`}
+                        key={message.id}
+                        className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
-                        <p className="whitespace-pre-wrap text-[15px]">{message.text}</p>
+                        <div
+                          className={`max-w-[85%] p-4 rounded-lg ${
+                            message.sender === 'user'
+                              ? 'bg-indigo-500 text-white'
+                              : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700'
+                          }`}
+                        >
+                          <p className="whitespace-pre-wrap text-[15px]">{message.text}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                  {isLoading && (
-                    <div className="flex justify-start">
-                      <div className="max-w-[85%] p-4 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        <span className="flex items-center gap-2">
-                          <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
-                          <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></span>
-                          <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></span>
-                        </span>
+                    ))}
+                    {isLoading && (
+                      <div className="flex justify-start">
+                        <div className="max-w-[85%] p-4 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                          <span className="flex items-center gap-2">
+                            <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
+                            <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></span>
+                            <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></span>
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
 
             <div className="flex gap-2">
               <Textarea
