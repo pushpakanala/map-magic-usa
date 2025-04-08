@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Send, ArrowLeft, Bot, BrainCircuit } from 'lucide-react';
+import { Send, ArrowLeft, Bot, BrainCircuit, Search, Book, GraduationCap, DollarSign, Flag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import axios from 'axios';
@@ -23,6 +24,34 @@ const AIAdvancedPage = () => {
   const token = sessionStorage.getItem("token");
   const { isSessionExpired, resetSessionExpiry } = useSessionExpiry();
 
+  // Suggestion messages for the university search
+  const suggestionMessages = [
+    {
+      text: "Suggest affordable universities for Computer Science",
+      icon: <DollarSign className="h-4 w-4" />
+    },
+    {
+      text: "Do I need IELTS to apply in the USA?",
+      icon: <Flag className="h-4 w-4" />
+    },
+    {
+      text: "How many intakes are there in U.S. universities?",
+      icon: <Book className="h-4 w-4" />
+    },
+    {
+      text: "What's your major, bot?",
+      icon: <Bot className="h-4 w-4" />
+    },
+    {
+      text: "Tell me about living costs in New York universities",
+      icon: <DollarSign className="h-4 w-4" />
+    },
+    {
+      text: "What are the top 5 universities in Texas for MBA?",
+      icon: <GraduationCap className="h-4 w-4" />
+    },
+  ];
+
   useEffect(() => {
     // Generate a session ID when the component mounts
     const newSessionId = sessionStorage.getItem("chatSessionId") || uuidv4();
@@ -42,12 +71,14 @@ const AIAdvancedPage = () => {
     navigate(-1);
   }, [navigate]);
 
-  const handleSendMessage = async () => {
-    if (!currentMessage.trim() || isLoading) return;
+  const handleSendMessage = async (text = currentMessage) => {
+    if ((!text || !text.trim()) && !currentMessage.trim() || isLoading) return;
+    
+    const messageToSend = text.trim() ? text : currentMessage.trim();
     
     setMessages(prev => [...prev, {
       id: Date.now(),
-      text: currentMessage,
+      text: messageToSend,
       sender: 'user'
     }]);
     
@@ -56,7 +87,7 @@ const AIAdvancedPage = () => {
     try {
       // Updated API call with user_message parameter instead of message
       const response = await axios.post(`${BOT_GEMINI}`, {
-        user_message: currentMessage,
+        user_message: messageToSend,
         session_id: sessionId
       }, {
         headers: { 
@@ -109,6 +140,12 @@ const AIAdvancedPage = () => {
       setIsLoading(false);
       setCurrentMessage('');
     }
+  };
+
+  // Handle suggestion click
+  const handleSuggestionClick = (suggestion) => {
+    setCurrentMessage(suggestion);
+    handleSendMessage(suggestion);
   };
 
   const generateTextSummary = (data) => {
@@ -187,12 +224,29 @@ const AIAdvancedPage = () => {
             <ScrollArea className="flex-1 bg-slate-100/50 dark:bg-slate-900/50 mb-4 rounded-lg min-h-[calc(100vh-200px)]">
               <div className="p-4">
                 {messages.length === 0 ? (
-                  <div className="h-full flex items-center justify-center min-h-[calc(100vh-250px)]">
+                  <div className="h-full flex flex-col items-center justify-center min-h-[calc(100vh-250px)]">
                     <div className="text-center p-6 max-w-lg">
                       <Bot className="h-16 w-16 mx-auto mb-4 text-indigo-500 opacity-50" />
-                      <p className="text-lg text-muted-foreground">
+                      <p className="text-lg text-muted-foreground mb-6">
                         Start a conversation with the AI Assistant to get detailed information about universities and educational opportunities.
                       </p>
+                      
+                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {suggestionMessages.map((suggestion, index) => (
+                          <motion.button
+                            key={index}
+                            className="flex items-center gap-2 p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 text-left hover:bg-slate-50 dark:hover:bg-slate-700/70 transition-colors"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => handleSuggestionClick(suggestion.text)}
+                          >
+                            <div className="flex-shrink-0 p-1.5 bg-indigo-100 dark:bg-indigo-900/30 rounded-md text-indigo-600 dark:text-indigo-400">
+                              {suggestion.icon}
+                            </div>
+                            <span className="text-sm text-slate-700 dark:text-slate-300">{suggestion.text}</span>
+                          </motion.button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 ) : (
@@ -231,7 +285,7 @@ const AIAdvancedPage = () => {
                 }}
               />
               <Button
-                onClick={handleSendMessage}
+                onClick={() => handleSendMessage()}
                 className="bg-indigo-600 hover:bg-indigo-700 self-end h-12 px-4"
                 disabled={!currentMessage.trim() || isLoading}
               >
