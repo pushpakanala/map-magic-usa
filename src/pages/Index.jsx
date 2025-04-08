@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LogOut, User, Bot, X, Send, KeyRound, Info, MapPin, Heart, BarChart3, Shield, Sparkles } from 'lucide-react';
+import { LogOut, User, Bot, X, Send, KeyRound, Info, MapPin, Heart, BarChart3, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
@@ -19,12 +19,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
 import { BOT_GEMINI } from '../constants';
 import { Card, CardContent } from "@/components/ui/card";
-import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, Compass, School, BookOpen, Lightbulb, Rocket } from 'lucide-react';
+import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, Compass, School, BookOpen, Lightbulb, Sparkles, Rocket } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
 import { useIsMobile } from '@/hooks/use-mobile';
 import ChatMessage from '@/components/bot/ChatMessage';
-import AdvancedChat from '@/components/advanced-ai/AdvancedChat';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -304,7 +303,7 @@ const Index = () => {
             className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-md rounded-xl p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50"
           >
             <Tabs defaultValue="map" className="w-full">
-              <TabsList className={`grid w-full max-w-[700px] mx-auto mb-6 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 ${userData?.role === 'admin' ? 'grid-cols-5' : 'grid-cols-4'}`}>
+              <TabsList className={`grid w-full max-w-[600px] mx-auto mb-6 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 ${userData?.role === 'admin' ? 'grid-cols-4' : 'grid-cols-3'}`}>
                 <TabsTrigger value="map" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
                   <MapPin className="h-4 w-4" />
                   <span className="hidden sm:inline">Map View</span>
@@ -316,10 +315,6 @@ const Index = () => {
                 <TabsTrigger value="about" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
                   <Info className="h-4 w-4" />
                   <span className="hidden sm:inline">About</span>
-                </TabsTrigger>
-                <TabsTrigger value="ai-advanced" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
-                  <Sparkles className="h-4 w-4" />
-                  <span className="hidden sm:inline">AI Advanced</span>
                 </TabsTrigger>
                 {userData?.role === 'admin' && (
                   <TabsTrigger value="admin" className="flex items-center gap-2 data-[state=active]:bg-black data-[state=active]:text-white">
@@ -353,7 +348,7 @@ const Index = () => {
                       <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-black/10 dark:from-white/5 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <CardContent className="p-6 flex flex-col space-y-3">
                         <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-2">
-                          <GraduationCap className="h-6 w-6 text-black" />
+                          <GraduationCap className="h-6 w-6 text-black dark:text-white" />
                         </div>
                         <h3 className="text-xl font-bold">4,000+ Universities</h3>
                         <p className="text-muted-foreground">Explore thousands of universities across the United States, each with detailed information about programs, campus life, and more.</p>
@@ -372,7 +367,7 @@ const Index = () => {
                       <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-black/10 dark:from-white/5 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <CardContent className="p-6 flex flex-col space-y-3">
                         <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-2">
-                          <Map className="h-6 w-6 text-black" />
+                          <Map className="h-6 w-6 text-black dark:text-white" />
                         </div>
                         <h3 className="text-xl font-bold">Nationwide Coverage</h3>
                         <p className="text-muted-foreground">Access educational institutions from all 50 states with our interactive map interface, allowing you to discover schools by location.</p>
@@ -391,7 +386,7 @@ const Index = () => {
                       <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-black/10 dark:from-white/5 dark:to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <CardContent className="p-6 flex flex-col space-y-3">
                         <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-2">
-                          <BarChart3 className="h-6 w-6 text-black" />
+                          <BarChart3 className="h-6 w-6 text-black dark:text-white" />
                         </div>
                         <h3 className="text-xl font-bold">Compare & Analyze</h3>
                         <p className="text-muted-foreground">Use our powerful comparison tools to analyze multiple universities side by side, helping you make informed decisions about your academic future.</p>
@@ -572,16 +567,6 @@ const Index = () => {
                       ))}
                     </div>
                   </motion.div>
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="ai-advanced" className="focus-visible:outline-none focus-visible:ring-0">
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="max-w-6xl mx-auto"
-                >
-                  <AdvancedChat />
                 </motion.div>
               </TabsContent>
 
