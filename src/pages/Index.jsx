@@ -595,3 +595,141 @@ const Index = () => {
                 ? "bg-red-500 hover:bg-red-600" 
                 : "bg-gradient-to-br from-gray-800 to-black hover:shadow-xl"
             }`}
+            onClick={handleBotClick}
+          >
+            {isChatOpen ? (
+              <X className="h-6 w-6 text-white" />
+            ) : (
+              <Bot className="h-6 w-6 text-white" />
+            )}
+          </Button>
+        </motion.div>
+
+        <AnimatePresence>
+          {isChatOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="fixed bottom-20 right-4 w-full max-w-md z-50"
+            >
+              <Card className="overflow-hidden border border-gray-200 dark:border-gray-800 shadow-xl">
+                <div className="bg-gradient-to-r from-gray-800 to-black p-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-white/10 p-1.5 rounded-md">
+                      <Bot className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="font-medium text-white">UniQuest AI</h3>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 rounded-full text-white hover:bg-white/10"
+                    onClick={handleBotClick}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div className="h-96 overflow-y-auto p-4 bg-white dark:bg-gray-950 space-y-4">
+                  {messages.length === 0 ? (
+                    <div className="h-full flex flex-col items-center justify-center text-center">
+                      <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-full mb-3">
+                        <Bot className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-semibold mb-2">How can I help you?</h3>
+                      <p className="text-gray-500 dark:text-gray-400 text-sm max-w-xs">
+                        Ask me anything about universities, programs, admission requirements, etc.
+                      </p>
+                      
+                      <div className="grid grid-cols-1 gap-2 mt-6">
+                        {["Tell me about Harvard", "Top 5 universities for engineering", "Scholarship information"].map((q, i) => (
+                          <Button 
+                            key={i}
+                            variant="outline" 
+                            className="text-xs justify-start"
+                            onClick={() => setCurrentMessage(q)}
+                          >
+                            <Sparkles className="h-3 w-3 mr-2 text-gray-400" />
+                            {q}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    messages.map((message) => (
+                      <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`max-w-[80%] ${
+                          message.sender === 'user' 
+                            ? 'bg-black text-white rounded-2xl rounded-tr-sm' 
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-2xl rounded-tl-sm'
+                        } px-4 py-3 shadow-sm`}>
+                          <ChatMessage message={message} />
+                        </div>
+                      </div>
+                    ))
+                  )}
+                  
+                  {isLoading && (
+                    <div className="flex justify-start">
+                      <div className="max-w-[80%] bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+                        <div className="flex items-center space-x-2">
+                          <div className="h-2 w-2 bg-gray-400 rounded-full animate-pulse"></div>
+                          <div className="h-2 w-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="h-2 w-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+                  <div className="flex gap-2">
+                    <Textarea
+                      value={currentMessage}
+                      onChange={(e) => setCurrentMessage(e.target.value)}
+                      placeholder="Ask about universities..."
+                      className="resize-none min-h-[60px] bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSendMessage();
+                        }
+                      }}
+                    />
+                    <Button
+                      onClick={handleSendMessage}
+                      size="icon"
+                      className="h-14 w-14 rounded-full bg-black hover:bg-gray-800"
+                      disabled={!currentMessage.trim() || isLoading}
+                    >
+                      <Send className="h-5 w-5 text-white" />
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {isSessionExpired && (
+        <SessionExpiredDialog
+          open={isSessionExpired}
+          onOpenChange={setIsSessionExpired}
+        />
+      )}
+
+      {comparedUniversities.length > 0 && (
+        <ComparisonBanner
+          universities={comparedUniversities}
+          onView={() => navigate('/compare')}
+          onClear={clearComparedUniversities}
+        />
+      )}
+    </>
+  );
+};
+
+export default Index;
