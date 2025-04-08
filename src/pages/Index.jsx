@@ -595,4 +595,14 @@ const Index = () => {
                 : "bg-gradient-to-br from-gray-800 to-black hover:shadow-xl"
             }`}
             onClick={handleBotClick}
-            type="button
+            type="button"
+          >
+            {isChatOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
+          </Button>
+        </motion.div>
+      </div>
+    </>
+  );
+};
+
+export default Index;
