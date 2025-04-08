@@ -29,8 +29,8 @@ const ChatMessage = ({ message }) => {
         if (value.name) {
           return String(value.name);
         }
-        // Format object as JSON string
-        return JSON.stringify(value, null, 2);
+        // Don't format objects as JSON strings anymore - we'll handle them differently
+        return value;
       } catch (e) {
         return '[Object]';
       }
@@ -48,11 +48,53 @@ const ChatMessage = ({ message }) => {
     return (
       <div className="space-y-2 mt-2">
         {Array.isArray(items) && items.map((item, index) => (
-          <div key={index} className="flex items-center gap-2">
-            <IconComponent className="h-4 w-4 text-uniquestPurple/70 flex-shrink-0" />
-            <span>{formatValue(item)}</span>
+          <div key={index} className="flex items-start gap-2">
+            <IconComponent className="h-4 w-4 text-uniquestPurple/70 flex-shrink-0 mt-1" />
+            <div className="flex-1">
+              {typeof item === 'object' && item !== null ? 
+                renderNestedObject(item) : 
+                <span>{formatValue(item)}</span>
+              }
+            </div>
           </div>
         ))}
+      </div>
+    );
+  };
+  
+  // Function to render nested objects
+  const renderNestedObject = (obj) => {
+    if (!obj || typeof obj !== 'object') return null;
+    
+    // Handle array of objects
+    if (Array.isArray(obj)) {
+      return renderList(obj);
+    }
+    
+    // For regular objects, show each property
+    return (
+      <div className="space-y-1">
+        {Object.entries(obj).map(([key, value], idx) => {
+          if (!hasValue(value)) return null;
+          
+          const formattedKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
+          
+          return (
+            <div key={idx} className="ml-0">
+              {typeof value === 'object' && value !== null && !Array.isArray(value) ? (
+                <div className="mb-1">
+                  <span className="font-medium text-gray-700 dark:text-gray-300">{formattedKey}:</span>
+                  <div className="ml-3 mt-1">{renderNestedObject(value)}</div>
+                </div>
+              ) : (
+                <div className="mb-1">
+                  <span className="font-medium text-gray-700 dark:text-gray-300">{formattedKey}:</span>{' '}
+                  <span className="text-gray-800 dark:text-gray-200">{formatValue(value)}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -62,6 +104,13 @@ const ChatMessage = ({ message }) => {
     if (value === null || value === undefined) return false;
     if (typeof value === 'string' && value.trim() === '') return false;
     if (Array.isArray(value) && value.length === 0) return false;
+    
+    // For objects, check if any property has a valid value
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      const hasValuedProperty = Object.values(value).some(prop => hasValue(prop));
+      return hasValuedProperty;
+    }
+    
     return true;
   };
   
@@ -130,10 +179,24 @@ const ChatMessage = ({ message }) => {
                 {title}
               </h4>
               
-              {Array.isArray(data[field]) 
-                ? renderList(data[field], field === 'courses' ? GraduationCap : fieldIcons[field])
-                : <p>{formatValue(data[field])}</p>
-              }
+              {Array.isArray(data[field]) ? (
+                data[field].length > 0 && data[field][0] && typeof data[field][0] === 'object' ? (
+                  <div className="space-y-4 mt-2">
+                    {data[field].map((item, index) => (
+                      <div key={index} className="bg-white/50 dark:bg-slate-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
+                        <h5 className="font-medium mb-2">{item.name || `Item ${index + 1}`}</h5>
+                        {renderNestedObject(item)}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  renderList(data[field], field === 'courses' ? GraduationCap : fieldIcons[field])
+                )
+              ) : typeof data[field] === 'object' ? (
+                renderNestedObject(data[field])
+              ) : (
+                <p>{formatValue(data[field])}</p>
+              )}
             </div>
           );
         })}
