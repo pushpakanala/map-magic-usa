@@ -3,6 +3,7 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
+  // We need to ensure this component is only rendered within a Router context
   const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
   const location = useLocation();
   

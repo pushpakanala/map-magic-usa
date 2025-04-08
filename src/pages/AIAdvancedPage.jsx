@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -31,7 +30,17 @@ const AIAdvancedPage = () => {
       sessionStorage.setItem("chatSessionId", newSessionId);
     }
     setSessionId(newSessionId);
+    
+    // Cleanup function to handle component unmounting
+    return () => {
+      // Any cleanup needed when navigating away
+    };
   }, []);
+
+  const handleBack = useCallback(() => {
+    // Navigate back safely
+    navigate(-1);
+  }, [navigate]);
 
   const handleSendMessage = async () => {
     if (!currentMessage.trim() || isLoading) return;
@@ -160,7 +169,7 @@ const AIAdvancedPage = () => {
           <Button 
             variant="ghost" 
             size="icon" 
-            onClick={() => navigate(-1)}
+            onClick={handleBack}
             className="rounded-full hover:bg-black/10"
           >
             <ArrowLeft className="h-5 w-5" />
