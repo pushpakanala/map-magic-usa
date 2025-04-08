@@ -1,9 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import USAMap from '@/components/USAMap';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LogOut, User, Bot, X, Send, KeyRound, Info, MapPin, Heart, BarChart3, Shield } from 'lucide-react';
+import { LogOut, User, Bot, X, Send, KeyRound, Info, MapPin, Heart, BarChart3, Shield, BrainCircuit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavorites } from '@/hooks/use-favorites';
@@ -19,7 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Textarea } from "@/components/ui/textarea";
 import { BOT_GEMINI } from '../constants';
 import { Card, CardContent } from "@/components/ui/card";
-import { Map, Search, GraduationCap, Users, Globe2, BrainCircuit, Award, Compass, School, BookOpen, Lightbulb, Sparkles, Rocket } from 'lucide-react';
+import { Map, Search, GraduationCap, Users, Globe2, Award, Compass, School, BookOpen, Lightbulb, Rocket } from 'lucide-react';
 import SessionExpiredDialog from '@/components/SessionExpiredDialog';
 import ComparisonBanner from '@/components/ComparisonBanner';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -295,6 +296,23 @@ const Index = () => {
               </div>
             </div>
           </header>
+
+          {/* AI Advanced Search Button - Prominent and Visible */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex justify-center"
+          >
+            <Button
+              onClick={() => navigate('/ai-advanced')}
+              className="bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-700 hover:to-indigo-900 text-white px-6 py-6 text-lg font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
+              size="lg"
+            >
+              <BrainCircuit className="h-6 w-6 mr-2 group-hover:animate-pulse" />
+              AI Advanced Search
+            </Button>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
